@@ -10,6 +10,7 @@ import 'package:littlesignals/router/app_router.dart';
 
 import 'providers/report_provider.dart';
 import 'widgets/behavior_style_card.dart';
+import 'widgets/observation_data_card.dart';
 import 'widgets/observe_another_button.dart';
 import 'widgets/parenting_tips_card.dart';
 import 'widgets/result_chart.dart';
@@ -91,6 +92,11 @@ class ReportScreen extends ConsumerWidget {
                 description: reportData.description,
               ),
               const SizedBox(height: 16),
+              // 주의력 테스트인 경우 관찰 데이터 포인트 표시
+              if (isAttention && attentionResult != null) ...[
+                ObservationDataCard(result: attentionResult),
+                const SizedBox(height: 16),
+              ],
               ResultChart(
                 score: reportData.visualScore,
                 label: l10n.typicalRangeForAge,

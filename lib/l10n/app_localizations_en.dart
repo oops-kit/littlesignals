@@ -161,4 +161,58 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get enterBirthday => 'Please enter date of birth';
+
+  @override
+  String get observationDataPoints => 'Observation Data';
+
+  @override
+  String get randomTapping => 'Random Tapping';
+
+  @override
+  String get randomTappingDesc =>
+      'Number of taps without trying to remember card positions';
+
+  @override
+  String get sustainability => 'Sustainability';
+
+  @override
+  String get sustainabilityDesc =>
+      'Comparison of response speed between first and second half';
+
+  @override
+  String get errorType => 'Error Type';
+
+  @override
+  String get errorTypeDesc => 'Times the child tapped a card they just saw';
+
+  @override
+  String get times => 'times';
+
+  @override
+  String get firstHalf => 'First Half';
+
+  @override
+  String get secondHalf => 'Second Half';
+
+  @override
+  String get seconds => 'sec';
+
+  @override
+  String get sustainabilityGood => 'Focus was maintained consistently';
+
+  @override
+  String get sustainabilityDecline =>
+      'Focus tends to decline in the second half';
+
+  @override
+  String get workingMemoryGood => 'Good working memory';
+
+  @override
+  String get workingMemoryLimited => 'May have difficulty with working memory';
+
+  @override
+  String get attentionFocused => 'Searched for cards systematically';
+
+  @override
+  String get attentionRandom => 'Shows tendency to tap randomly';
 }

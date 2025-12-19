@@ -152,4 +152,55 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get enterBirthday => '생년월일을 입력해주세요';
+
+  @override
+  String get observationDataPoints => '관찰 데이터';
+
+  @override
+  String get randomTapping => '무작위 터치';
+
+  @override
+  String get randomTappingDesc => '위치를 기억하려고 하지 않고 마구잡이로 터치한 횟수';
+
+  @override
+  String get sustainability => '지속성';
+
+  @override
+  String get sustainabilityDesc => '전반부와 후반부의 반응 속도 비교';
+
+  @override
+  String get errorType => '오류 유형';
+
+  @override
+  String get errorTypeDesc => '방금 확인한 카드를 기억하지 못하고 바로 다시 누른 횟수';
+
+  @override
+  String get times => '회';
+
+  @override
+  String get firstHalf => '전반부';
+
+  @override
+  String get secondHalf => '후반부';
+
+  @override
+  String get seconds => '초';
+
+  @override
+  String get sustainabilityGood => '집중력이 일정하게 유지되었어요';
+
+  @override
+  String get sustainabilityDecline => '후반부에 집중력이 떨어지는 경향이 보여요';
+
+  @override
+  String get workingMemoryGood => '작업 기억력이 좋아요';
+
+  @override
+  String get workingMemoryLimited => '작업 기억에 어려움이 있을 수 있어요';
+
+  @override
+  String get attentionFocused => '체계적으로 카드를 찾았어요';
+
+  @override
+  String get attentionRandom => '무작위로 터치하는 경향이 보여요';
 }

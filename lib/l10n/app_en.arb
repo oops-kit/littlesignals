@@ -47,5 +47,22 @@
   "progressWillBeLost": "Progress will be lost.",
   "cancel": "Cancel",
   "confirm": "Confirm",
-  "enterBirthday": "Please enter date of birth"
+  "enterBirthday": "Please enter date of birth",
+  "observationDataPoints": "Observation Data",
+  "randomTapping": "Random Tapping",
+  "randomTappingDesc": "Number of taps without trying to remember card positions",
+  "sustainability": "Sustainability",
+  "sustainabilityDesc": "Comparison of response speed between first and second half",
+  "errorType": "Error Type",
+  "errorTypeDesc": "Times the child tapped a card they just saw",
+  "times": "times",
+  "firstHalf": "First Half",
+  "secondHalf": "Second Half",
+  "seconds": "sec",
+  "sustainabilityGood": "Focus was maintained consistently",
+  "sustainabilityDecline": "Focus tends to decline in the second half",
+  "workingMemoryGood": "Good working memory",
+  "workingMemoryLimited": "May have difficulty with working memory",
+  "attentionFocused": "Searched for cards systematically",
+  "attentionRandom": "Shows tendency to tap randomly"
 }

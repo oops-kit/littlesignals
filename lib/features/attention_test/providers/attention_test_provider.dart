@@ -12,6 +12,9 @@ import 'attention_test_state.dart';
 
 part 'attention_test_provider.g.dart';
 
+/// 무작위 터치 감지 기준 (ms)
+const _rapidTapThresholdMs = 300;
+
 /// 주의력 테스트 컨트롤러
 ///
 /// 게임 로직을 담당합니다.
@@ -87,13 +90,68 @@ class AttentionTestController extends _$AttentionTestController {
   void handleCardClick(int cardId) {
     if (state.isProcessing) return;
 
+    final now = DateTime.now();
     final cardIndex = state.cards.indexWhere((c) => c.id == cardId);
     if (cardIndex == -1) return;
 
     final card = state.cards[cardIndex];
-    if (card.isFlipped || card.isMatched) return;
+
+    // === 무작위 터치 감지 (유효하지 않은 터치 포함) ===
+    int randomTaps = state.randomTaps;
+
+    // 1. 이미 뒤집힌 카드나 매치된 카드를 터치 = 무작위 터치
+    if (card.isFlipped || card.isMatched) {
+      randomTaps++;
+      state = state.copyWith(
+        randomTaps: randomTaps,
+        tapRecords: [
+          ...state.tapRecords,
+          TapRecord(timestamp: now, cardId: cardId),
+        ],
+      );
+      return;
+    }
+
+    // 2. 짧은 시간 내 연속 터치 = 무작위 터치 (생각 없이 빠르게 누르는 경우)
+    if (state.tapRecords.isNotEmpty) {
+      final lastTap = state.tapRecords.last;
+      final timeDiff = now.difference(lastTap.timestamp).inMilliseconds;
+      if (timeDiff < _rapidTapThresholdMs) {
+        randomTaps++;
+      }
+    }
 
     _hintTimer?.cancel();
+
+    // === 다른 관찰 지표 수집 ===
+    int immediateRepeatErrors = state.immediateRepeatErrors;
+
+    // 즉시 반복 오류: 방금 확인한 카드를 바로 다시 터치
+    // (이미 뒤집혀서 다시 뒤집힌 카드를 바로 터치하는 경우)
+    if (state.recentlyFlippedCardIds.contains(cardId)) {
+      immediateRepeatErrors++;
+    }
+
+    // 터치 기록 추가
+    final newTapRecords = [
+      ...state.tapRecords,
+      TapRecord(timestamp: now, cardId: cardId),
+    ];
+
+    // 최근 뒤집은 카드 목록 업데이트 (최대 4개 유지)
+    final newRecentlyFlipped = [...state.recentlyFlippedCardIds, cardId];
+    final trimmedRecentlyFlipped = newRecentlyFlipped.length > 4
+        ? newRecentlyFlipped.sublist(newRecentlyFlipped.length - 4)
+        : newRecentlyFlipped;
+
+    // 전반/후반 터치 횟수 계산
+    int firstHalfTaps = state.firstHalfTaps;
+    int secondHalfTaps = state.secondHalfTaps;
+    if (state.firstHalfEndTime == null) {
+      firstHalfTaps++;
+    } else {
+      secondHalfTaps++;
+    }
 
     // 카드 뒤집기
     final newCards = List<CardData>.from(state.cards);
@@ -105,6 +163,12 @@ class AttentionTestController extends _$AttentionTestController {
       cards: newCards,
       flippedCardIds: newFlippedIds,
       hintCardId: null,
+      randomTaps: randomTaps,
+      immediateRepeatErrors: immediateRepeatErrors,
+      tapRecords: newTapRecords,
+      recentlyFlippedCardIds: trimmedRecentlyFlipped,
+      firstHalfTaps: firstHalfTaps,
+      secondHalfTaps: secondHalfTaps,
     );
 
     if (newFlippedIds.length == 2) {
@@ -174,6 +238,9 @@ class AttentionTestController extends _$AttentionTestController {
     }
 
     if (state.level == 1) {
+      // 전반부 완료 시간 기록
+      state = state.copyWith(firstHalfEndTime: DateTime.now());
+
       // 다음 레벨로
       Future.delayed(const Duration(seconds: 1), () {
         setupLevel(2);
@@ -191,15 +258,35 @@ class AttentionTestController extends _$AttentionTestController {
       name: 'AttentionTest',
     );
     // #endregion
+    final now = DateTime.now();
     final duration = state.startTime != null
-        ? DateTime.now().difference(state.startTime!).inMilliseconds / 1000.0
+        ? now.difference(state.startTime!).inMilliseconds / 1000.0
         : 0.0;
+
+    // 전반부/후반부 시간 계산
+    double firstHalfDuration = 0.0;
+    double secondHalfDuration = 0.0;
+
+    if (state.startTime != null && state.firstHalfEndTime != null) {
+      firstHalfDuration =
+          state.firstHalfEndTime!.difference(state.startTime!).inMilliseconds /
+          1000.0;
+      secondHalfDuration =
+          now.difference(state.firstHalfEndTime!).inMilliseconds / 1000.0;
+    }
 
     final result = AttentionResult(
       durationSeconds: duration,
       totalMoves: state.moves,
       errors: state.errors,
       completionStatus: CompletionStatus.completed,
+      // 관찰 지표
+      randomTapCount: state.randomTaps,
+      immediateRepeatErrors: state.immediateRepeatErrors,
+      firstHalfDurationSeconds: firstHalfDuration,
+      secondHalfDurationSeconds: secondHalfDuration,
+      firstHalfTaps: state.firstHalfTaps,
+      secondHalfTaps: state.secondHalfTaps,
     );
 
     // #region agent log

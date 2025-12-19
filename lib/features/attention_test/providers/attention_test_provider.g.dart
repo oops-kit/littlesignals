@@ -7,7 +7,7 @@ part of 'attention_test_provider.dart';
 // **************************************************************************
 
 String _$attentionTestControllerHash() =>
-    r'10ea48ee85f63f80bb1a7b50175e90397b8bf638';
+    r'95272d1eee22cc3fcc9832b5e3880d1692630401';
 
 /// 주의력 테스트 컨트롤러
 ///

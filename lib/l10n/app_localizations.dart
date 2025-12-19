@@ -385,6 +385,108 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'생년월일을 입력해주세요'**
   String get enterBirthday;
+
+  /// No description provided for @observationDataPoints.
+  ///
+  /// In ko, this message translates to:
+  /// **'관찰 데이터'**
+  String get observationDataPoints;
+
+  /// No description provided for @randomTapping.
+  ///
+  /// In ko, this message translates to:
+  /// **'무작위 터치'**
+  String get randomTapping;
+
+  /// No description provided for @randomTappingDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'위치를 기억하려고 하지 않고 마구잡이로 터치한 횟수'**
+  String get randomTappingDesc;
+
+  /// No description provided for @sustainability.
+  ///
+  /// In ko, this message translates to:
+  /// **'지속성'**
+  String get sustainability;
+
+  /// No description provided for @sustainabilityDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'전반부와 후반부의 반응 속도 비교'**
+  String get sustainabilityDesc;
+
+  /// No description provided for @errorType.
+  ///
+  /// In ko, this message translates to:
+  /// **'오류 유형'**
+  String get errorType;
+
+  /// No description provided for @errorTypeDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'방금 확인한 카드를 기억하지 못하고 바로 다시 누른 횟수'**
+  String get errorTypeDesc;
+
+  /// No description provided for @times.
+  ///
+  /// In ko, this message translates to:
+  /// **'회'**
+  String get times;
+
+  /// No description provided for @firstHalf.
+  ///
+  /// In ko, this message translates to:
+  /// **'전반부'**
+  String get firstHalf;
+
+  /// No description provided for @secondHalf.
+  ///
+  /// In ko, this message translates to:
+  /// **'후반부'**
+  String get secondHalf;
+
+  /// No description provided for @seconds.
+  ///
+  /// In ko, this message translates to:
+  /// **'초'**
+  String get seconds;
+
+  /// No description provided for @sustainabilityGood.
+  ///
+  /// In ko, this message translates to:
+  /// **'집중력이 일정하게 유지되었어요'**
+  String get sustainabilityGood;
+
+  /// No description provided for @sustainabilityDecline.
+  ///
+  /// In ko, this message translates to:
+  /// **'후반부에 집중력이 떨어지는 경향이 보여요'**
+  String get sustainabilityDecline;
+
+  /// No description provided for @workingMemoryGood.
+  ///
+  /// In ko, this message translates to:
+  /// **'작업 기억력이 좋아요'**
+  String get workingMemoryGood;
+
+  /// No description provided for @workingMemoryLimited.
+  ///
+  /// In ko, this message translates to:
+  /// **'작업 기억에 어려움이 있을 수 있어요'**
+  String get workingMemoryLimited;
+
+  /// No description provided for @attentionFocused.
+  ///
+  /// In ko, this message translates to:
+  /// **'체계적으로 카드를 찾았어요'**
+  String get attentionFocused;
+
+  /// No description provided for @attentionRandom.
+  ///
+  /// In ko, this message translates to:
+  /// **'무작위로 터치하는 경향이 보여요'**
+  String get attentionRandom;
 }
 
 class _AppLocalizationsDelegate
