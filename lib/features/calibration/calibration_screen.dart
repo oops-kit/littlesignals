@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:littlesignals/core/constants/app_constants.dart';
 import 'package:littlesignals/core/theme/app_theme.dart';
+import 'package:littlesignals/core/widgets/progress_text.dart';
+import 'package:littlesignals/core/widgets/section_header.dart';
 import 'package:littlesignals/l10n/app_localizations.dart';
 import 'package:littlesignals/models/app_state.dart';
 import 'package:littlesignals/providers/app_state_provider.dart';
@@ -23,13 +25,22 @@ class CalibrationScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final poppedCount = useState(0);
+    final poppedIndices = useState<Set<int>>({});
 
-    void handlePop() {
-      final newCount = poppedCount.value + 1;
-      poppedCount.value = newCount;
+    void navigateToTest() {
+      switch (testType) {
+        case TestType.attention:
+          context.go(AppRoutes.attentionTest);
+        case TestType.impulsivity:
+          context.go(AppRoutes.impulsivityTest);
+      }
+    }
 
-      if (newCount >= AppConstants.calibrationRequiredTaps) {
+    void handlePop(int index) {
+      final newSet = {...poppedIndices.value, index};
+      poppedIndices.value = newSet;
+
+      if (newSet.length >= AppConstants.calibrationRequiredTaps) {
         // #region agent log
         developer.log(
           '[DEBUG][HypA] Calibration done, navigating to: $testType, calling setActiveTest NOW',
@@ -38,14 +49,10 @@ class CalibrationScreen extends HookConsumerWidget {
         // #endregion
         // FIX: setActiveTest를 호출하여 activeTest 상태를 설정
         ref.read(appStateNotifierProvider.notifier).setActiveTest(testType);
-        Future.delayed(const Duration(milliseconds: 500), () {
+        // 바로 테스트 화면으로 이동 (카운트다운은 게임 화면에서)
+        Future.delayed(const Duration(milliseconds: 300), () {
           if (context.mounted) {
-            switch (testType) {
-              case TestType.attention:
-                context.go(AppRoutes.attentionTest);
-              case TestType.impulsivity:
-                context.go(AppRoutes.impulsivityTest);
-            }
+            navigateToTest();
           }
         });
       }
@@ -57,61 +64,26 @@ class CalibrationScreen extends HookConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _Header(title: l10n.warmUp, subtitle: l10n.warmUpDesc),
+            SectionHeader(title: l10n.warmUp, subtitle: l10n.warmUpDesc),
             const SizedBox(height: 48),
             SizedBox(
               height: 120,
               child: Center(
                 child: BubbleRow(
-                  poppedCount: poppedCount.value,
+                  poppedIndices: poppedIndices.value,
                   onPop: handlePop,
                   popText: l10n.pop,
                 ),
               ),
             ),
             const SizedBox(height: 32),
-            _ProgressText(
-              current: poppedCount.value,
+            ProgressText(
+              current: poppedIndices.value.length,
               total: AppConstants.calibrationRequiredTaps,
             ),
           ],
         ),
       ),
-    );
-  }
-}
-
-class _Header extends StatelessWidget {
-  const _Header({required this.title, required this.subtitle});
-
-  final String title;
-  final String subtitle;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(title, style: Theme.of(context).textTheme.headlineMedium),
-        const SizedBox(height: 8),
-        Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
-      ],
-    );
-  }
-}
-
-class _ProgressText extends StatelessWidget {
-  const _ProgressText({required this.current, required this.total});
-
-  final int current;
-  final int total;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      '$current / $total',
-      style: Theme.of(
-        context,
-      ).textTheme.titleLarge?.copyWith(color: AppTheme.primaryBlue),
     );
   }
 }

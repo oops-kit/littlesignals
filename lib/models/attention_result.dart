@@ -1,4 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:littlesignals/core/domain/test_result.dart';
+import 'package:littlesignals/models/test_event_log.dart';
 
 part 'attention_result.freezed.dart';
 part 'attention_result.g.dart';
@@ -11,7 +13,7 @@ enum CompletionStatus {
 }
 
 @freezed
-abstract class AttentionResult with _$AttentionResult {
+abstract class AttentionResult with _$AttentionResult implements TestResult {
   const factory AttentionResult({
     required double durationSeconds,
     required int totalMoves,
@@ -35,8 +37,20 @@ abstract class AttentionResult with _$AttentionResult {
 
     /// 후반부 터치 횟수
     @Default(0) int secondHalfTaps,
+
+    /// 테스트 중 발생한 이벤트 로그
+    @Default([]) List<TestEventLog> eventLogs,
   }) = _AttentionResult;
+
+  const AttentionResult._();
 
   factory AttentionResult.fromJson(Map<String, dynamic> json) =>
       _$AttentionResultFromJson(json);
+
+  /// TestResult 인터페이스 구현
+  @override
+  String get completionStatusString => completionStatus.name;
+
+  @override
+  bool get isCompleted => completionStatus == CompletionStatus.completed;
 }

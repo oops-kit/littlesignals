@@ -6,3 +6,4 @@ export 'card_data.dart';
 export 'child_profile.dart';
 export 'impulsivity_result.dart';
 export 'report_data.dart';
+export 'test_event_log.dart';

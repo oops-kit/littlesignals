@@ -215,4 +215,69 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get attentionRandom => 'Shows tendency to tap randomly';
+
+  @override
+  String get commissionError => 'Impulsivity (Red Balloon Taps)';
+
+  @override
+  String get commissionErrorDesc =>
+      'Times the child tapped when a red balloon appeared';
+
+  @override
+  String get omissionError => 'Inattention (Blue Balloon Misses)';
+
+  @override
+  String get omissionErrorDesc => 'Times the child missed a blue balloon';
+
+  @override
+  String get reactionTime => 'Reaction Time';
+
+  @override
+  String get reactionTimeDesc =>
+      'Check if the child taps before balloons appear';
+
+  @override
+  String get averageReactionTime => 'Average RT';
+
+  @override
+  String get anticipatoryResponse => 'Early Taps';
+
+  @override
+  String get redBalloons => 'Red balloons';
+
+  @override
+  String get impulseControlGood => 'Good impulse control';
+
+  @override
+  String get impulseControlNeeds => 'Needs practice with impulse control';
+
+  @override
+  String get attentionGood => 'Good attention';
+
+  @override
+  String get attentionNeeds => 'Needs practice with attention';
+
+  @override
+  String get anticipatoryResponseHigh => 'Tends to respond before waiting';
+
+  @override
+  String get anticipatoryResponseLow => 'Good at waiting before responding';
+
+  @override
+  String get eventLog => 'Event Log';
+
+  @override
+  String get showAll => 'Show All';
+
+  @override
+  String get showLess => 'Show Less';
+
+  @override
+  String get noEventsRecorded => 'No events recorded';
+
+  @override
+  String get blueBalloonTap => 'Tap!';
+
+  @override
+  String get redBalloonNoTap => 'Don\'t tap!';
 }

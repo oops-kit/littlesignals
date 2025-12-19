@@ -7,13 +7,13 @@ import 'calibration_bubble.dart';
 class BubbleRow extends StatelessWidget {
   const BubbleRow({
     super.key,
-    required this.poppedCount,
+    required this.poppedIndices,
     required this.onPop,
     required this.popText,
   });
 
-  final int poppedCount;
-  final VoidCallback onPop;
+  final Set<int> poppedIndices;
+  final void Function(int index) onPop;
   final String popText;
 
   @override
@@ -21,12 +21,12 @@ class BubbleRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(AppConstants.calibrationRequiredTaps, (index) {
-        final isPopped = index < poppedCount;
+        final isPopped = poppedIndices.contains(index);
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: CalibrationBubble(
             isPopped: isPopped,
-            onTap: isPopped ? null : onPop,
+            onTap: isPopped ? null : () => onPop(index),
             animationDelay: index * 200,
             popText: popText,
           ),

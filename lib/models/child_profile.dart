@@ -18,8 +18,5 @@ abstract class ChildProfile with _$ChildProfile {
 ChildProfile createProfileFromBirthDate(DateTime birthDate) {
   final now = DateTime.now();
   final ageMonths = (now.difference(birthDate).inDays / 30.44).roundToDouble();
-  return ChildProfile(
-    dateOfBirth: birthDate,
-    ageMonths: ageMonths,
-  );
+  return ChildProfile(dateOfBirth: birthDate, ageMonths: ageMonths);
 }

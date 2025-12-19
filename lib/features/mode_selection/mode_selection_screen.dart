@@ -2,6 +2,7 @@ import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:littlesignals/core/theme/app_theme.dart';
+import 'package:littlesignals/core/widgets/section_header.dart';
 import 'package:littlesignals/l10n/app_localizations.dart';
 import 'package:littlesignals/models/app_state.dart';
 import 'package:littlesignals/router/app_router.dart';
@@ -37,9 +38,10 @@ class ModeSelectionScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 16),
-              _Header(
+              SectionHeader(
                 title: l10n.selectObservation,
                 subtitle: l10n.selectActivityDesc,
+                alignment: CrossAxisAlignment.start,
               ),
               const SizedBox(height: 32),
               Expanded(
@@ -59,25 +61,6 @@ class ModeSelectionScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _Header extends StatelessWidget {
-  const _Header({required this.title, required this.subtitle});
-
-  final String title;
-  final String subtitle;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(title, style: Theme.of(context).textTheme.headlineMedium),
-        const SizedBox(height: 8),
-        Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
-      ],
     );
   }
 }

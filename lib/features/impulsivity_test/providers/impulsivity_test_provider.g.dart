@@ -7,11 +7,13 @@ part of 'impulsivity_test_provider.dart';
 // **************************************************************************
 
 String _$impulsivityTestControllerHash() =>
-    r'ddcd9ef73c8f301080ca08107c186a1891e29175';
+    r'708eb92608b1d1a671a8fb1aa1d71bf529c1bee0';
 
 /// 충동성 테스트 컨트롤러
 ///
-/// 게임 로직을 담당합니다.
+/// 게임 흐름을 조율하고, 세부 로직은 전문 서비스에 위임합니다.
+/// SRP: 게임 흐름 조율에만 집중
+/// DIP: EventLogger, BalloonTapHandler는 인터페이스/서비스를 통해 사용
 ///
 /// Copied from [ImpulsivityTestController].
 @ProviderFor(ImpulsivityTestController)

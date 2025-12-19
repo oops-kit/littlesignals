@@ -487,6 +487,132 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'무작위로 터치하는 경향이 보여요'**
   String get attentionRandom;
+
+  /// No description provided for @commissionError.
+  ///
+  /// In ko, this message translates to:
+  /// **'충동성 (빨간 풍선 터치)'**
+  String get commissionError;
+
+  /// No description provided for @commissionErrorDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'빨간 풍선이 나왔을 때 손이 먼저 나간 횟수'**
+  String get commissionErrorDesc;
+
+  /// No description provided for @omissionError.
+  ///
+  /// In ko, this message translates to:
+  /// **'부주의 (파란 풍선 놓침)'**
+  String get omissionError;
+
+  /// No description provided for @omissionErrorDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'파란 풍선이 나왔는데 딴청 피우다 놓친 횟수'**
+  String get omissionErrorDesc;
+
+  /// No description provided for @reactionTime.
+  ///
+  /// In ko, this message translates to:
+  /// **'반응 시간'**
+  String get reactionTime;
+
+  /// No description provided for @reactionTimeDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'풍선이 뜨기 전에 화면을 누르는지 확인'**
+  String get reactionTimeDesc;
+
+  /// No description provided for @averageReactionTime.
+  ///
+  /// In ko, this message translates to:
+  /// **'평균 반응 시간'**
+  String get averageReactionTime;
+
+  /// No description provided for @anticipatoryResponse.
+  ///
+  /// In ko, this message translates to:
+  /// **'예측 반응'**
+  String get anticipatoryResponse;
+
+  /// No description provided for @redBalloons.
+  ///
+  /// In ko, this message translates to:
+  /// **'빨간 풍선'**
+  String get redBalloons;
+
+  /// No description provided for @impulseControlGood.
+  ///
+  /// In ko, this message translates to:
+  /// **'충동 조절을 잘하고 있어요'**
+  String get impulseControlGood;
+
+  /// No description provided for @impulseControlNeeds.
+  ///
+  /// In ko, this message translates to:
+  /// **'충동 조절 연습이 필요해요'**
+  String get impulseControlNeeds;
+
+  /// No description provided for @attentionGood.
+  ///
+  /// In ko, this message translates to:
+  /// **'집중력이 좋아요'**
+  String get attentionGood;
+
+  /// No description provided for @attentionNeeds.
+  ///
+  /// In ko, this message translates to:
+  /// **'주의 집중 연습이 필요해요'**
+  String get attentionNeeds;
+
+  /// No description provided for @anticipatoryResponseHigh.
+  ///
+  /// In ko, this message translates to:
+  /// **'기다리지 못하고 미리 반응하는 경향이 있어요'**
+  String get anticipatoryResponseHigh;
+
+  /// No description provided for @anticipatoryResponseLow.
+  ///
+  /// In ko, this message translates to:
+  /// **'기다렸다가 반응하는 것을 잘해요'**
+  String get anticipatoryResponseLow;
+
+  /// No description provided for @eventLog.
+  ///
+  /// In ko, this message translates to:
+  /// **'이벤트 로그'**
+  String get eventLog;
+
+  /// No description provided for @showAll.
+  ///
+  /// In ko, this message translates to:
+  /// **'전체 보기'**
+  String get showAll;
+
+  /// No description provided for @showLess.
+  ///
+  /// In ko, this message translates to:
+  /// **'간략히 보기'**
+  String get showLess;
+
+  /// No description provided for @noEventsRecorded.
+  ///
+  /// In ko, this message translates to:
+  /// **'기록된 이벤트가 없습니다'**
+  String get noEventsRecorded;
+
+  /// No description provided for @blueBalloonTap.
+  ///
+  /// In ko, this message translates to:
+  /// **'터치!'**
+  String get blueBalloonTap;
+
+  /// No description provided for @redBalloonNoTap.
+  ///
+  /// In ko, this message translates to:
+  /// **'터치 안 함!'**
+  String get redBalloonNoTap;
 }
 
 class _AppLocalizationsDelegate

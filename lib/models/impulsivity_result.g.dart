@@ -13,6 +13,18 @@ _ImpulsivityResult _$ImpulsivityResultFromJson(Map<String, dynamic> json) =>
       omissionErrors: (json['omissionErrors'] as num).toInt(),
       totalStimuli: (json['totalStimuli'] as num).toInt(),
       completionStatus: json['completionStatus'] as String,
+      anticipatoryResponses:
+          (json['anticipatoryResponses'] as num?)?.toInt() ?? 0,
+      reactionTimes:
+          (json['reactionTimes'] as List<dynamic>?)
+              ?.map((e) => (e as num).toInt())
+              .toList() ??
+          const [],
+      eventLogs:
+          (json['eventLogs'] as List<dynamic>?)
+              ?.map((e) => TestEventLog.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$ImpulsivityResultToJson(_ImpulsivityResult instance) =>
@@ -22,4 +34,7 @@ Map<String, dynamic> _$ImpulsivityResultToJson(_ImpulsivityResult instance) =>
       'omissionErrors': instance.omissionErrors,
       'totalStimuli': instance.totalStimuli,
       'completionStatus': instance.completionStatus,
+      'anticipatoryResponses': instance.anticipatoryResponses,
+      'reactionTimes': instance.reactionTimes,
+      'eventLogs': instance.eventLogs,
     };

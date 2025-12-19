@@ -203,4 +203,67 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get attentionRandom => '무작위로 터치하는 경향이 보여요';
+
+  @override
+  String get commissionError => '충동성 (빨간 풍선 터치)';
+
+  @override
+  String get commissionErrorDesc => '빨간 풍선이 나왔을 때 손이 먼저 나간 횟수';
+
+  @override
+  String get omissionError => '부주의 (파란 풍선 놓침)';
+
+  @override
+  String get omissionErrorDesc => '파란 풍선이 나왔는데 딴청 피우다 놓친 횟수';
+
+  @override
+  String get reactionTime => '반응 시간';
+
+  @override
+  String get reactionTimeDesc => '풍선이 뜨기 전에 화면을 누르는지 확인';
+
+  @override
+  String get averageReactionTime => '평균 반응 시간';
+
+  @override
+  String get anticipatoryResponse => '예측 반응';
+
+  @override
+  String get redBalloons => '빨간 풍선';
+
+  @override
+  String get impulseControlGood => '충동 조절을 잘하고 있어요';
+
+  @override
+  String get impulseControlNeeds => '충동 조절 연습이 필요해요';
+
+  @override
+  String get attentionGood => '집중력이 좋아요';
+
+  @override
+  String get attentionNeeds => '주의 집중 연습이 필요해요';
+
+  @override
+  String get anticipatoryResponseHigh => '기다리지 못하고 미리 반응하는 경향이 있어요';
+
+  @override
+  String get anticipatoryResponseLow => '기다렸다가 반응하는 것을 잘해요';
+
+  @override
+  String get eventLog => '이벤트 로그';
+
+  @override
+  String get showAll => '전체 보기';
+
+  @override
+  String get showLess => '간략히 보기';
+
+  @override
+  String get noEventsRecorded => '기록된 이벤트가 없습니다';
+
+  @override
+  String get blueBalloonTap => '터치!';
+
+  @override
+  String get redBalloonNoTap => '터치 안 함!';
 }

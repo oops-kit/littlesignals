@@ -60,5 +60,4 @@ class DefaultFirebaseOptions {
     authDomain: 'littlesignals.firebaseapp.com',
     storageBucket: 'littlesignals.firebasestorage.app',
   );
-
 }

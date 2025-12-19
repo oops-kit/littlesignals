@@ -6,10 +6,7 @@ import 'impulsivity_result.dart';
 
 part 'app_state.freezed.dart';
 
-enum TestType {
-  attention,
-  impulsivity,
-}
+enum TestType { attention, impulsivity }
 
 @freezed
 abstract class AppState with _$AppState {

@@ -1,7 +1,11 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:littlesignals/models/card_data.dart';
+import 'package:littlesignals/models/test_event_log.dart';
 
 part 'attention_test_state.freezed.dart';
+
+/// 주의력 테스트의 게임 상태
+enum AttentionGameState { countdown, playing, finished }
 
 /// 터치 기록 데이터 (지속성 분석용)
 @freezed
@@ -14,6 +18,8 @@ abstract class TapRecord with _$TapRecord {
 @freezed
 abstract class AttentionTestState with _$AttentionTestState {
   const factory AttentionTestState({
+    @Default(AttentionGameState.countdown) AttentionGameState gameState,
+    @Default(null) int? countdownValue,
     @Default(1) int level,
     @Default([]) List<CardData> cards,
     @Default([]) List<int> flippedCardIds,
@@ -44,5 +50,8 @@ abstract class AttentionTestState with _$AttentionTestState {
 
     /// 후반부 터치 횟수
     @Default(0) int secondHalfTaps,
+
+    /// 이벤트 로그 (테스트 중 발생한 모든 이벤트)
+    @Default([]) List<TestEventLog> eventLogs,
   }) = _AttentionTestState;
 }

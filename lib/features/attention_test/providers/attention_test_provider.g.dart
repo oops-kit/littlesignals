@@ -7,11 +7,13 @@ part of 'attention_test_provider.dart';
 // **************************************************************************
 
 String _$attentionTestControllerHash() =>
-    r'95272d1eee22cc3fcc9832b5e3880d1692630401';
+    r'30fe68bfbea2b2abb9344b02b2e47793383ef7c9';
 
 /// 주의력 테스트 컨트롤러
 ///
-/// 게임 로직을 담당합니다.
+/// 게임 흐름을 조율하고, 세부 로직은 전문 서비스에 위임합니다.
+/// SRP: 게임 흐름 조율에만 집중
+/// DIP: DeckGenerator, EventLogger, 각 서비스는 인터페이스를 통해 사용
 ///
 /// Copied from [AttentionTestController].
 @ProviderFor(AttentionTestController)

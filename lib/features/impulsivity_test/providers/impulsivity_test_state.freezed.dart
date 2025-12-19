@@ -14,7 +14,11 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ImpulsivityTestState {
 
- ImpulsivityGameState get gameState; BalloonData? get currentBalloon; int get stimuliCount; int get commissionErrors; int get omissionErrors; List<int> get reactionTimes; bool get isCompleted;
+ ImpulsivityGameState get gameState; BalloonData? get currentBalloon; int get stimuliCount; int get commissionErrors; int get omissionErrors; List<int> get reactionTimes; bool get isCompleted;/// 예측 반응 횟수 (풍선이 뜨기 전에 화면을 누른 횟수)
+ int get anticipatoryResponses;/// 테스트 시작 시간
+ DateTime? get startTime;/// 이벤트 로그 (테스트 중 발생한 모든 이벤트)
+ List<TestEventLog> get eventLogs;/// 카운트다운 값 (3, 2, 1)
+ int? get countdownValue;
 /// Create a copy of ImpulsivityTestState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +29,16 @@ $ImpulsivityTestStateCopyWith<ImpulsivityTestState> get copyWith => _$Impulsivit
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ImpulsivityTestState&&(identical(other.gameState, gameState) || other.gameState == gameState)&&(identical(other.currentBalloon, currentBalloon) || other.currentBalloon == currentBalloon)&&(identical(other.stimuliCount, stimuliCount) || other.stimuliCount == stimuliCount)&&(identical(other.commissionErrors, commissionErrors) || other.commissionErrors == commissionErrors)&&(identical(other.omissionErrors, omissionErrors) || other.omissionErrors == omissionErrors)&&const DeepCollectionEquality().equals(other.reactionTimes, reactionTimes)&&(identical(other.isCompleted, isCompleted) || other.isCompleted == isCompleted));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ImpulsivityTestState&&(identical(other.gameState, gameState) || other.gameState == gameState)&&(identical(other.currentBalloon, currentBalloon) || other.currentBalloon == currentBalloon)&&(identical(other.stimuliCount, stimuliCount) || other.stimuliCount == stimuliCount)&&(identical(other.commissionErrors, commissionErrors) || other.commissionErrors == commissionErrors)&&(identical(other.omissionErrors, omissionErrors) || other.omissionErrors == omissionErrors)&&const DeepCollectionEquality().equals(other.reactionTimes, reactionTimes)&&(identical(other.isCompleted, isCompleted) || other.isCompleted == isCompleted)&&(identical(other.anticipatoryResponses, anticipatoryResponses) || other.anticipatoryResponses == anticipatoryResponses)&&(identical(other.startTime, startTime) || other.startTime == startTime)&&const DeepCollectionEquality().equals(other.eventLogs, eventLogs)&&(identical(other.countdownValue, countdownValue) || other.countdownValue == countdownValue));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,gameState,currentBalloon,stimuliCount,commissionErrors,omissionErrors,const DeepCollectionEquality().hash(reactionTimes),isCompleted);
+int get hashCode => Object.hash(runtimeType,gameState,currentBalloon,stimuliCount,commissionErrors,omissionErrors,const DeepCollectionEquality().hash(reactionTimes),isCompleted,anticipatoryResponses,startTime,const DeepCollectionEquality().hash(eventLogs),countdownValue);
 
 @override
 String toString() {
-  return 'ImpulsivityTestState(gameState: $gameState, currentBalloon: $currentBalloon, stimuliCount: $stimuliCount, commissionErrors: $commissionErrors, omissionErrors: $omissionErrors, reactionTimes: $reactionTimes, isCompleted: $isCompleted)';
+  return 'ImpulsivityTestState(gameState: $gameState, currentBalloon: $currentBalloon, stimuliCount: $stimuliCount, commissionErrors: $commissionErrors, omissionErrors: $omissionErrors, reactionTimes: $reactionTimes, isCompleted: $isCompleted, anticipatoryResponses: $anticipatoryResponses, startTime: $startTime, eventLogs: $eventLogs, countdownValue: $countdownValue)';
 }
 
 
@@ -45,7 +49,7 @@ abstract mixin class $ImpulsivityTestStateCopyWith<$Res>  {
   factory $ImpulsivityTestStateCopyWith(ImpulsivityTestState value, $Res Function(ImpulsivityTestState) _then) = _$ImpulsivityTestStateCopyWithImpl;
 @useResult
 $Res call({
- ImpulsivityGameState gameState, BalloonData? currentBalloon, int stimuliCount, int commissionErrors, int omissionErrors, List<int> reactionTimes, bool isCompleted
+ ImpulsivityGameState gameState, BalloonData? currentBalloon, int stimuliCount, int commissionErrors, int omissionErrors, List<int> reactionTimes, bool isCompleted, int anticipatoryResponses, DateTime? startTime, List<TestEventLog> eventLogs, int? countdownValue
 });
 
 
@@ -62,7 +66,7 @@ class _$ImpulsivityTestStateCopyWithImpl<$Res>
 
 /// Create a copy of ImpulsivityTestState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? gameState = null,Object? currentBalloon = freezed,Object? stimuliCount = null,Object? commissionErrors = null,Object? omissionErrors = null,Object? reactionTimes = null,Object? isCompleted = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? gameState = null,Object? currentBalloon = freezed,Object? stimuliCount = null,Object? commissionErrors = null,Object? omissionErrors = null,Object? reactionTimes = null,Object? isCompleted = null,Object? anticipatoryResponses = null,Object? startTime = freezed,Object? eventLogs = null,Object? countdownValue = freezed,}) {
   return _then(_self.copyWith(
 gameState: null == gameState ? _self.gameState : gameState // ignore: cast_nullable_to_non_nullable
 as ImpulsivityGameState,currentBalloon: freezed == currentBalloon ? _self.currentBalloon : currentBalloon // ignore: cast_nullable_to_non_nullable
@@ -71,7 +75,11 @@ as int,commissionErrors: null == commissionErrors ? _self.commissionErrors : com
 as int,omissionErrors: null == omissionErrors ? _self.omissionErrors : omissionErrors // ignore: cast_nullable_to_non_nullable
 as int,reactionTimes: null == reactionTimes ? _self.reactionTimes : reactionTimes // ignore: cast_nullable_to_non_nullable
 as List<int>,isCompleted: null == isCompleted ? _self.isCompleted : isCompleted // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,anticipatoryResponses: null == anticipatoryResponses ? _self.anticipatoryResponses : anticipatoryResponses // ignore: cast_nullable_to_non_nullable
+as int,startTime: freezed == startTime ? _self.startTime : startTime // ignore: cast_nullable_to_non_nullable
+as DateTime?,eventLogs: null == eventLogs ? _self.eventLogs : eventLogs // ignore: cast_nullable_to_non_nullable
+as List<TestEventLog>,countdownValue: freezed == countdownValue ? _self.countdownValue : countdownValue // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 /// Create a copy of ImpulsivityTestState
@@ -168,10 +176,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ImpulsivityGameState gameState,  BalloonData? currentBalloon,  int stimuliCount,  int commissionErrors,  int omissionErrors,  List<int> reactionTimes,  bool isCompleted)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ImpulsivityGameState gameState,  BalloonData? currentBalloon,  int stimuliCount,  int commissionErrors,  int omissionErrors,  List<int> reactionTimes,  bool isCompleted,  int anticipatoryResponses,  DateTime? startTime,  List<TestEventLog> eventLogs,  int? countdownValue)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ImpulsivityTestState() when $default != null:
-return $default(_that.gameState,_that.currentBalloon,_that.stimuliCount,_that.commissionErrors,_that.omissionErrors,_that.reactionTimes,_that.isCompleted);case _:
+return $default(_that.gameState,_that.currentBalloon,_that.stimuliCount,_that.commissionErrors,_that.omissionErrors,_that.reactionTimes,_that.isCompleted,_that.anticipatoryResponses,_that.startTime,_that.eventLogs,_that.countdownValue);case _:
   return orElse();
 
 }
@@ -189,10 +197,10 @@ return $default(_that.gameState,_that.currentBalloon,_that.stimuliCount,_that.co
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ImpulsivityGameState gameState,  BalloonData? currentBalloon,  int stimuliCount,  int commissionErrors,  int omissionErrors,  List<int> reactionTimes,  bool isCompleted)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ImpulsivityGameState gameState,  BalloonData? currentBalloon,  int stimuliCount,  int commissionErrors,  int omissionErrors,  List<int> reactionTimes,  bool isCompleted,  int anticipatoryResponses,  DateTime? startTime,  List<TestEventLog> eventLogs,  int? countdownValue)  $default,) {final _that = this;
 switch (_that) {
 case _ImpulsivityTestState():
-return $default(_that.gameState,_that.currentBalloon,_that.stimuliCount,_that.commissionErrors,_that.omissionErrors,_that.reactionTimes,_that.isCompleted);case _:
+return $default(_that.gameState,_that.currentBalloon,_that.stimuliCount,_that.commissionErrors,_that.omissionErrors,_that.reactionTimes,_that.isCompleted,_that.anticipatoryResponses,_that.startTime,_that.eventLogs,_that.countdownValue);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -209,10 +217,10 @@ return $default(_that.gameState,_that.currentBalloon,_that.stimuliCount,_that.co
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ImpulsivityGameState gameState,  BalloonData? currentBalloon,  int stimuliCount,  int commissionErrors,  int omissionErrors,  List<int> reactionTimes,  bool isCompleted)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ImpulsivityGameState gameState,  BalloonData? currentBalloon,  int stimuliCount,  int commissionErrors,  int omissionErrors,  List<int> reactionTimes,  bool isCompleted,  int anticipatoryResponses,  DateTime? startTime,  List<TestEventLog> eventLogs,  int? countdownValue)?  $default,) {final _that = this;
 switch (_that) {
 case _ImpulsivityTestState() when $default != null:
-return $default(_that.gameState,_that.currentBalloon,_that.stimuliCount,_that.commissionErrors,_that.omissionErrors,_that.reactionTimes,_that.isCompleted);case _:
+return $default(_that.gameState,_that.currentBalloon,_that.stimuliCount,_that.commissionErrors,_that.omissionErrors,_that.reactionTimes,_that.isCompleted,_that.anticipatoryResponses,_that.startTime,_that.eventLogs,_that.countdownValue);case _:
   return null;
 
 }
@@ -224,7 +232,7 @@ return $default(_that.gameState,_that.currentBalloon,_that.stimuliCount,_that.co
 
 
 class _ImpulsivityTestState implements ImpulsivityTestState {
-  const _ImpulsivityTestState({this.gameState = ImpulsivityGameState.intro, this.currentBalloon = null, this.stimuliCount = 0, this.commissionErrors = 0, this.omissionErrors = 0, final  List<int> reactionTimes = const [], this.isCompleted = false}): _reactionTimes = reactionTimes;
+  const _ImpulsivityTestState({this.gameState = ImpulsivityGameState.intro, this.currentBalloon = null, this.stimuliCount = 0, this.commissionErrors = 0, this.omissionErrors = 0, final  List<int> reactionTimes = const [], this.isCompleted = false, this.anticipatoryResponses = 0, this.startTime = null, final  List<TestEventLog> eventLogs = const [], this.countdownValue = null}): _reactionTimes = reactionTimes,_eventLogs = eventLogs;
   
 
 @override@JsonKey() final  ImpulsivityGameState gameState;
@@ -240,6 +248,21 @@ class _ImpulsivityTestState implements ImpulsivityTestState {
 }
 
 @override@JsonKey() final  bool isCompleted;
+/// 예측 반응 횟수 (풍선이 뜨기 전에 화면을 누른 횟수)
+@override@JsonKey() final  int anticipatoryResponses;
+/// 테스트 시작 시간
+@override@JsonKey() final  DateTime? startTime;
+/// 이벤트 로그 (테스트 중 발생한 모든 이벤트)
+ final  List<TestEventLog> _eventLogs;
+/// 이벤트 로그 (테스트 중 발생한 모든 이벤트)
+@override@JsonKey() List<TestEventLog> get eventLogs {
+  if (_eventLogs is EqualUnmodifiableListView) return _eventLogs;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_eventLogs);
+}
+
+/// 카운트다운 값 (3, 2, 1)
+@override@JsonKey() final  int? countdownValue;
 
 /// Create a copy of ImpulsivityTestState
 /// with the given fields replaced by the non-null parameter values.
@@ -251,16 +274,16 @@ _$ImpulsivityTestStateCopyWith<_ImpulsivityTestState> get copyWith => __$Impulsi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ImpulsivityTestState&&(identical(other.gameState, gameState) || other.gameState == gameState)&&(identical(other.currentBalloon, currentBalloon) || other.currentBalloon == currentBalloon)&&(identical(other.stimuliCount, stimuliCount) || other.stimuliCount == stimuliCount)&&(identical(other.commissionErrors, commissionErrors) || other.commissionErrors == commissionErrors)&&(identical(other.omissionErrors, omissionErrors) || other.omissionErrors == omissionErrors)&&const DeepCollectionEquality().equals(other._reactionTimes, _reactionTimes)&&(identical(other.isCompleted, isCompleted) || other.isCompleted == isCompleted));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ImpulsivityTestState&&(identical(other.gameState, gameState) || other.gameState == gameState)&&(identical(other.currentBalloon, currentBalloon) || other.currentBalloon == currentBalloon)&&(identical(other.stimuliCount, stimuliCount) || other.stimuliCount == stimuliCount)&&(identical(other.commissionErrors, commissionErrors) || other.commissionErrors == commissionErrors)&&(identical(other.omissionErrors, omissionErrors) || other.omissionErrors == omissionErrors)&&const DeepCollectionEquality().equals(other._reactionTimes, _reactionTimes)&&(identical(other.isCompleted, isCompleted) || other.isCompleted == isCompleted)&&(identical(other.anticipatoryResponses, anticipatoryResponses) || other.anticipatoryResponses == anticipatoryResponses)&&(identical(other.startTime, startTime) || other.startTime == startTime)&&const DeepCollectionEquality().equals(other._eventLogs, _eventLogs)&&(identical(other.countdownValue, countdownValue) || other.countdownValue == countdownValue));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,gameState,currentBalloon,stimuliCount,commissionErrors,omissionErrors,const DeepCollectionEquality().hash(_reactionTimes),isCompleted);
+int get hashCode => Object.hash(runtimeType,gameState,currentBalloon,stimuliCount,commissionErrors,omissionErrors,const DeepCollectionEquality().hash(_reactionTimes),isCompleted,anticipatoryResponses,startTime,const DeepCollectionEquality().hash(_eventLogs),countdownValue);
 
 @override
 String toString() {
-  return 'ImpulsivityTestState(gameState: $gameState, currentBalloon: $currentBalloon, stimuliCount: $stimuliCount, commissionErrors: $commissionErrors, omissionErrors: $omissionErrors, reactionTimes: $reactionTimes, isCompleted: $isCompleted)';
+  return 'ImpulsivityTestState(gameState: $gameState, currentBalloon: $currentBalloon, stimuliCount: $stimuliCount, commissionErrors: $commissionErrors, omissionErrors: $omissionErrors, reactionTimes: $reactionTimes, isCompleted: $isCompleted, anticipatoryResponses: $anticipatoryResponses, startTime: $startTime, eventLogs: $eventLogs, countdownValue: $countdownValue)';
 }
 
 
@@ -271,7 +294,7 @@ abstract mixin class _$ImpulsivityTestStateCopyWith<$Res> implements $Impulsivit
   factory _$ImpulsivityTestStateCopyWith(_ImpulsivityTestState value, $Res Function(_ImpulsivityTestState) _then) = __$ImpulsivityTestStateCopyWithImpl;
 @override @useResult
 $Res call({
- ImpulsivityGameState gameState, BalloonData? currentBalloon, int stimuliCount, int commissionErrors, int omissionErrors, List<int> reactionTimes, bool isCompleted
+ ImpulsivityGameState gameState, BalloonData? currentBalloon, int stimuliCount, int commissionErrors, int omissionErrors, List<int> reactionTimes, bool isCompleted, int anticipatoryResponses, DateTime? startTime, List<TestEventLog> eventLogs, int? countdownValue
 });
 
 
@@ -288,7 +311,7 @@ class __$ImpulsivityTestStateCopyWithImpl<$Res>
 
 /// Create a copy of ImpulsivityTestState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? gameState = null,Object? currentBalloon = freezed,Object? stimuliCount = null,Object? commissionErrors = null,Object? omissionErrors = null,Object? reactionTimes = null,Object? isCompleted = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? gameState = null,Object? currentBalloon = freezed,Object? stimuliCount = null,Object? commissionErrors = null,Object? omissionErrors = null,Object? reactionTimes = null,Object? isCompleted = null,Object? anticipatoryResponses = null,Object? startTime = freezed,Object? eventLogs = null,Object? countdownValue = freezed,}) {
   return _then(_ImpulsivityTestState(
 gameState: null == gameState ? _self.gameState : gameState // ignore: cast_nullable_to_non_nullable
 as ImpulsivityGameState,currentBalloon: freezed == currentBalloon ? _self.currentBalloon : currentBalloon // ignore: cast_nullable_to_non_nullable
@@ -297,7 +320,11 @@ as int,commissionErrors: null == commissionErrors ? _self.commissionErrors : com
 as int,omissionErrors: null == omissionErrors ? _self.omissionErrors : omissionErrors // ignore: cast_nullable_to_non_nullable
 as int,reactionTimes: null == reactionTimes ? _self._reactionTimes : reactionTimes // ignore: cast_nullable_to_non_nullable
 as List<int>,isCompleted: null == isCompleted ? _self.isCompleted : isCompleted // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,anticipatoryResponses: null == anticipatoryResponses ? _self.anticipatoryResponses : anticipatoryResponses // ignore: cast_nullable_to_non_nullable
+as int,startTime: freezed == startTime ? _self.startTime : startTime // ignore: cast_nullable_to_non_nullable
+as DateTime?,eventLogs: null == eventLogs ? _self._eventLogs : eventLogs // ignore: cast_nullable_to_non_nullable
+as List<TestEventLog>,countdownValue: freezed == countdownValue ? _self.countdownValue : countdownValue // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 

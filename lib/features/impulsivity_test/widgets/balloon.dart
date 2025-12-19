@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class Balloon extends HookWidget {
-  const Balloon({
-    super.key,
-    required this.isBlue,
-    required this.onTap,
-  });
+  const Balloon({super.key, required this.isBlue, required this.onTap});
 
   final bool isBlue;
   final VoidCallback onTap;
@@ -29,7 +25,6 @@ class Balloon extends HookWidget {
     );
 
     final color = isBlue ? Colors.blue.shade500 : Colors.red.shade500;
-    final shadowColor = isBlue ? Colors.blue.shade300 : Colors.red.shade300;
 
     return GestureDetector(
       onTap: onTap,
@@ -39,6 +34,7 @@ class Balloon extends HookWidget {
           width: 96,
           height: 128,
           child: Stack(
+            clipBehavior: Clip.none,
             alignment: Alignment.topCenter,
             children: [
               // Balloon body
@@ -53,13 +49,6 @@ class Balloon extends HookWidget {
                     bottomLeft: Radius.circular(48),
                     bottomRight: Radius.circular(48),
                   ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: shadowColor,
-                      blurRadius: 16,
-                      offset: const Offset(0, 8),
-                    ),
-                  ],
                 ),
                 child: Stack(
                   children: [

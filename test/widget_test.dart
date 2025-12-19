@@ -6,11 +6,7 @@ import 'package:littlesignals/app.dart';
 
 void main() {
   testWidgets('App smoke test', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      const ProviderScope(
-        child: LittleSignalsApp(),
-      ),
-    );
+    await tester.pumpWidget(const ProviderScope(child: LittleSignalsApp()));
 
     // Verify the app loads
     expect(find.byType(MaterialApp), findsOneWidget);

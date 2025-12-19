@@ -52,10 +52,7 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          textStyle: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
+          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
       ),
       cardTheme: CardThemeData(
@@ -92,18 +89,9 @@ class AppTheme {
           fontWeight: FontWeight.w500,
           color: slate700,
         ),
-        bodyLarge: TextStyle(
-          fontSize: 16,
-          color: slate600,
-        ),
-        bodyMedium: TextStyle(
-          fontSize: 14,
-          color: slate500,
-        ),
-        bodySmall: TextStyle(
-          fontSize: 12,
-          color: slate400,
-        ),
+        bodyLarge: TextStyle(fontSize: 16, color: slate600),
+        bodyMedium: TextStyle(fontSize: 14, color: slate500),
+        bodySmall: TextStyle(fontSize: 12, color: slate400),
       ),
     );
   }

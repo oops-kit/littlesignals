@@ -3,15 +3,21 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:littlesignals/core/theme/app_theme.dart';
+import 'package:littlesignals/core/widgets/countdown_overlay.dart';
+import 'package:littlesignals/core/widgets/debug_event_listener.dart';
 import 'package:littlesignals/core/widgets/exit_confirm_dialog.dart';
 import 'package:littlesignals/core/widgets/game_header.dart';
 import 'package:littlesignals/l10n/app_localizations.dart';
 import 'package:littlesignals/router/app_router.dart';
 
 import 'providers/attention_test_provider.dart';
-import 'widgets/flip_card.dart';
+import 'providers/attention_test_state.dart';
+import 'widgets/card_grid.dart';
+import 'widgets/level_indicator.dart';
 
 /// 주의력 테스트 화면
+///
+/// SRP: UI 구성에만 집중, 디버그 로깅은 DebugEventListener에 위임
 class AttentionTestScreen extends HookConsumerWidget {
   const AttentionTestScreen({super.key});
 
@@ -21,25 +27,29 @@ class AttentionTestScreen extends HookConsumerWidget {
     final testState = ref.watch(attentionTestControllerProvider);
     final controller = ref.read(attentionTestControllerProvider.notifier);
 
-    // 초기화
+    // 게임 시작
     useEffect(() {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        controller.setupLevel(1);
+        controller.startGame();
       });
       return null;
     }, []);
 
-    // 완료 시 리포트 화면으로 이동
-    useEffect(() {
-      if (testState.isCompleted) {
+    // SRP: 완료 시 네비게이션을 ref.listen()으로 처리
+    // 상태 변화 감지를 통한 side effect 처리 패턴
+    ref.listen<AttentionTestState>(attentionTestControllerProvider, (
+      previous,
+      next,
+    ) {
+      // 이전 상태가 미완료이고 현재 상태가 완료된 경우에만 네비게이션
+      if (previous?.isCompleted != true && next.isCompleted) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (context.mounted) {
             context.go(AppRoutes.report);
           }
         });
       }
-      return null;
-    }, [testState.isCompleted]);
+    });
 
     void handleExit() {
       ExitConfirmDialog.show(
@@ -50,91 +60,50 @@ class AttentionTestScreen extends HookConsumerWidget {
 
     final columns = testState.level == 1 ? 3 : 4;
 
-    return Scaffold(
-      backgroundColor: AppTheme.attentionOrangeLight,
-      body: SafeArea(
-        child: Column(
-          children: [
-            GameHeader(
-              title: l10n.findAnimalFriends,
-              exitLabel: l10n.exit,
-              onExit: handleExit,
-              titleColor: Colors.orange.shade800,
-              exitColor: Colors.orange.shade400,
-            ),
-            Expanded(
-              child: _CardGrid(
-                cards: testState.cards,
-                columns: columns,
-                hintCardId: testState.hintCardId,
-                onCardTap: controller.handleCardClick,
+    // SRP: 디버그 로깅을 DebugEventListener에 위임
+    return DebugEventListener(
+      eventLogs: testState.eventLogs,
+      child: Scaffold(
+        backgroundColor: AppTheme.attentionOrangeLight,
+        body: SafeArea(
+          child: Stack(
+            children: [
+              Column(
+                children: [
+                  GameHeader(
+                    title: l10n.findAnimalFriends,
+                    exitLabel: l10n.exit,
+                    onExit: handleExit,
+                    titleColor: Colors.orange.shade800,
+                    exitColor: Colors.orange.shade400,
+                  ),
+                  Expanded(
+                    child: CardGrid(
+                      cards: testState.cards,
+                      columns: columns,
+                      hintCardId: testState.hintCardId,
+                      onCardTap: controller.handleCardClick,
+                      level: testState.level,
+                    ),
+                  ),
+                  LevelIndicator(
+                    level: testState.level,
+                    totalLevels: 2,
+                    levelLabel: l10n.level,
+                    color: Colors.orange.shade400,
+                  ),
+                ],
               ),
-            ),
-            _LevelIndicator(level: testState.level, levelLabel: l10n.level),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _CardGrid extends StatelessWidget {
-  const _CardGrid({
-    required this.cards,
-    required this.columns,
-    required this.hintCardId,
-    required this.onCardTap,
-  });
-
-  final List cards;
-  final int columns;
-  final int? hintCardId;
-  final void Function(int) onCardTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 500),
-          child: GridView.builder(
-            shrinkWrap: true,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: columns,
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-            ),
-            itemCount: cards.length,
-            itemBuilder: (context, index) {
-              final card = cards[index];
-              return FlipCard(
-                key: ValueKey(card.id),
-                card: card,
-                isHinting: hintCardId == card.id,
-                onTap: () => onCardTap(card.id),
-              );
-            },
+              // 카운트다운 오버레이
+              if (testState.gameState == AttentionGameState.countdown &&
+                  testState.countdownValue != null)
+                CountdownOverlay(
+                  value: testState.countdownValue!,
+                  circleColor: Colors.orange.shade500,
+                ),
+            ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _LevelIndicator extends StatelessWidget {
-  const _LevelIndicator({required this.level, required this.levelLabel});
-
-  final int level;
-  final String levelLabel;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Text(
-        '$levelLabel $level / 2',
-        style: TextStyle(color: Colors.orange.shade400, fontSize: 14),
       ),
     );
   }

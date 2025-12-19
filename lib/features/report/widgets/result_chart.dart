@@ -61,9 +61,9 @@ class ResultChart extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                       gradient: LinearGradient(
                         colors: [
-                          Colors.amber.shade300.withOpacity(0.3),
-                          Colors.green.shade300.withOpacity(0.3),
-                          Colors.blue.shade300.withOpacity(0.3),
+                          Colors.amber.shade300.withValues(alpha: 0.3),
+                          Colors.green.shade300.withValues(alpha: 0.3),
+                          Colors.blue.shade300.withValues(alpha: 0.3),
                         ],
                       ),
                     ),
@@ -123,7 +123,9 @@ class ResultChart extends StatelessWidget {
                                   ),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black.withOpacity(0.1),
+                                      color: Colors.black.withValues(
+                                        alpha: 0.1,
+                                      ),
                                       blurRadius: 4,
                                       offset: const Offset(0, 2),
                                     ),

@@ -24,6 +24,11 @@ _AttentionResult _$AttentionResultFromJson(Map<String, dynamic> json) =>
           (json['secondHalfDurationSeconds'] as num?)?.toDouble() ?? 0.0,
       firstHalfTaps: (json['firstHalfTaps'] as num?)?.toInt() ?? 0,
       secondHalfTaps: (json['secondHalfTaps'] as num?)?.toInt() ?? 0,
+      eventLogs:
+          (json['eventLogs'] as List<dynamic>?)
+              ?.map((e) => TestEventLog.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$AttentionResultToJson(_AttentionResult instance) =>
@@ -38,6 +43,7 @@ Map<String, dynamic> _$AttentionResultToJson(_AttentionResult instance) =>
       'secondHalfDurationSeconds': instance.secondHalfDurationSeconds,
       'firstHalfTaps': instance.firstHalfTaps,
       'secondHalfTaps': instance.secondHalfTaps,
+      'eventLogs': instance.eventLogs,
     };
 
 const _$CompletionStatusEnumMap = {

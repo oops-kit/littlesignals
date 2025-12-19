@@ -24,10 +24,7 @@ class LittleSignalsApp extends ConsumerWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [
-        Locale('ko'),
-        Locale('en'),
-      ],
+      supportedLocales: const [Locale('ko'), Locale('en')],
       locale: const Locale('ko'),
     );
   }

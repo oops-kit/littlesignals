@@ -1,7 +1,7 @@
-import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:littlesignals/core/domain/test_result.dart';
 import 'package:littlesignals/core/theme/app_theme.dart';
 import 'package:littlesignals/l10n/app_localizations.dart';
 import 'package:littlesignals/models/app_state.dart';
@@ -10,6 +10,8 @@ import 'package:littlesignals/router/app_router.dart';
 
 import 'providers/report_provider.dart';
 import 'widgets/behavior_style_card.dart';
+import 'widgets/event_log_card.dart';
+import 'widgets/impulsivity_data_card.dart';
 import 'widgets/observation_data_card.dart';
 import 'widgets/observe_another_button.dart';
 import 'widgets/parenting_tips_card.dart';
@@ -26,50 +28,22 @@ class ReportScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final appState = ref.watch(appStateNotifierProvider);
     final isAttention = appState.activeTest == TestType.attention;
+    final calculator = ref.watch(reportCalculatorProvider);
 
     final attentionResult = appState.attentionResult;
     final impulsivityResult = appState.impulsivityResult;
 
-    // #region agent log
-    developer.log(
-      '[DEBUG][HypA,B] ReportScreen build: '
-      'activeTest=${appState.activeTest}, '
-      'isAttention=$isAttention, '
-      'attentionResult=${attentionResult != null}, '
-      'impulsivityResult=${impulsivityResult != null}',
-      name: 'ReportScreen',
-    );
-    // #endregion
+    // 테스트 결과를 TestResult 인터페이스로 추상화
+    final TestResult? testResult = isAttention
+        ? attentionResult
+        : impulsivityResult;
 
-    if (isAttention && attentionResult == null) {
-      // #region agent log
-      developer.log(
-        '[DEBUG][HypC] Loading: isAttention=true, attentionResult=null',
-        name: 'ReportScreen',
-      );
-      // #endregion
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    }
-    if (!isAttention && impulsivityResult == null) {
-      // #region agent log
-      developer.log(
-        '[DEBUG][HypA,B] Loading: isAttention=false, impulsivityResult=null',
-        name: 'ReportScreen',
-      );
-      // #endregion
+    if (testResult == null) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
-    final reportData = isAttention
-        ? ReportCalculator.fromAttentionResult(
-            durationSeconds: attentionResult!.durationSeconds,
-            errors: attentionResult.errors,
-            l10n: l10n,
-          )
-        : ReportCalculator.fromImpulsivityResult(
-            commissionErrors: impulsivityResult!.commissionErrors,
-            l10n: l10n,
-          );
+    // Strategy 패턴을 통한 리포트 데이터 계산
+    final reportData = calculator.calculate(testResult, l10n);
 
     void handleObserveAnother() {
       ref.read(appStateNotifierProvider.notifier).clearActiveTest();
@@ -92,9 +66,13 @@ class ReportScreen extends ConsumerWidget {
                 description: reportData.description,
               ),
               const SizedBox(height: 16),
-              // 주의력 테스트인 경우 관찰 데이터 포인트 표시
+              // 테스트별 관찰 데이터 포인트 표시
               if (isAttention && attentionResult != null) ...[
                 ObservationDataCard(result: attentionResult),
+                const SizedBox(height: 16),
+              ],
+              if (!isAttention && impulsivityResult != null) ...[
+                ImpulsivityDataCard(result: impulsivityResult),
                 const SizedBox(height: 16),
               ],
               ResultChart(
@@ -108,6 +86,14 @@ class ReportScreen extends ConsumerWidget {
               ParentingTipsCard(
                 title: l10n.parentingTips,
                 tips: reportData.tips,
+              ),
+              const SizedBox(height: 16),
+              // 이벤트 로그 - TestResult 인터페이스 활용
+              EventLogCard(
+                eventLogs: testResult.eventLogs,
+                startTime: testResult.eventLogs.isNotEmpty
+                    ? testResult.eventLogs.first.timestamp
+                    : null,
               ),
               const SizedBox(height: 24),
               ObserveAnotherButton(
