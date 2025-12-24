@@ -73,19 +73,14 @@ class AttentionTestController extends _$AttentionTestController {
       countdownValue: null,
       startTime: DateTime.now(),
     );
-    setupLevel(1);
+    setupGame();
   }
 
-  /// 레벨 초기화
-  void setupLevel(int level) {
-    final pairCount = level == 1
-        ? AppConstants.attentionLevel1Pairs
-        : AppConstants.attentionLevel2Pairs;
-
-    final deck = _deckGenerator.generate(pairCount);
+  /// 게임 초기화 (기획서: 3x2 격자, 3쌍 고정)
+  void setupGame() {
+    final deck = _deckGenerator.generate(AppConstants.attentionPairCount);
 
     state = state.copyWith(
-      level: level,
       cards: deck,
       flippedCardIds: [],
       isProcessing: false,
@@ -108,7 +103,11 @@ class AttentionTestController extends _$AttentionTestController {
           (c) => !c.isMatched && !state.flippedCardIds.contains(c.id),
         );
         if (available != -1) {
-          state = state.copyWith(hintCardId: state.cards[available].id);
+          // 기획서: 힌트 사용 시 점수 가중치 0.5점 차감
+          state = state.copyWith(
+            hintCardId: state.cards[available].id,
+            hintUsedCount: state.hintUsedCount + 1,
+          );
         }
       },
       onHideHint: () {
@@ -129,6 +128,15 @@ class AttentionTestController extends _$AttentionTestController {
     if (state.isProcessing) return;
 
     final now = DateTime.now();
+
+    // Cool-down: 마지막 카드 뒤집기 후 일정 시간 동안 입력 차단
+    // 기획서: 애니메이션 직후 300~500ms 터치 차단
+    if (state.lastFlipTime != null) {
+      final elapsed = now.difference(state.lastFlipTime!).inMilliseconds;
+      if (elapsed < AppConstants.attentionCooldownMs) {
+        return; // Cool-down 중이므로 무시
+      }
+    }
     final cardIndex = state.cards.indexWhere((c) => c.id == cardId);
     if (cardIndex == -1) return;
 
@@ -307,24 +315,10 @@ class AttentionTestController extends _$AttentionTestController {
       return;
     }
 
-    if (state.level == 1) {
-      // 전반부 완료 시간 기록
-      _logRecorder.logLevelComplete(1);
-      state = state.copyWith(
-        firstHalfEndTime: DateTime.now(),
-        eventLogs: _logRecorder.logs,
-      );
-
-      // 다음 레벨로
-      Future.delayed(const Duration(seconds: 1), () {
-        setupLevel(2);
-      });
-    } else {
-      // 테스트 완료
-      _logRecorder.logLevelComplete(2);
-      state = state.copyWith(eventLogs: _logRecorder.logs);
-      _finishTest();
-    }
+    // 테스트 완료 (기획서: 3쌍 고정, 레벨 시스템 없음)
+    _logRecorder.logLevelComplete(1);
+    state = state.copyWith(eventLogs: _logRecorder.logs);
+    _finishTest();
   }
 
   void _finishTest() {
@@ -367,6 +361,8 @@ class AttentionTestController extends _$AttentionTestController {
       uniqueCardsRevealed: state.revealedCardIds.length,
       totalTurns: state.totalTurns,
       reactionTimesMs: state.reactionTimesMs,
+      // 힌트 사용 횟수
+      hintUsedCount: state.hintUsedCount,
     );
 
     ref.read(appStateNotifierProvider.notifier).setAttentionResult(result);

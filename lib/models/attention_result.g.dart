@@ -37,6 +37,7 @@ _AttentionResult _$AttentionResultFromJson(Map<String, dynamic> json) =>
               ?.map((e) => (e as num).toInt())
               .toList() ??
           const [],
+      hintUsedCount: (json['hintUsedCount'] as num?)?.toInt() ?? 0,
     );
 
 Map<String, dynamic> _$AttentionResultToJson(_AttentionResult instance) =>
@@ -56,6 +57,7 @@ Map<String, dynamic> _$AttentionResultToJson(_AttentionResult instance) =>
       'uniqueCardsRevealed': instance.uniqueCardsRevealed,
       'totalTurns': instance.totalTurns,
       'reactionTimesMs': instance.reactionTimesMs,
+      'hintUsedCount': instance.hintUsedCount,
     };
 
 const _$CompletionStatusEnumMap = {

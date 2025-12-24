@@ -10,6 +10,7 @@ import 'package:littlesignals/router/app_router.dart';
 
 import 'providers/report_provider.dart';
 import 'widgets/behavior_style_card.dart';
+import 'widgets/debug_metrics_card.dart';
 import 'widgets/event_log_card.dart';
 import 'widgets/impulsivity_data_card.dart';
 import 'widgets/key_metrics_card.dart';
@@ -67,6 +68,14 @@ class ReportScreen extends ConsumerWidget {
               const SizedBox(height: 16),
               _PageTitle(title: l10n.observationSummary),
               const SizedBox(height: 24),
+              // 디버그 모드에서만 표시되는 내부 계산값 카드
+              DebugMetricsCard(
+                attentionResult: attentionResult,
+                impulsivityResult: impulsivityResult,
+                attentionAnalysis: reportData.attentionAnalysis,
+                impulsivityAnalysis: reportData.impulsivityAnalysis,
+              ),
+              const SizedBox(height: 16),
               BehaviorStyleCard(
                 label: l10n.behaviorStyle,
                 title: reportData.title,

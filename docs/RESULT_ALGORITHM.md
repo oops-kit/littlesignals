@@ -36,6 +36,16 @@ TestResult → ReportCalculator → ReportData → UI 렌더링
 
 ## 주의력 테스트 결과 알고리즘
 
+### 테스트 설계 (기획서 기준)
+
+| 항목 | 값 | 설명 |
+|-----|-----|------|
+| 격자 구성 | 3x2 (6장, 3쌍) | 고정 |
+| 오답 피드백 노출 | 1500ms | 시각 정보 저장 시간 보장 |
+| 입력 차단 (Cool-down) | 400ms | 충동성 연타 방지 |
+| 힌트 딜레이 | 8초 | 입력이 없을 때 힌트 표시 |
+| 힌트 사용 패널티 | MER -0.05/회 | 힌트 사용 시 점수 차감 |
+
 ### 입력 데이터 (AttentionResult)
 
 | 필드 | 타입 | 설명 |
@@ -47,6 +57,7 @@ TestResult → ReportCalculator → ReportData → UI 렌더링
 | `uniqueCardsRevealed` | int | 확인한 고유 카드 수 |
 | `totalTurns` | int | 총 턴 수 (카드 2장 뒤집기 = 1턴) |
 | `reactionTimesMs` | List\<int\> | 개별 반응 시간 목록 (ms) |
+| `hintUsedCount` | int | 힌트 사용 횟수 |
 
 ### 1. MER (Memory Efficiency Ratio) 계산
 
@@ -56,17 +67,21 @@ TestResult → ReportCalculator → ReportData → UI 렌더링
 // 실제 턴 수 계산
 actualTurns = totalTurns > 0 ? totalTurns : (totalMoves / 2).ceil()
 
-// MER 계산
-MER = baselineTurns / actualTurns
+// 기본 MER 계산
+baseMER = baselineTurns / actualTurns
+
+// 힌트 패널티 적용 (기획서: 힌트 사용 시 0.5점 차감 → MER 0.05 차감)
+MER = (baseMER - (hintUsedCount * 0.05)).clamp(0.0, 1.0)
 ```
 
 - **baselineTurns**: 6 (3쌍의 카드를 완벽하게 맞추는 최소 턴 수)
-- **MER 범위**: 0.0 ~ 1.0+ (1.0이면 완벽한 효율)
+- **MER 범위**: 0.0 ~ 1.0 (1.0이면 완벽한 효율)
+- **힌트 패널티**: 힌트 1회 사용 시 MER에서 0.05 차감
 
 **예시:**
-- 6턴에 완료 → MER = 6/6 = 1.0 (완벽)
-- 10턴에 완료 → MER = 6/10 = 0.6
-- 15턴에 완료 → MER = 6/15 = 0.4
+- 6턴에 완료, 힌트 0회 → MER = 6/6 = 1.0 (완벽)
+- 10턴에 완료, 힌트 0회 → MER = 6/10 = 0.6
+- 10턴에 완료, 힌트 2회 → MER = 0.6 - 0.1 = 0.5
 
 ### 2. 재확인율 (Revisiting Rate) 계산
 
@@ -105,6 +120,16 @@ revisitZ = (peerMean - observedRevisitingRate) / peerStdDev
 
 ## 충동성 테스트 결과 알고리즘
 
+### 테스트 설계 (기획서 기준)
+
+| 항목 | 값 | 설명 |
+|-----|-----|------|
+| 자극 노출 시간 | 1500ms | 풍선이 화면에 머무는 시간 |
+| 자극 간 간격 (ISI) | 1500ms | 고정, 다음 풍선까지 대기 시간 |
+| 파란 풍선 비율 (Go) | 75% | 터치해야 하는 자극 |
+| 빨간 풍선 비율 (No-Go) | 25% | 터치하면 안 되는 자극 |
+| 총 자극 수 | 15개 | 테스트당 풍선 수 |
+
 ### 입력 데이터 (ImpulsivityResult)
 
 | 필드 | 타입 | 설명 |
@@ -121,8 +146,8 @@ revisitZ = (peerMean - observedRevisitingRate) / peerStdDev
 **억제 비율**은 No-go 자극에 대해 얼마나 잘 반응을 억제했는지를 나타냅니다.
 
 ```dart
-// No-go 자극 수 (전체의 약 30%)
-noGoCount = (totalStimuli * 0.3).round()
+// No-go 자극 수 (전체의 25%, 기획서 기준)
+noGoCount = (totalStimuli * 0.25).round()
 
 // 정확히 억제한 수
 correctInhibitions = noGoCount - commissionErrors
@@ -423,4 +448,5 @@ lib/
 ---
 
 *Last Updated: 2024-12-24*
+*Updated: 기획서(12/22 웹페이지 판단 알고리즘 구성) 반영*
 

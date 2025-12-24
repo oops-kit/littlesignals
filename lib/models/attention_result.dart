@@ -53,6 +53,9 @@ abstract class AttentionResult with _$AttentionResult implements TestResult {
 
     /// 개별 반응 시간 목록 (ms)
     @Default([]) List<int> reactionTimesMs,
+
+    /// 힌트 사용 횟수 (기획서: 힌트 사용 시 0.5점 차감)
+    @Default(0) int hintUsedCount,
   }) = _AttentionResult;
 
   const AttentionResult._();

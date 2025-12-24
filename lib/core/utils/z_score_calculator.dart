@@ -10,6 +10,10 @@ import 'package:littlesignals/models/z_score_result.dart';
 class ZScoreCalculator {
   const ZScoreCalculator._();
 
+  /// 힌트 사용 당 MER 차감 값 (기획서: 0.5점 차감)
+  /// MER은 0~1 범위이므로 0.05로 조정 (0.5/10)
+  static const double _hintPenaltyPerUse = 0.05;
+
   /// 주의력 테스트 결과 분석
   static AttentionAnalysisResult analyzeAttentionResult({
     required AttentionResult result,
@@ -20,9 +24,14 @@ class ZScoreCalculator {
     final actualTurns = result.totalTurns > 0
         ? result.totalTurns
         : (result.totalMoves / 2).ceil();
-    final mer = actualTurns > 0
+    double mer = actualTurns > 0
         ? AttentionAgeNorms.baselineTurns / actualTurns
         : 0.0;
+
+    // 기획서: 힌트 사용 시 점수 가중치 차감
+    if (result.hintUsedCount > 0) {
+      mer = (mer - (result.hintUsedCount * _hintPenaltyPerUse)).clamp(0.0, 1.0);
+    }
 
     // 재확인율 계산: 재확인 횟수 / 총 이동 횟수
     final revisitingRate = result.totalMoves > 0
@@ -32,9 +41,10 @@ class ZScoreCalculator {
     // 평균 반응시간 계산 (초)
     final avgReactionTime = result.reactionTimesMs.isNotEmpty
         ? result.reactionTimesMs.reduce((a, b) => a + b) /
-            result.reactionTimesMs.length /
-            1000
-        : result.durationSeconds / (result.totalMoves > 0 ? result.totalMoves : 1);
+              result.reactionTimesMs.length /
+              1000
+        : result.durationSeconds /
+              (result.totalMoves > 0 ? result.totalMoves : 1);
 
     // 규준값 가져오기
     final merNorm = AttentionAgeNorms.getMerNorm(ageMonths);
@@ -79,14 +89,17 @@ class ZScoreCalculator {
     );
   }
 
+  /// No-go 비율 (기획서: 25%)
+  static const double _noGoRatio = 0.25;
+
   /// 충동성 테스트 결과 분석
   static ImpulsivityAnalysisResult analyzeImpulsivityResult({
     required ImpulsivityResult result,
     required double ageMonths,
     required AppLocalizations l10n,
   }) {
-    // No-go 자극 수 계산 (전체의 약 30%)
-    final noGoCount = (result.totalStimuli * 0.3).round();
+    // No-go 자극 수 계산 (기획서: 전체의 25%)
+    final noGoCount = (result.totalStimuli * _noGoRatio).round();
 
     // 억제 비율 계산: (정확히 억제한 수) / (No-Go 총 수)
     final correctInhibitions = noGoCount - result.commissionErrors;
@@ -216,5 +229,3 @@ class ZScoreCalculator {
     return ((clampedZ + 2) / 4) * 100;
   }
 }
-
-

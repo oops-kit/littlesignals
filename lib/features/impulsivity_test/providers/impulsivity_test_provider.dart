@@ -75,9 +75,10 @@ class ImpulsivityTestController extends _$ImpulsivityTestController {
   }
 
   void _initBalloonController() {
+    // 기획서: ISI 1500ms 고정 (min=max)
     _balloonController = BalloonSpawnController(
-      minIntervalMs: AppConstants.impulsivityMinIntervalMs,
-      maxIntervalMs: AppConstants.impulsivityMaxIntervalMs,
+      minIntervalMs: AppConstants.impulsivityIntervalMs,
+      maxIntervalMs: AppConstants.impulsivityIntervalMs,
       balloonDurationMs: AppConstants.impulsivityBalloonDurationMs,
       blueRatio: AppConstants.impulsivityBlueRatio,
       onSpawn: (balloon) {

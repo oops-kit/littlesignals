@@ -69,5 +69,8 @@ abstract class AttentionTestState with _$AttentionTestState {
 
     /// 마지막 카드 뒤집기 시간 (반응시간 계산용)
     @Default(null) DateTime? lastFlipTime,
+
+    /// 힌트 사용 횟수 (기획서: 힌트 사용 시 0.5점 차감)
+    @Default(0) int hintUsedCount,
   }) = _AttentionTestState;
 }
