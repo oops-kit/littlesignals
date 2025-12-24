@@ -7,8 +7,8 @@ import 'package:littlesignals/models/balloon_data.dart';
 /// 풍선 위젯
 ///
 /// 탭 상태에 따라 다른 애니메이션을 표시합니다:
-/// - correctTap: 팡! 터지는 효과
-/// - incorrectTap: 좌우로 흔들리는 효과
+/// - correctTap: 팡! 터지는 효과 (파란 풍선)
+/// - incorrectTap: X 표시 효과 (빨간 풍선)
 /// - timeout: 페이드아웃
 class Balloon extends HookWidget {
   const Balloon({
@@ -34,8 +34,8 @@ class Balloon extends HookWidget {
       duration: const Duration(milliseconds: 300),
     );
 
-    // 흔들림 애니메이션 (빨간 풍선 탭)
-    final shakeController = useAnimationController(
+    // X 효과 애니메이션 (빨간 풍선 탭)
+    final xController = useAnimationController(
       duration: const Duration(milliseconds: 400),
     );
 
@@ -56,7 +56,7 @@ class Balloon extends HookWidget {
         case BalloonTapState.correctTap:
           popController.forward();
         case BalloonTapState.incorrectTap:
-          shakeController.forward();
+          xController.forward();
         case BalloonTapState.timeout:
           fadeController.forward();
         case BalloonTapState.none:
@@ -83,9 +83,18 @@ class Balloon extends HookWidget {
       ),
     );
 
-    final shakeAnimation = useAnimation(
+    final xAnimation = useAnimation(
       Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(parent: shakeController, curve: Curves.elasticOut),
+        CurvedAnimation(parent: xController, curve: Curves.elasticOut),
+      ),
+    );
+
+    final xFadeOut = useAnimation(
+      Tween<double>(begin: 1.0, end: 0.0).animate(
+        CurvedAnimation(
+          parent: xController,
+          curve: const Interval(0.6, 1.0, curve: Curves.easeOut),
+        ),
       ),
     );
 
@@ -97,9 +106,6 @@ class Balloon extends HookWidget {
 
     final color = isBlue ? Colors.blue.shade500 : Colors.red.shade500;
 
-    // 흔들림 오프셋 계산
-    final shakeOffset = sin(shakeAnimation * 4 * pi) * 12 * (1 - shakeAnimation);
-
     // 최종 스케일과 투명도 계산
     double finalScale = scaleAnimation;
     double finalOpacity = 1.0;
@@ -107,86 +113,90 @@ class Balloon extends HookWidget {
     if (tapState == BalloonTapState.correctTap) {
       finalScale = scaleAnimation * popAnimation;
       finalOpacity = popOpacity;
+    } else if (tapState == BalloonTapState.incorrectTap) {
+      finalOpacity = xFadeOut;
     } else if (tapState == BalloonTapState.timeout) {
       finalOpacity = fadeAnimation;
     }
 
     return GestureDetector(
       onTap: tapState == BalloonTapState.none ? onTap : null,
-      child: Transform.translate(
-        offset: Offset(shakeOffset, 0),
-        child: Transform.scale(
-          scale: finalScale,
-          child: Opacity(
-            opacity: finalOpacity,
-            child: SizedBox(
-              width: 96,
-              height: 128,
-              child: Stack(
-                clipBehavior: Clip.none,
-                alignment: Alignment.topCenter,
-                children: [
-                  // Balloon body
-                  Container(
-                    width: 96,
-                    height: 120,
+      child: Transform.scale(
+        scale: finalScale,
+        child: Opacity(
+          opacity: finalOpacity,
+          child: SizedBox(
+            width: 96,
+            height: 128,
+            child: Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.topCenter,
+              children: [
+                // Balloon body
+                Container(
+                  width: 96,
+                  height: 120,
+                  decoration: BoxDecoration(
+                    color: color,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(48),
+                      topRight: Radius.circular(48),
+                      bottomLeft: Radius.circular(48),
+                      bottomRight: Radius.circular(48),
+                    ),
+                  ),
+                  child: Stack(
+                    children: [
+                      // Shine effect
+                      Positioned(
+                        top: 16,
+                        left: 16,
+                        child: Container(
+                          width: 24,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.3),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          transform: Matrix4.rotationZ(0.2),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // Balloon knot
+                Positioned(
+                  bottom: 0,
+                  child: Container(
+                    width: 12,
+                    height: 12,
                     decoration: BoxDecoration(
                       color: color,
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(48),
-                        topRight: Radius.circular(48),
-                        bottomLeft: Radius.circular(48),
-                        bottomRight: Radius.circular(48),
-                      ),
-                    ),
-                    child: Stack(
-                      children: [
-                        // Shine effect
-                        Positioned(
-                          top: 16,
-                          left: 16,
-                          child: Container(
-                            width: 24,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.3),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            transform: Matrix4.rotationZ(0.2),
-                          ),
-                        ),
-                      ],
+                      borderRadius: BorderRadius.circular(2),
                     ),
                   ),
-                  // Balloon knot
-                  Positioned(
-                    bottom: 0,
-                    child: Container(
-                      width: 12,
-                      height: 12,
-                      decoration: BoxDecoration(
-                        color: color,
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
+                ),
+                // String
+                Positioned(
+                  bottom: -40,
+                  child: Container(
+                    width: 2,
+                    height: 48,
+                    color: Colors.grey.shade400,
                   ),
-                  // String
-                  Positioned(
-                    bottom: -40,
-                    child: Container(
-                      width: 2,
-                      height: 48,
-                      color: Colors.grey.shade400,
-                    ),
+                ),
+                // 팝 이펙트 파티클 (파란 풍선)
+                if (tapState == BalloonTapState.correctTap)
+                  _PopParticles(
+                    color: color,
+                    progress: popController.value,
                   ),
-                  // 팝 이펙트 파티클
-                  if (tapState == BalloonTapState.correctTap)
-                    _PopParticles(
-                      color: color,
-                      progress: popController.value,
-                    ),
-                ],
-              ),
+                // X 이펙트 (빨간 풍선)
+                if (tapState == BalloonTapState.incorrectTap)
+                  _XEffect(
+                    progress: xAnimation,
+                  ),
+              ],
             ),
           ),
         ),
@@ -275,5 +285,47 @@ class _ParticlePainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant _ParticlePainter oldDelegate) {
     return oldDelegate.progress != progress;
+  }
+}
+
+/// X 표시 효과 (빨간 풍선 탭 시)
+class _XEffect extends StatelessWidget {
+  const _XEffect({
+    required this.progress,
+  });
+
+  final double progress;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned.fill(
+      child: Center(
+        child: Transform.scale(
+          scale: progress,
+          child: Container(
+            width: 80,
+            height: 80,
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.9),
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.red.withValues(alpha: 0.3),
+                  blurRadius: 20,
+                  spreadRadius: 5,
+                ),
+              ],
+            ),
+            child: const Center(
+              child: Icon(
+                Icons.close,
+                color: Colors.red,
+                size: 48,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

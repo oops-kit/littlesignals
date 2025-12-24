@@ -8,6 +8,7 @@ import 'package:littlesignals/models/child_profile.dart';
 import 'package:littlesignals/providers/app_state_provider.dart';
 import 'package:littlesignals/providers/debug_mode_provider.dart';
 import 'package:littlesignals/router/app_router.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'widgets/app_logo.dart';
 import 'widgets/date_selector.dart';
@@ -184,15 +185,22 @@ class _ErrorMessage extends StatelessWidget {
   }
 }
 
-class _VersionText extends StatelessWidget {
+class _VersionText extends HookWidget {
   const _VersionText();
-
-  static const String _version = '1.0.1';
 
   @override
   Widget build(BuildContext context) {
+    final versionInfo = useState<String>('');
+
+    useEffect(() {
+      PackageInfo.fromPlatform().then((info) {
+        versionInfo.value = 'v${info.version}+${info.buildNumber}';
+      });
+      return null;
+    }, []);
+
     return Text(
-      'v$_version',
+      versionInfo.value,
       style: const TextStyle(fontSize: 12, color: AppTheme.slate400),
     );
   }
