@@ -309,6 +309,15 @@ class AttentionTestController extends _$AttentionTestController {
   }
 
   void _checkCompletion() {
+    // 매칭된 쌍 수 계산
+    final matchedPairs = state.cards.where((c) => c.isMatched).length ~/ 2;
+    final totalPairs = AppConstants.attentionPairCount;
+
+    // 전반부/후반부 구분: 절반(2쌍) 매칭 시 전반부 종료
+    if (matchedPairs == (totalPairs ~/ 2 + 1) && state.firstHalfEndTime == null) {
+      state = state.copyWith(firstHalfEndTime: DateTime.now());
+    }
+
     // SRP: 완료 확인을 CardMatchingService에 위임
     if (!_matchingService.isAllMatched(state.cards)) {
       _startHintTimer();
