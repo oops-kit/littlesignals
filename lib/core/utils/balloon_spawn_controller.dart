@@ -47,8 +47,10 @@ class BalloonSpawnController {
   void scheduleNext() {
     if (_isDisposed) return;
 
-    final delay =
-        minIntervalMs + _random.nextInt(maxIntervalMs - minIntervalMs);
+    // min == max인 경우 고정 간격, 아니면 랜덤 간격
+    final delay = minIntervalMs == maxIntervalMs
+        ? minIntervalMs
+        : minIntervalMs + _random.nextInt(maxIntervalMs - minIntervalMs);
 
     _spawnTimer = Timer(Duration(milliseconds: delay), () {
       if (_isDisposed) return;
