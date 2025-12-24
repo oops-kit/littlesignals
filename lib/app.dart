@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import 'core/theme/app_theme.dart';
-import 'router/app_router.dart';
+import 'package:littlesignals/core/theme/app_theme.dart';
+import 'package:littlesignals/l10n/app_localizations.dart';
+import 'package:littlesignals/router/app_router.dart';
 
 class LittleSignalsApp extends ConsumerWidget {
   const LittleSignalsApp({super.key});

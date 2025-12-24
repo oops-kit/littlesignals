@@ -7,12 +7,11 @@ import 'package:littlesignals/core/widgets/countdown_overlay.dart';
 import 'package:littlesignals/core/widgets/debug_event_listener.dart';
 import 'package:littlesignals/core/widgets/exit_confirm_dialog.dart';
 import 'package:littlesignals/core/widgets/game_header.dart';
+import 'package:littlesignals/features/attention_test/providers/attention_test_provider.dart';
+import 'package:littlesignals/features/attention_test/providers/attention_test_state.dart';
+import 'package:littlesignals/features/attention_test/widgets/card_grid.dart';
 import 'package:littlesignals/l10n/app_localizations.dart';
 import 'package:littlesignals/router/app_router.dart';
-
-import 'providers/attention_test_provider.dart';
-import 'providers/attention_test_state.dart';
-import 'widgets/card_grid.dart';
 
 /// 주의력 테스트 화면
 ///
@@ -103,3 +102,4 @@ class AttentionTestScreen extends HookConsumerWidget {
     );
   }
 }
+

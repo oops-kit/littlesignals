@@ -1,4 +1,5 @@
 import 'dart:developer' as developer;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -7,12 +8,11 @@ import 'package:littlesignals/core/constants/app_constants.dart';
 import 'package:littlesignals/core/theme/app_theme.dart';
 import 'package:littlesignals/core/widgets/progress_text.dart';
 import 'package:littlesignals/core/widgets/section_header.dart';
+import 'package:littlesignals/features/calibration/widgets/bubble_row.dart';
 import 'package:littlesignals/l10n/app_localizations.dart';
 import 'package:littlesignals/models/app_state.dart';
 import 'package:littlesignals/providers/app_state_provider.dart';
 import 'package:littlesignals/router/app_router.dart';
-
-import 'widgets/bubble_row.dart';
 
 /// 캘리브레이션 화면
 ///

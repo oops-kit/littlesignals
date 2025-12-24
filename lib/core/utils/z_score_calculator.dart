@@ -1,231 +1,57 @@
-import 'package:littlesignals/core/constants/age_norms.dart';
+import 'package:littlesignals/core/services/analysis/attention_z_score_analyzer.dart';
+import 'package:littlesignals/core/services/analysis/impulsivity_z_score_analyzer.dart';
+import 'package:littlesignals/core/services/analysis/z_score_visual_converter.dart';
 import 'package:littlesignals/l10n/app_localizations.dart';
 import 'package:littlesignals/models/attention_result.dart';
 import 'package:littlesignals/models/impulsivity_result.dart';
 import 'package:littlesignals/models/z_score_result.dart';
 
-/// Z점수 계산 유틸리티
+/// Z점수 계산 유틸리티 (Facade)
 ///
-/// 아동의 테스트 결과를 월령별 규준값과 비교하여 Z점수를 계산합니다.
+/// 기존 API와의 호환성을 유지하면서 내부적으로 분리된 서비스들에 위임합니다.
+/// SRP를 적용하여 실제 로직은 다음 클래스들에 분리되어 있습니다:
+/// - AttentionZScoreAnalyzer: 주의력 테스트 Z점수 분석
+/// - ImpulsivityZScoreAnalyzer: 충동성 테스트 Z점수 분석
+/// - BehaviorPatternClassifier: 행동 패턴 분류
+/// - ZScoreLabelProvider: Z점수 라벨 생성
+/// - ZScoreVisualConverter: Z점수 시각화 변환
 class ZScoreCalculator {
   const ZScoreCalculator._();
 
-  /// 힌트 사용 당 MER 차감 값 (기획서: 0.5점 차감)
-  /// MER은 0~1 범위이므로 0.05로 조정 (0.5/10)
-  static const double _hintPenaltyPerUse = 0.05;
-
   /// 주의력 테스트 결과 분석
+  ///
+  /// AttentionZScoreAnalyzer에 위임합니다.
   static AttentionAnalysisResult analyzeAttentionResult({
     required AttentionResult result,
     required double ageMonths,
     required AppLocalizations l10n,
   }) {
-    // MER 계산: (기준턴수 / 실제턴수)
-    final actualTurns = result.totalTurns > 0
-        ? result.totalTurns
-        : (result.totalMoves / 2).ceil();
-    double mer = actualTurns > 0
-        ? AttentionAgeNorms.baselineTurns / actualTurns
-        : 0.0;
-
-    // 기획서: 힌트 사용 시 점수 가중치 차감
-    if (result.hintUsedCount > 0) {
-      mer = (mer - (result.hintUsedCount * _hintPenaltyPerUse)).clamp(0.0, 1.0);
-    }
-
-    // 재확인율 계산: 재확인 횟수 / 총 이동 횟수
-    final revisitingRate = result.totalMoves > 0
-        ? result.revisitCount / result.totalMoves
-        : 0.0;
-
-    // 평균 반응시간 계산 (초)
-    final avgReactionTime = result.reactionTimesMs.isNotEmpty
-        ? result.reactionTimesMs.reduce((a, b) => a + b) /
-              result.reactionTimesMs.length /
-              1000
-        : result.durationSeconds /
-              (result.totalMoves > 0 ? result.totalMoves : 1);
-
-    // 규준값 가져오기
-    final merNorm = AttentionAgeNorms.getMerNorm(ageMonths);
-    final revisitNorm = AttentionAgeNorms.getRevisitingRateNorm(ageMonths);
-    final rtNorm = AttentionAgeNorms.getReactionTimeNorm(ageMonths);
-
-    // Z점수 계산
-    final merZ = merNorm.calculateZScore(mer);
-    final revisitZ = revisitNorm.calculateZScore(
-      revisitingRate,
-      invertDirection: true,
-    );
-
-    // 행동 패턴 분류
-    final pattern = _classifyAttentionPattern(
-      merZ: merZ,
-      revisitZ: revisitZ,
-      avgReactionTime: avgReactionTime,
-      rtNorm: rtNorm,
-    );
-
-    return AttentionAnalysisResult(
-      merZScore: ZScoreResult(
-        zScore: merZ,
-        label: _getMerLabel(merZ, l10n),
-        peerMean: merNorm.mean,
-        peerStdDev: merNorm.stdDev,
-        observedValue: mer,
-      ),
-      revisitingRateZScore: ZScoreResult(
-        zScore: revisitZ,
-        label: _getRevisitLabel(revisitZ, l10n),
-        peerMean: revisitNorm.mean,
-        peerStdDev: revisitNorm.stdDev,
-        observedValue: revisitingRate,
-      ),
-      behaviorPattern: pattern,
-      mer: mer,
-      revisitingRate: revisitingRate,
-      avgReactionTime: avgReactionTime,
-      isReactionTimeNormal: rtNorm.isWithinRange(avgReactionTime),
+    return AttentionZScoreAnalyzer.analyze(
+      result: result,
+      ageMonths: ageMonths,
+      l10n: l10n,
     );
   }
 
-  /// No-go 비율 (기획서: 25%)
-  static const double _noGoRatio = 0.25;
-
   /// 충동성 테스트 결과 분석
+  ///
+  /// ImpulsivityZScoreAnalyzer에 위임합니다.
   static ImpulsivityAnalysisResult analyzeImpulsivityResult({
     required ImpulsivityResult result,
     required double ageMonths,
     required AppLocalizations l10n,
   }) {
-    // No-go 자극 수 계산 (기획서: 전체의 25%)
-    final noGoCount = (result.totalStimuli * _noGoRatio).round();
-
-    // 억제 비율 계산: (정확히 억제한 수) / (No-Go 총 수)
-    final correctInhibitions = noGoCount - result.commissionErrors;
-    final inhibitionRate = noGoCount > 0 ? correctInhibitions / noGoCount : 0.0;
-
-    // 평균 반응시간 (ms)
-    final avgReactionTime = result.reactionTimeAverage;
-
-    // 규준값 가져오기
-    final inhibitionNorm = ImpulsivityAgeNorms.getInhibitionRateNorm(ageMonths);
-    final rtNorm = ImpulsivityAgeNorms.getReactionTimeNorm(ageMonths);
-
-    // Z점수 계산
-    final inhibitionZ = inhibitionNorm.calculateZScore(inhibitionRate);
-
-    // 반응시간이 또래 평균보다 빠른지 판단
-    final isFastReactor = avgReactionTime < rtNorm.mean;
-
-    // 행동 패턴 분류
-    final pattern = _classifyImpulsivityPattern(
-      inhibitionZ: inhibitionZ,
-      isFastReactor: isFastReactor,
+    return ImpulsivityZScoreAnalyzer.analyze(
+      result: result,
+      ageMonths: ageMonths,
+      l10n: l10n,
     );
-
-    return ImpulsivityAnalysisResult(
-      inhibitionZScore: ZScoreResult(
-        zScore: inhibitionZ,
-        label: _getInhibitionLabel(inhibitionZ, l10n),
-        peerMean: inhibitionNorm.mean,
-        peerStdDev: inhibitionNorm.stdDev,
-        observedValue: inhibitionRate,
-      ),
-      behaviorPattern: pattern,
-      inhibitionRate: inhibitionRate,
-      avgReactionTime: avgReactionTime,
-      isFastReactor: isFastReactor,
-    );
-  }
-
-  /// 주의력 행동 패턴 분류
-  static AttentionBehaviorPattern _classifyAttentionPattern({
-    required double merZ,
-    required double revisitZ,
-    required double avgReactionTime,
-    required AgeRangeNormData rtNorm,
-  }) {
-    // MER이 평균 이상인지 (z >= 0)
-    final isHighMer = merZ >= 0;
-    // 재확인율이 평균 이하인지 (z >= 0, 방향 반전 적용됨)
-    final isLowRevisit = revisitZ >= 0;
-    // 반응시간이 느린지 (중앙값보다 높음)
-    final isSlowReaction = avgReactionTime > rtNorm.midValue;
-
-    if (isHighMer && isLowRevisit) {
-      // MER 높고 재확인율 낮음
-      return isSlowReaction
-          ? AttentionBehaviorPattern.carefulExplorer
-          : AttentionBehaviorPattern.quickProcessor;
-    } else {
-      // MER 낮거나 재확인율 높음
-      return isSlowReaction
-          ? AttentionBehaviorPattern.diligentTrier
-          : AttentionBehaviorPattern.energeticExplorer;
-    }
-  }
-
-  /// 충동성 행동 패턴 분류 (4분면)
-  static ImpulsivityBehaviorPattern _classifyImpulsivityPattern({
-    required double inhibitionZ,
-    required bool isFastReactor,
-  }) {
-    // 억제 비율이 평균 이상인지 (z >= 0)
-    final isHighInhibition = inhibitionZ >= 0;
-
-    if (isFastReactor) {
-      // 반응 빠름
-      return isHighInhibition
-          ? ImpulsivityBehaviorPattern.quickAndControlled
-          : ImpulsivityBehaviorPattern.energyFirst;
-    } else {
-      // 반응 느림
-      return isHighInhibition
-          ? ImpulsivityBehaviorPattern.calmAndStable
-          : ImpulsivityBehaviorPattern.learningAtOwnPace;
-    }
-  }
-
-  /// MER Z점수에 대한 부모용 라벨
-  static String _getMerLabel(double z, AppLocalizations l10n) {
-    if (z >= -1 && z <= 1) {
-      return l10n.peerAverage;
-    } else if (z > 1) {
-      return l10n.highMemoryEfficiency;
-    } else {
-      return l10n.developingMemory;
-    }
-  }
-
-  /// 재확인율 Z점수에 대한 부모용 라벨
-  static String _getRevisitLabel(double z, AppLocalizations l10n) {
-    if (z >= -1 && z <= 1) {
-      return l10n.peerAverage;
-    } else if (z > 1) {
-      return l10n.stableMemory;
-    } else {
-      return l10n.activeExploration;
-    }
-  }
-
-  /// 억제 비율 Z점수에 대한 부모용 라벨
-  static String _getInhibitionLabel(double z, AppLocalizations l10n) {
-    if (z >= -1 && z <= 1) {
-      return l10n.peerAverage;
-    } else if (z > 1) {
-      return l10n.goodSelfControl;
-    } else {
-      return l10n.highEnergy;
-    }
   }
 
   /// Z점수를 시각화용 위치값(0-100)으로 변환
-  /// Z점수 -2 ~ +2 범위를 0 ~ 100으로 매핑
+  ///
+  /// ZScoreVisualConverter에 위임합니다.
   static double zScoreToVisualPosition(double zScore) {
-    // Z점수를 -2 ~ +2 범위로 클램핑
-    final clampedZ = zScore.clamp(-2.0, 2.0);
-    // 0-100 범위로 변환 (0 = -2, 50 = 0, 100 = +2)
-    return ((clampedZ + 2) / 4) * 100;
+    return ZScoreVisualConverter.toVisualPosition(zScore);
   }
 }

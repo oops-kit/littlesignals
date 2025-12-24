@@ -9,12 +9,11 @@ import 'package:littlesignals/core/services/attention/card_matching_service.dart
 import 'package:littlesignals/core/utils/countdown_controller.dart';
 import 'package:littlesignals/core/utils/event_log_recorder.dart';
 import 'package:littlesignals/core/utils/hint_timer_controller.dart';
-import 'package:littlesignals/models/card_data.dart';
+import 'package:littlesignals/features/attention_test/providers/attention_test_state.dart';
 import 'package:littlesignals/models/attention_result.dart';
+import 'package:littlesignals/models/card_data.dart';
 import 'package:littlesignals/providers/app_state_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import 'attention_test_state.dart';
 
 part 'attention_test_provider.g.dart';
 

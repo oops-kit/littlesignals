@@ -1,13 +1,13 @@
 import 'dart:developer' as developer;
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:littlesignals/core/theme/app_theme.dart';
 import 'package:littlesignals/core/widgets/section_header.dart';
+import 'package:littlesignals/features/mode_selection/widgets/test_mode_card.dart';
 import 'package:littlesignals/l10n/app_localizations.dart';
 import 'package:littlesignals/models/app_state.dart';
 import 'package:littlesignals/router/app_router.dart';
-
-import 'widgets/test_mode_card.dart';
 
 /// 모드 선택 화면
 ///

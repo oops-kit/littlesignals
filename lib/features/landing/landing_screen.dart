@@ -3,16 +3,15 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:littlesignals/core/theme/app_theme.dart';
+import 'package:littlesignals/features/landing/widgets/app_logo.dart';
+import 'package:littlesignals/features/landing/widgets/date_selector.dart';
+import 'package:littlesignals/features/landing/widgets/primary_button.dart';
 import 'package:littlesignals/l10n/app_localizations.dart';
 import 'package:littlesignals/models/child_profile.dart';
 import 'package:littlesignals/providers/app_state_provider.dart';
 import 'package:littlesignals/providers/debug_mode_provider.dart';
 import 'package:littlesignals/router/app_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-
-import 'widgets/app_logo.dart';
-import 'widgets/date_selector.dart';
-import 'widgets/primary_button.dart';
 
 /// 랜딩 화면
 ///

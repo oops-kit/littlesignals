@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:littlesignals/features/attention_test/widgets/flip_card.dart';
 import 'package:littlesignals/models/card_data.dart';
-
-import 'flip_card.dart';
 
 /// 카드 그리드 위젯
 ///

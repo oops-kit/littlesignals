@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:littlesignals/features/impulsivity_test/widgets/balloon.dart';
 import 'package:littlesignals/models/balloon_data.dart';
-
-import 'balloon.dart';
 
 /// 화면에 위치한 풍선 위젯
 class BalloonPositioned extends StatelessWidget {

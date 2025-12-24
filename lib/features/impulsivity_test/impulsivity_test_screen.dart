@@ -9,14 +9,13 @@ import 'package:littlesignals/core/widgets/debug_event_listener.dart';
 import 'package:littlesignals/core/widgets/exit_confirm_dialog.dart';
 import 'package:littlesignals/core/widgets/game_header.dart';
 import 'package:littlesignals/core/widgets/game_progress_indicator.dart';
+import 'package:littlesignals/features/impulsivity_test/providers/impulsivity_test_provider.dart';
+import 'package:littlesignals/features/impulsivity_test/providers/impulsivity_test_state.dart';
+import 'package:littlesignals/features/impulsivity_test/widgets/balloon_positioned.dart';
+import 'package:littlesignals/features/impulsivity_test/widgets/rules_indicator.dart';
 import 'package:littlesignals/l10n/app_localizations.dart';
 import 'package:littlesignals/models/balloon_data.dart';
 import 'package:littlesignals/router/app_router.dart';
-
-import 'providers/impulsivity_test_provider.dart';
-import 'providers/impulsivity_test_state.dart';
-import 'widgets/balloon_positioned.dart';
-import 'widgets/rules_indicator.dart';
 
 /// 충동성 테스트 화면
 ///

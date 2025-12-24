@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:littlesignals/core/constants/app_constants.dart';
-
-import 'calibration_bubble.dart';
+import 'package:littlesignals/features/calibration/widgets/calibration_bubble.dart';
 
 /// 캘리브레이션 화면에서 버블들을 가로로 배치하는 위젯
 class BubbleRow extends StatelessWidget {

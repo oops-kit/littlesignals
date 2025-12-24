@@ -3,22 +3,21 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:littlesignals/core/domain/test_result.dart';
 import 'package:littlesignals/core/theme/app_theme.dart';
+import 'package:littlesignals/features/report/providers/report_provider.dart';
+import 'package:littlesignals/features/report/widgets/behavior_style_card.dart';
+import 'package:littlesignals/features/report/widgets/debug_metrics_card.dart';
+import 'package:littlesignals/features/report/widgets/event_log_card.dart';
+import 'package:littlesignals/features/report/widgets/impulsivity_data_card.dart';
+import 'package:littlesignals/features/report/widgets/key_metrics_card.dart';
+import 'package:littlesignals/features/report/widgets/observation_data_card.dart';
+import 'package:littlesignals/features/report/widgets/observe_another_button.dart';
+import 'package:littlesignals/features/report/widgets/parenting_tips_card.dart';
+import 'package:littlesignals/features/report/widgets/result_chart.dart';
+import 'package:littlesignals/features/report/widgets/result_interpretation_card.dart';
 import 'package:littlesignals/l10n/app_localizations.dart';
 import 'package:littlesignals/models/app_state.dart';
 import 'package:littlesignals/providers/app_state_provider.dart';
 import 'package:littlesignals/router/app_router.dart';
-
-import 'providers/report_provider.dart';
-import 'widgets/behavior_style_card.dart';
-import 'widgets/debug_metrics_card.dart';
-import 'widgets/event_log_card.dart';
-import 'widgets/impulsivity_data_card.dart';
-import 'widgets/key_metrics_card.dart';
-import 'widgets/observation_data_card.dart';
-import 'widgets/observe_another_button.dart';
-import 'widgets/parenting_tips_card.dart';
-import 'widgets/result_chart.dart';
-import 'widgets/result_interpretation_card.dart';
 
 /// 리포트 화면
 ///

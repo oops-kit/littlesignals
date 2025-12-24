@@ -1,8 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import 'attention_result.dart';
-import 'child_profile.dart';
-import 'impulsivity_result.dart';
+import 'package:littlesignals/models/attention_result.dart';
+import 'package:littlesignals/models/child_profile.dart';
+import 'package:littlesignals/models/impulsivity_result.dart';
 
 part 'app_state.freezed.dart';
 
