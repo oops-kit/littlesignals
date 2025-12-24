@@ -55,7 +55,14 @@ class ReportScreen extends ConsumerWidget {
 
     void handleObserveAnother() {
       ref.read(appStateNotifierProvider.notifier).clearActiveTest();
-      context.go(AppRoutes.modeSelection);
+      // 스택을 정리하기 위해 먼저 루트로 이동
+      context.go(AppRoutes.landing);
+      // 다음 프레임에서 modeSelection으로 이동하여 스택 중복 방지
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (context.mounted) {
+          context.go(AppRoutes.modeSelection);
+        }
+      });
     }
 
     return Scaffold(
