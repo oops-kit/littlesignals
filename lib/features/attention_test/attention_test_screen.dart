@@ -13,7 +13,6 @@ import 'package:littlesignals/router/app_router.dart';
 import 'providers/attention_test_provider.dart';
 import 'providers/attention_test_state.dart';
 import 'widgets/card_grid.dart';
-import 'widgets/level_indicator.dart';
 
 /// 주의력 테스트 화면
 ///
@@ -58,7 +57,8 @@ class AttentionTestScreen extends HookConsumerWidget {
       );
     }
 
-    final columns = testState.level == 1 ? 3 : 4;
+    // 기획서: 3x2 격자 (3쌍) 고정
+    const columns = 3;
 
     // SRP: 디버그 로깅을 DebugEventListener에 위임
     return DebugEventListener(
@@ -83,15 +83,10 @@ class AttentionTestScreen extends HookConsumerWidget {
                       columns: columns,
                       hintCardId: testState.hintCardId,
                       onCardTap: controller.handleCardClick,
-                      level: testState.level,
                     ),
                   ),
-                  LevelIndicator(
-                    level: testState.level,
-                    totalLevels: 2,
-                    levelLabel: l10n.level,
-                    color: Colors.orange.shade400,
-                  ),
+                  // 기획서: 3쌍 고정, 레벨 시스템 없음
+                  const SizedBox(height: 16),
                 ],
               ),
               // 카운트다운 오버레이
