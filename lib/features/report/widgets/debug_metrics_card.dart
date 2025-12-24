@@ -1,14 +1,12 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:littlesignals/core/theme/app_theme.dart';
 import 'package:littlesignals/models/attention_result.dart';
 import 'package:littlesignals/models/impulsivity_result.dart';
 import 'package:littlesignals/models/z_score_result.dart';
 
-/// 디버그용 상세 지표 카드
+/// 상세 지표 카드
 ///
-/// kDebugMode일 때만 표시됩니다.
-/// 기획서에서 "UI에 노출하지 말라"고 한 Z점수 등 내부 계산값을 표시합니다.
+/// Z점수 등 내부 계산값을 표시합니다.
 class DebugMetricsCard extends StatelessWidget {
   const DebugMetricsCard({
     super.key,
@@ -25,9 +23,6 @@ class DebugMetricsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 릴리즈 모드에서는 표시하지 않음
-    if (!kDebugMode) return const SizedBox.shrink();
-
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -71,14 +66,29 @@ class DebugMetricsCard extends StatelessWidget {
         _sectionTitle('📊 주의력 Z점수 분석'),
         _debugRow('MER (원본)', analysis.mer.toStringAsFixed(4)),
         _debugRow('MER Z점수', analysis.merZScore.zScore.toStringAsFixed(3)),
-        _debugRow('MER 또래평균(μ)', analysis.merZScore.peerMean.toStringAsFixed(3)),
-        _debugRow('MER 표준편차(σ)', analysis.merZScore.peerStdDev.toStringAsFixed(3)),
+        _debugRow(
+          'MER 또래평균(μ)',
+          analysis.merZScore.peerMean.toStringAsFixed(3),
+        ),
+        _debugRow(
+          'MER 표준편차(σ)',
+          analysis.merZScore.peerStdDev.toStringAsFixed(3),
+        ),
         _debugRow('MER 라벨', analysis.merZScore.label),
         const Divider(height: 16),
         _debugRow('재확인율 (원본)', analysis.revisitingRate.toStringAsFixed(4)),
-        _debugRow('재확인율 Z점수', analysis.revisitingRateZScore.zScore.toStringAsFixed(3)),
-        _debugRow('재확인율 또래평균(μ)', analysis.revisitingRateZScore.peerMean.toStringAsFixed(3)),
-        _debugRow('재확인율 표준편차(σ)', analysis.revisitingRateZScore.peerStdDev.toStringAsFixed(3)),
+        _debugRow(
+          '재확인율 Z점수',
+          analysis.revisitingRateZScore.zScore.toStringAsFixed(3),
+        ),
+        _debugRow(
+          '재확인율 또래평균(μ)',
+          analysis.revisitingRateZScore.peerMean.toStringAsFixed(3),
+        ),
+        _debugRow(
+          '재확인율 표준편차(σ)',
+          analysis.revisitingRateZScore.peerStdDev.toStringAsFixed(3),
+        ),
         const Divider(height: 16),
         _debugRow('평균 반응시간', '${analysis.avgReactionTime.toStringAsFixed(2)}초'),
         _debugRow('반응시간 정상범위', analysis.isReactionTimeNormal ? '✅ 예' : '❌ 아니오'),
@@ -95,12 +105,24 @@ class DebugMetricsCard extends StatelessWidget {
       children: [
         _sectionTitle('📊 충동성 Z점수 분석'),
         _debugRow('억제비율 (원본)', analysis.inhibitionRate.toStringAsFixed(4)),
-        _debugRow('억제비율 Z점수', analysis.inhibitionZScore.zScore.toStringAsFixed(3)),
-        _debugRow('억제비율 또래평균(μ)', analysis.inhibitionZScore.peerMean.toStringAsFixed(3)),
-        _debugRow('억제비율 표준편차(σ)', analysis.inhibitionZScore.peerStdDev.toStringAsFixed(3)),
+        _debugRow(
+          '억제비율 Z점수',
+          analysis.inhibitionZScore.zScore.toStringAsFixed(3),
+        ),
+        _debugRow(
+          '억제비율 또래평균(μ)',
+          analysis.inhibitionZScore.peerMean.toStringAsFixed(3),
+        ),
+        _debugRow(
+          '억제비율 표준편차(σ)',
+          analysis.inhibitionZScore.peerStdDev.toStringAsFixed(3),
+        ),
         _debugRow('억제비율 라벨', analysis.inhibitionZScore.label),
         const Divider(height: 16),
-        _debugRow('평균 반응시간', '${analysis.avgReactionTime.toStringAsFixed(0)}ms'),
+        _debugRow(
+          '평균 반응시간',
+          '${analysis.avgReactionTime.toStringAsFixed(0)}ms',
+        ),
         _debugRow('빠른 반응자', analysis.isFastReactor ? '✅ 예' : '❌ 아니오'),
         _debugRow('행동 패턴', analysis.behaviorPattern.name),
         const SizedBox(height: 8),
@@ -125,7 +147,10 @@ class DebugMetricsCard extends StatelessWidget {
         _debugRow('즉시 반복 오류', '${result.immediateRepeatErrors}회'),
         if (result.reactionTimesMs.isNotEmpty) ...[
           _debugRow('반응시간 목록', '${result.reactionTimesMs.length}개'),
-          _debugRow('반응시간 평균', '${(result.reactionTimesMs.reduce((a, b) => a + b) / result.reactionTimesMs.length).toStringAsFixed(0)}ms'),
+          _debugRow(
+            '반응시간 평균',
+            '${(result.reactionTimesMs.reduce((a, b) => a + b) / result.reactionTimesMs.length).toStringAsFixed(0)}ms',
+          ),
         ],
         const SizedBox(height: 8),
       ],
@@ -142,7 +167,10 @@ class DebugMetricsCard extends StatelessWidget {
         _debugRow('Commission 오류', '${result.commissionErrors}회 (No-go에 반응)'),
         _debugRow('Omission 오류', '${result.omissionErrors}회 (Go에 미반응)'),
         _debugRow('예측 반응', '${result.anticipatoryResponses}회'),
-        _debugRow('평균 반응시간', '${result.reactionTimeAverage.toStringAsFixed(0)}ms'),
+        _debugRow(
+          '평균 반응시간',
+          '${result.reactionTimeAverage.toStringAsFixed(0)}ms',
+        ),
         if (result.reactionTimes.isNotEmpty) ...[
           _debugRow('반응시간 목록', '${result.reactionTimes.length}개'),
         ],
@@ -198,4 +226,3 @@ class DebugMetricsCard extends StatelessWidget {
     );
   }
 }
-

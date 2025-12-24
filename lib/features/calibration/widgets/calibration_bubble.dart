@@ -73,9 +73,9 @@ class CalibrationBubble extends HookWidget {
       ),
     );
 
-    // 팝 애니메이션이 완료되면 빈 공간 반환
+    // 팝 애니메이션이 완료되면 빈 공간 반환 (크기 유지하여 레이아웃 흔들림 방지)
     if (isPopped && popController.isCompleted) {
-      return const SizedBox(width: 64, height: 64);
+      return const SizedBox(width: 80, height: 80);
     }
 
     // 팝 중이거나 일반 상태
