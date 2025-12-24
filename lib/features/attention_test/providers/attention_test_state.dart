@@ -53,5 +53,21 @@ abstract class AttentionTestState with _$AttentionTestState {
 
     /// 이벤트 로그 (테스트 중 발생한 모든 이벤트)
     @Default([]) List<TestEventLog> eventLogs,
+
+    // === MER 및 재확인율 계산용 필드 ===
+    /// 이미 확인한 카드 ID 집합
+    @Default({}) Set<int> revealedCardIds,
+
+    /// 재확인 횟수 (이미 본 카드를 다시 뒤집은 횟수)
+    @Default(0) int revisitCount,
+
+    /// 총 턴 수 (카드 2장 뒤집기 = 1턴)
+    @Default(0) int totalTurns,
+
+    /// 개별 반응 시간 목록 (ms)
+    @Default([]) List<int> reactionTimesMs,
+
+    /// 마지막 카드 뒤집기 시간 (반응시간 계산용)
+    @Default(null) DateTime? lastFlipTime,
   }) = _AttentionTestState;
 }

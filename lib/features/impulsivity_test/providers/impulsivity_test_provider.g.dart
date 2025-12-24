@@ -7,7 +7,7 @@ part of 'impulsivity_test_provider.dart';
 // **************************************************************************
 
 String _$impulsivityTestControllerHash() =>
-    r'708eb92608b1d1a671a8fb1aa1d71bf529c1bee0';
+    r'8aad856f2abd313972eea1e6040f3f6065d85602';
 
 /// 충동성 테스트 컨트롤러
 ///

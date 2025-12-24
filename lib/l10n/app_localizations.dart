@@ -613,6 +613,414 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'터치 안 함!'**
   String get redBalloonNoTap;
+
+  /// No description provided for @peerAverage.
+  ///
+  /// In ko, this message translates to:
+  /// **'또래 평균'**
+  String get peerAverage;
+
+  /// No description provided for @highMemoryEfficiency.
+  ///
+  /// In ko, this message translates to:
+  /// **'기억 효율이 높음'**
+  String get highMemoryEfficiency;
+
+  /// No description provided for @developingMemory.
+  ///
+  /// In ko, this message translates to:
+  /// **'기억력 발달 중'**
+  String get developingMemory;
+
+  /// No description provided for @stableMemory.
+  ///
+  /// In ko, this message translates to:
+  /// **'안정적인 기억 유지'**
+  String get stableMemory;
+
+  /// No description provided for @activeExploration.
+  ///
+  /// In ko, this message translates to:
+  /// **'활발한 탐색'**
+  String get activeExploration;
+
+  /// No description provided for @goodSelfControl.
+  ///
+  /// In ko, this message translates to:
+  /// **'자기 조절을 잘 함'**
+  String get goodSelfControl;
+
+  /// No description provided for @carefulExplorerTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'신중한 탐색가'**
+  String get carefulExplorerTitle;
+
+  /// No description provided for @carefulExplorerDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'아이의 속도는 느릴 수 있지만, 한 번 본 정보는 잘 기억하고 신중하게 행동하는 편이에요.'**
+  String get carefulExplorerDesc;
+
+  /// No description provided for @quickProcessorTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'빠른 처리형'**
+  String get quickProcessorTitle;
+
+  /// No description provided for @quickProcessorDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'아이의 기억과 판단 속도가 또래에 비해 빠른 편이에요. 놀이를 금방 파악하고 활용하고 있어요.'**
+  String get quickProcessorDesc;
+
+  /// No description provided for @energeticExplorerTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'에너지 탐색형'**
+  String get energeticExplorerTitle;
+
+  /// No description provided for @energeticExplorerDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'아이에게는 새로운 것을 바로 확인하고 싶어 하는 에너지가 많이 느껴져요. 지금은 탐색이 더 중요한 시기일 수 있어요.'**
+  String get energeticExplorerDesc;
+
+  /// No description provided for @diligentTrierTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'성실한 시도형'**
+  String get diligentTrierTitle;
+
+  /// No description provided for @diligentTrierDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'아이 스스로 잘 해보려는 모습이 보여요. 다만 기억해야 할 정보가 아직은 조금 많은 단계일 수 있어요.'**
+  String get diligentTrierDesc;
+
+  /// No description provided for @quickAndControlledTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'빠르게 반응하지만 멈출 줄 아는 아이'**
+  String get quickAndControlledTitle;
+
+  /// No description provided for @quickAndControlledDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'새로운 자극을 빠르게 포착해서 재빨리 반응할 수 있으면서도, 멈추라는 신호를 보면 잘 멈출 수 있어요.'**
+  String get quickAndControlledDesc;
+
+  /// No description provided for @energyFirstTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'에너지가 먼저 나오는 아이'**
+  String get energyFirstTitle;
+
+  /// No description provided for @energyFirstDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'재미있어 보이는 것은 일단 먼저 눌러 보고 싶은 마음이 큰 편이에요. 짧은 게임처럼 \'멈추기 신호\'를 연습하면 좋아요.'**
+  String get energyFirstDesc;
+
+  /// No description provided for @calmAndStableTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'차분하고 안정적인 아이'**
+  String get calmAndStableTitle;
+
+  /// No description provided for @calmAndStableDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'서두르기보다 한 번 더 보고, 생각한 뒤에 움직이는 편이에요. 규칙을 지키는 활동에서 강점을 보일 수 있어요.'**
+  String get calmAndStableDesc;
+
+  /// No description provided for @learningAtOwnPaceTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'천천히 익혀가는 단계의 아이'**
+  String get learningAtOwnPaceTitle;
+
+  /// No description provided for @learningAtOwnPaceDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'새로운 과제에서는 속도도 아직 느리고, 멈추기 규칙도 이제 막 익혀 가는 중이에요. 충분한 시간과 반복 기회를 주면 좋아요.'**
+  String get learningAtOwnPaceDesc;
+
+  /// No description provided for @carefulExplorerTip1.
+  ///
+  /// In ko, this message translates to:
+  /// **'퍼즐이나 블록 놀이처럼 차근차근 완성해가는 활동을 즐겨보세요.'**
+  String get carefulExplorerTip1;
+
+  /// No description provided for @carefulExplorerTip2.
+  ///
+  /// In ko, this message translates to:
+  /// **'아이의 속도를 존중하며 충분한 시간을 주세요.'**
+  String get carefulExplorerTip2;
+
+  /// No description provided for @quickProcessorTip1.
+  ///
+  /// In ko, this message translates to:
+  /// **'새로운 규칙이 있는 게임을 시도해보세요. 빠르게 적응할 거예요.'**
+  String get quickProcessorTip1;
+
+  /// No description provided for @quickProcessorTip2.
+  ///
+  /// In ko, this message translates to:
+  /// **'집중 시간이 길어질 수 있도록 점점 복잡한 활동을 도전해보세요.'**
+  String get quickProcessorTip2;
+
+  /// No description provided for @energeticExplorerTip1.
+  ///
+  /// In ko, this message translates to:
+  /// **'탐색 에너지를 발산할 수 있는 야외 활동을 충분히 해주세요.'**
+  String get energeticExplorerTip1;
+
+  /// No description provided for @energeticExplorerTip2.
+  ///
+  /// In ko, this message translates to:
+  /// **'짧은 집중 → 보상 → 짧은 집중 패턴으로 놀이해보세요.'**
+  String get energeticExplorerTip2;
+
+  /// No description provided for @diligentTrierTip1.
+  ///
+  /// In ko, this message translates to:
+  /// **'작은 성공에도 격려해주세요. 노력하는 과정이 중요해요.'**
+  String get diligentTrierTip1;
+
+  /// No description provided for @diligentTrierTip2.
+  ///
+  /// In ko, this message translates to:
+  /// **'한 번에 기억해야 할 양을 줄이고 반복해주세요.'**
+  String get diligentTrierTip2;
+
+  /// No description provided for @quickAndControlledTip1.
+  ///
+  /// In ko, this message translates to:
+  /// **'팀 놀이나 운동에서 \'선두이자 안전요원\' 역할을 맡겨보세요.'**
+  String get quickAndControlledTip1;
+
+  /// No description provided for @quickAndControlledTip2.
+  ///
+  /// In ko, this message translates to:
+  /// **'신호에 따라 행동하는 게임을 더 즐겨보세요.'**
+  String get quickAndControlledTip2;
+
+  /// No description provided for @energyFirstTip1.
+  ///
+  /// In ko, this message translates to:
+  /// **'\'그대로 멈춰라\' 같은 브레이크 연습 놀이를 해보세요.'**
+  String get energyFirstTip1;
+
+  /// No description provided for @energyFirstTip2.
+  ///
+  /// In ko, this message translates to:
+  /// **'짧은 게임으로 \'멈추기 신호\' 연습을 반복해보세요.'**
+  String get energyFirstTip2;
+
+  /// No description provided for @calmAndStableTip1.
+  ///
+  /// In ko, this message translates to:
+  /// **'차분한 성격을 활용한 집중 활동을 시도해보세요.'**
+  String get calmAndStableTip1;
+
+  /// No description provided for @calmAndStableTip2.
+  ///
+  /// In ko, this message translates to:
+  /// **'새로운 도전 앞에서 작은 단계부터 속도를 올려보세요.'**
+  String get calmAndStableTip2;
+
+  /// No description provided for @learningAtOwnPaceTip1.
+  ///
+  /// In ko, this message translates to:
+  /// **'같은 규칙을 여러 번, 짧게 나누어 연습해주세요.'**
+  String get learningAtOwnPaceTip1;
+
+  /// No description provided for @learningAtOwnPaceTip2.
+  ///
+  /// In ko, this message translates to:
+  /// **'충분한 시간을 주고 아이의 속도에 맞춰주세요.'**
+  String get learningAtOwnPaceTip2;
+
+  /// No description provided for @peerRangeLabel.
+  ///
+  /// In ko, this message translates to:
+  /// **'또래 평균 범위 (참고용)'**
+  String get peerRangeLabel;
+
+  /// No description provided for @peerRangeDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'같은 나이 또래 아이들이 이 과제에서 보이는 대략적인 범위입니다. 범위를 벗어난다고 해서 이상을 뜻하지는 않으며, 아이의 반응 경향을 이해하기 위한 참고 자료입니다.'**
+  String get peerRangeDesc;
+
+  /// No description provided for @myChild.
+  ///
+  /// In ko, this message translates to:
+  /// **'내 아이'**
+  String get myChild;
+
+  /// No description provided for @resultInterpretation.
+  ///
+  /// In ko, this message translates to:
+  /// **'결과 해석'**
+  String get resultInterpretation;
+
+  /// No description provided for @whyThisResult.
+  ///
+  /// In ko, this message translates to:
+  /// **'왜 이런 결과가 나왔나요?'**
+  String get whyThisResult;
+
+  /// No description provided for @whatItMeans.
+  ///
+  /// In ko, this message translates to:
+  /// **'이 수치가 의미하는 것'**
+  String get whatItMeans;
+
+  /// No description provided for @merHighExplanation.
+  ///
+  /// In ko, this message translates to:
+  /// **'아이가 카드 위치를 잘 기억하고 효율적으로 짝을 찾았어요. 작업기억이 또래보다 잘 발달되어 있어요.'**
+  String get merHighExplanation;
+
+  /// No description provided for @merAverageExplanation.
+  ///
+  /// In ko, this message translates to:
+  /// **'아이가 또래와 비슷한 수준으로 카드 위치를 기억했어요. 연령에 맞는 정상적인 발달을 보이고 있어요.'**
+  String get merAverageExplanation;
+
+  /// No description provided for @merLowExplanation.
+  ///
+  /// In ko, this message translates to:
+  /// **'카드 위치를 기억하는 데 조금 더 시간이 필요했어요. 반복 연습을 통해 기억력이 향상될 수 있어요.'**
+  String get merLowExplanation;
+
+  /// No description provided for @revisitLowExplanation.
+  ///
+  /// In ko, this message translates to:
+  /// **'한 번 본 카드를 잘 기억해서 다시 뒤집는 경우가 적었어요. 안정적인 기억력을 보여주고 있어요.'**
+  String get revisitLowExplanation;
+
+  /// No description provided for @revisitAverageExplanation.
+  ///
+  /// In ko, this message translates to:
+  /// **'가끔 확인한 카드를 다시 뒤집었지만, 또래와 비슷한 수준이에요.'**
+  String get revisitAverageExplanation;
+
+  /// No description provided for @revisitHighExplanation.
+  ///
+  /// In ko, this message translates to:
+  /// **'확인한 카드를 다시 뒤집는 경우가 많았어요. 집중력이 흐트러졌거나 게임에 익숙해지는 중일 수 있어요.'**
+  String get revisitHighExplanation;
+
+  /// No description provided for @inhibitionHighExplanation.
+  ///
+  /// In ko, this message translates to:
+  /// **'빨간 풍선을 잘 참았어요! 충동을 조절하는 능력이 또래보다 잘 발달되어 있어요.'**
+  String get inhibitionHighExplanation;
+
+  /// No description provided for @inhibitionAverageExplanation.
+  ///
+  /// In ko, this message translates to:
+  /// **'빨간 풍선을 참는 것이 또래와 비슷한 수준이에요. 연령에 맞는 정상적인 발달을 보이고 있어요.'**
+  String get inhibitionAverageExplanation;
+
+  /// No description provided for @inhibitionLowExplanation.
+  ///
+  /// In ko, this message translates to:
+  /// **'빨간 풍선을 참기 어려웠어요. 이 나이에는 자연스러운 반응이며, 연습을 통해 조절력이 향상될 수 있어요.'**
+  String get inhibitionLowExplanation;
+
+  /// No description provided for @reactionFastExplanation.
+  ///
+  /// In ko, this message translates to:
+  /// **'반응이 빠른 편이에요. 빠른 반응은 좋지만, 때로는 신중함도 필요해요.'**
+  String get reactionFastExplanation;
+
+  /// No description provided for @reactionNormalExplanation.
+  ///
+  /// In ko, this message translates to:
+  /// **'반응 속도가 또래와 비슷해요. 적절한 속도로 과제를 수행했어요.'**
+  String get reactionNormalExplanation;
+
+  /// No description provided for @reactionSlowExplanation.
+  ///
+  /// In ko, this message translates to:
+  /// **'신중하게 생각하고 반응하는 편이에요. 정확성을 중시하는 성향일 수 있어요.'**
+  String get reactionSlowExplanation;
+
+  /// No description provided for @keyMetrics.
+  ///
+  /// In ko, this message translates to:
+  /// **'핵심 지표'**
+  String get keyMetrics;
+
+  /// No description provided for @memoryEfficiencyRatio.
+  ///
+  /// In ko, this message translates to:
+  /// **'기억 효율 (MER)'**
+  String get memoryEfficiencyRatio;
+
+  /// No description provided for @memoryEfficiencyRatioDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'최소 이동 횟수 대비 실제 이동 횟수의 효율'**
+  String get memoryEfficiencyRatioDesc;
+
+  /// No description provided for @revisitingRate.
+  ///
+  /// In ko, this message translates to:
+  /// **'재확인율'**
+  String get revisitingRate;
+
+  /// No description provided for @revisitingRateDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'이미 확인한 카드를 다시 뒤집은 비율'**
+  String get revisitingRateDesc;
+
+  /// No description provided for @avgReactionTimeSec.
+  ///
+  /// In ko, this message translates to:
+  /// **'평균 반응 시간'**
+  String get avgReactionTimeSec;
+
+  /// No description provided for @inhibitionRate.
+  ///
+  /// In ko, this message translates to:
+  /// **'억제 비율'**
+  String get inhibitionRate;
+
+  /// No description provided for @inhibitionRateDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'빨간 풍선을 정확히 참은 비율'**
+  String get inhibitionRateDesc;
+
+  /// No description provided for @peerAvgLabel.
+  ///
+  /// In ko, this message translates to:
+  /// **'또래 평균'**
+  String get peerAvgLabel;
+
+  /// No description provided for @myChildValue.
+  ///
+  /// In ko, this message translates to:
+  /// **'내 아이'**
+  String get myChildValue;
+
+  /// No description provided for @lowerIsBetter.
+  ///
+  /// In ko, this message translates to:
+  /// **'(낮을수록 좋음)'**
+  String get lowerIsBetter;
+
+  /// No description provided for @higherIsBetter.
+  ///
+  /// In ko, this message translates to:
+  /// **'(높을수록 좋음)'**
+  String get higherIsBetter;
 }
 
 class _AppLocalizationsDelegate

@@ -21,7 +21,11 @@ class BalloonPositioned extends StatelessWidget {
       top: MediaQuery.of(context).size.height * balloon.y / 100,
       child: Transform.translate(
         offset: const Offset(-48, -64),
-        child: Balloon(isBlue: balloon.isBlue, onTap: onTap),
+        child: Balloon(
+          isBlue: balloon.isBlue,
+          onTap: onTap,
+          tapState: balloon.tapState,
+        ),
       ),
     );
   }

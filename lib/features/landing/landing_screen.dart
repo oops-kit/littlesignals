@@ -83,6 +83,8 @@ class LandingScreen extends HookConsumerWidget {
                   ),
                   const SizedBox(height: 48),
                   const _DebugModeSwitch(),
+                  const SizedBox(height: 24),
+                  const _VersionText(),
                 ],
               ),
             ),
@@ -178,6 +180,20 @@ class _ErrorMessage extends StatelessWidget {
         text: message,
         style: const TextStyle(fontSize: 14, color: Colors.red),
       ),
+    );
+  }
+}
+
+class _VersionText extends StatelessWidget {
+  const _VersionText();
+
+  static const String _version = '1.0.1';
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      'v$_version',
+      style: const TextStyle(fontSize: 12, color: AppTheme.slate400),
     );
   }
 }

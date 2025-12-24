@@ -85,5 +85,97 @@
   "showLess": "Show Less",
   "noEventsRecorded": "No events recorded",
   "blueBalloonTap": "Tap!",
-  "redBalloonNoTap": "Don't tap!"
+  "redBalloonNoTap": "Don't tap!",
+
+  "peerAverage": "Peer Average",
+  "highMemoryEfficiency": "High Memory Efficiency",
+  "developingMemory": "Developing Memory",
+  "stableMemory": "Stable Memory Retention",
+  "activeExploration": "Active Exploration",
+  "goodSelfControl": "Good Self-Control",
+
+  "carefulExplorerTitle": "Careful Explorer",
+  "carefulExplorerDesc": "Your child may take their time, but they remember information well and act thoughtfully.",
+
+  "quickProcessorTitle": "Quick Processor",
+  "quickProcessorDesc": "Your child's memory and decision speed are faster than peers. They quickly understand and use the game.",
+
+  "energeticExplorerTitle": "Energetic Explorer",
+  "energeticExplorerDesc": "Your child has lots of energy to explore new things right away. This may be a phase where exploration matters most.",
+
+  "diligentTrierTitle": "Diligent Trier",
+  "diligentTrierDesc": "Your child shows effort to do their best. However, the amount of information to remember may still be challenging.",
+
+  "quickAndControlledTitle": "Quick but Controlled",
+  "quickAndControlledDesc": "Your child quickly catches new stimuli and can stop when signaled. They know how to use speed and brakes.",
+
+  "energyFirstTitle": "Energy Leads First",
+  "energyFirstDesc": "Your child wants to tap fun things right away. Practicing 'stop signals' through short games can help.",
+
+  "calmAndStableTitle": "Calm and Stable",
+  "calmAndStableDesc": "Your child tends to look twice and think before moving. They may excel in rule-following activities.",
+
+  "learningAtOwnPaceTitle": "Learning at Own Pace",
+  "learningAtOwnPaceDesc": "Your child is still learning speed and stopping rules. With time and repetition, they'll develop at their own pace.",
+
+  "carefulExplorerTip1": "Try activities that build step by step, like puzzles or blocks.",
+  "carefulExplorerTip2": "Respect your child's pace and give them plenty of time.",
+
+  "quickProcessorTip1": "Try games with new rules - they'll adapt quickly.",
+  "quickProcessorTip2": "Gradually try more complex activities to extend focus time.",
+
+  "energeticExplorerTip1": "Provide plenty of outdoor activities to channel exploration energy.",
+  "energeticExplorerTip2": "Try patterns of short focus → reward → short focus.",
+
+  "diligentTrierTip1": "Encourage even small successes. The effort matters.",
+  "diligentTrierTip2": "Reduce the amount to remember at once and repeat.",
+
+  "quickAndControlledTip1": "Let them be the 'leader and safety officer' in team play or sports.",
+  "quickAndControlledTip2": "Enjoy more games that involve acting on signals.",
+
+  "energyFirstTip1": "Try 'Freeze Dance' games to practice braking.",
+  "energyFirstTip2": "Repeat 'stop signal' practice with short games.",
+
+  "calmAndStableTip1": "Try focused activities that suit their calm nature.",
+  "calmAndStableTip2": "Build up speed gradually with small steps for new challenges.",
+
+  "learningAtOwnPaceTip1": "Practice the same rules multiple times in short sessions.",
+  "learningAtOwnPaceTip2": "Give plenty of time and match your child's pace.",
+
+  "peerRangeLabel": "Peer Average Range (Reference)",
+  "peerRangeDesc": "This is the approximate range for same-age peers on this task. Being outside this range doesn't mean anything is wrong - it's a reference for understanding your child's response patterns.",
+  "myChild": "My Child",
+
+  "resultInterpretation": "Result Interpretation",
+  "whyThisResult": "Why did I get this result?",
+  "whatItMeans": "What these numbers mean",
+  
+  "merHighExplanation": "Your child remembered card positions well and found pairs efficiently. Working memory is more developed than peers.",
+  "merAverageExplanation": "Your child remembered card positions at a similar level to peers. Shows normal development for their age.",
+  "merLowExplanation": "Your child needed a bit more time to remember card positions. Memory can improve with practice.",
+  
+  "revisitLowExplanation": "Your child remembered seen cards well, rarely re-flipping them. Shows stable memory.",
+  "revisitAverageExplanation": "Sometimes re-flipped seen cards, but at a similar level to peers.",
+  "revisitHighExplanation": "Re-flipped seen cards often. May indicate distraction or still getting used to the game.",
+  
+  "inhibitionHighExplanation": "Great job stopping at red balloons! Impulse control is more developed than peers.",
+  "inhibitionAverageExplanation": "Stopping at red balloons was at a similar level to peers. Shows normal development for their age.",
+  "inhibitionLowExplanation": "Had difficulty stopping at red balloons. This is natural at this age and can improve with practice.",
+  
+  "reactionFastExplanation": "Reactions were quick. Fast reactions are good, but sometimes being careful is also important.",
+  "reactionNormalExplanation": "Reaction speed was similar to peers. Performed the task at an appropriate pace.",
+  "reactionSlowExplanation": "Tends to think carefully before reacting. May value accuracy.",
+  
+  "keyMetrics": "Key Metrics",
+  "memoryEfficiencyRatio": "Memory Efficiency (MER)",
+  "memoryEfficiencyRatioDesc": "Efficiency of actual moves vs. minimum moves",
+  "revisitingRate": "Revisiting Rate",
+  "revisitingRateDesc": "Rate of re-flipping already seen cards",
+  "avgReactionTimeSec": "Avg Reaction Time",
+  "inhibitionRate": "Inhibition Rate",
+  "inhibitionRateDesc": "Rate of correctly stopping at red balloons",
+  "peerAvgLabel": "Peer Avg",
+  "myChildValue": "My Child",
+  "lowerIsBetter": "(lower is better)",
+  "higherIsBetter": "(higher is better)"
 }

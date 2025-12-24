@@ -40,6 +40,19 @@ abstract class AttentionResult with _$AttentionResult implements TestResult {
 
     /// 테스트 중 발생한 이벤트 로그
     @Default([]) List<TestEventLog> eventLogs,
+
+    // === MER 및 재확인율 계산용 필드 ===
+    /// 재확인 횟수 (이미 확인한 카드를 다시 뒤집은 횟수)
+    @Default(0) int revisitCount,
+
+    /// 확인한 고유 카드 수
+    @Default(0) int uniqueCardsRevealed,
+
+    /// 총 턴 수 (카드 2장 뒤집기 = 1턴)
+    @Default(0) int totalTurns,
+
+    /// 개별 반응 시간 목록 (ms)
+    @Default([]) List<int> reactionTimesMs,
   }) = _AttentionResult;
 
   const AttentionResult._();

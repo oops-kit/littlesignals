@@ -196,6 +196,21 @@ class AttentionTestController extends _$AttentionTestController {
     // SRP: 카드 뒤집기 로깅을 MetricsCollector에 위임
     _metricsCollector.logCardFlip(state.level);
 
+    // === MER 및 재확인율 계산용 데이터 수집 ===
+    // 재확인 여부 체크 (이미 본 카드인지)
+    final isRevisit = state.revealedCardIds.contains(cardId);
+    final newRevisitCount = isRevisit ? state.revisitCount + 1 : state.revisitCount;
+
+    // 확인한 카드 목록 업데이트
+    final newRevealedCardIds = {...state.revealedCardIds, cardId};
+
+    // 반응 시간 계산 (이전 뒤집기로부터의 시간)
+    final newReactionTimesMs = [...state.reactionTimesMs];
+    if (state.lastFlipTime != null) {
+      final reactionMs = now.difference(state.lastFlipTime!).inMilliseconds;
+      newReactionTimesMs.add(reactionMs);
+    }
+
     state = state.copyWith(
       cards: newCards,
       flippedCardIds: newFlippedIds,
@@ -208,6 +223,11 @@ class AttentionTestController extends _$AttentionTestController {
       firstHalfTaps: firstHalfTaps,
       secondHalfTaps: secondHalfTaps,
       eventLogs: _logRecorder.logs,
+      // MER 관련 필드
+      revealedCardIds: newRevealedCardIds,
+      revisitCount: newRevisitCount,
+      reactionTimesMs: newReactionTimesMs,
+      lastFlipTime: now,
     );
 
     if (newFlippedIds.length == 2) {
@@ -221,7 +241,12 @@ class AttentionTestController extends _$AttentionTestController {
   ///
   /// SRP: CardMatchingService에 매칭 로직 위임
   void _processMatch(List<int> flippedIds) {
-    state = state.copyWith(isProcessing: true, moves: state.moves + 1);
+    // 턴 수 증가 (카드 2장 뒤집기 = 1턴)
+    state = state.copyWith(
+      isProcessing: true,
+      moves: state.moves + 1,
+      totalTurns: state.totalTurns + 1,
+    );
 
     // SRP: 매칭 확인을 CardMatchingService에 위임
     final matchResult = _matchingService.checkMatch(
@@ -337,6 +362,11 @@ class AttentionTestController extends _$AttentionTestController {
       firstHalfTaps: state.firstHalfTaps,
       secondHalfTaps: state.secondHalfTaps,
       eventLogs: finalLogs,
+      // MER 및 재확인율 관련 필드
+      revisitCount: state.revisitCount,
+      uniqueCardsRevealed: state.revealedCardIds.length,
+      totalTurns: state.totalTurns,
+      reactionTimesMs: state.reactionTimesMs,
     );
 
     ref.read(appStateNotifierProvider.notifier).setAttentionResult(result);

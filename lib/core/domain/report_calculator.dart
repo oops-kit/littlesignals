@@ -8,5 +8,13 @@ import 'package:littlesignals/models/report_data.dart';
 /// OCP: 새 테스트 타입 추가 시 새 구현체만 추가하면 됩니다.
 abstract class ReportCalculator {
   /// 테스트 결과를 기반으로 리포트 데이터를 계산합니다.
-  ReportData calculate(TestResult result, AppLocalizations l10n);
+  ///
+  /// [result] 테스트 결과
+  /// [l10n] 다국어 리소스
+  /// [ageMonths] 아동 월령 (Z점수 계산용)
+  ReportData calculate(
+    TestResult result,
+    AppLocalizations l10n, {
+    double? ageMonths,
+  });
 }

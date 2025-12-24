@@ -7,3 +7,4 @@ export 'child_profile.dart';
 export 'impulsivity_result.dart';
 export 'report_data.dart';
 export 'test_event_log.dart';
+export 'z_score_result.dart';

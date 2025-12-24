@@ -283,7 +283,13 @@ mixin _$AttentionTestState {
  DateTime? get firstHalfEndTime;/// 전반부 터치 횟수
  int get firstHalfTaps;/// 후반부 터치 횟수
  int get secondHalfTaps;/// 이벤트 로그 (테스트 중 발생한 모든 이벤트)
- List<TestEventLog> get eventLogs;
+ List<TestEventLog> get eventLogs;// === MER 및 재확인율 계산용 필드 ===
+/// 이미 확인한 카드 ID 집합
+ Set<int> get revealedCardIds;/// 재확인 횟수 (이미 본 카드를 다시 뒤집은 횟수)
+ int get revisitCount;/// 총 턴 수 (카드 2장 뒤집기 = 1턴)
+ int get totalTurns;/// 개별 반응 시간 목록 (ms)
+ List<int> get reactionTimesMs;/// 마지막 카드 뒤집기 시간 (반응시간 계산용)
+ DateTime? get lastFlipTime;
 /// Create a copy of AttentionTestState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -294,16 +300,16 @@ $AttentionTestStateCopyWith<AttentionTestState> get copyWith => _$AttentionTestS
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AttentionTestState&&(identical(other.gameState, gameState) || other.gameState == gameState)&&(identical(other.countdownValue, countdownValue) || other.countdownValue == countdownValue)&&(identical(other.level, level) || other.level == level)&&const DeepCollectionEquality().equals(other.cards, cards)&&const DeepCollectionEquality().equals(other.flippedCardIds, flippedCardIds)&&(identical(other.isProcessing, isProcessing) || other.isProcessing == isProcessing)&&(identical(other.startTime, startTime) || other.startTime == startTime)&&(identical(other.moves, moves) || other.moves == moves)&&(identical(other.errors, errors) || other.errors == errors)&&(identical(other.hintCardId, hintCardId) || other.hintCardId == hintCardId)&&(identical(other.isCompleted, isCompleted) || other.isCompleted == isCompleted)&&(identical(other.randomTaps, randomTaps) || other.randomTaps == randomTaps)&&(identical(other.immediateRepeatErrors, immediateRepeatErrors) || other.immediateRepeatErrors == immediateRepeatErrors)&&const DeepCollectionEquality().equals(other.tapRecords, tapRecords)&&const DeepCollectionEquality().equals(other.recentlyFlippedCardIds, recentlyFlippedCardIds)&&(identical(other.firstHalfEndTime, firstHalfEndTime) || other.firstHalfEndTime == firstHalfEndTime)&&(identical(other.firstHalfTaps, firstHalfTaps) || other.firstHalfTaps == firstHalfTaps)&&(identical(other.secondHalfTaps, secondHalfTaps) || other.secondHalfTaps == secondHalfTaps)&&const DeepCollectionEquality().equals(other.eventLogs, eventLogs));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AttentionTestState&&(identical(other.gameState, gameState) || other.gameState == gameState)&&(identical(other.countdownValue, countdownValue) || other.countdownValue == countdownValue)&&(identical(other.level, level) || other.level == level)&&const DeepCollectionEquality().equals(other.cards, cards)&&const DeepCollectionEquality().equals(other.flippedCardIds, flippedCardIds)&&(identical(other.isProcessing, isProcessing) || other.isProcessing == isProcessing)&&(identical(other.startTime, startTime) || other.startTime == startTime)&&(identical(other.moves, moves) || other.moves == moves)&&(identical(other.errors, errors) || other.errors == errors)&&(identical(other.hintCardId, hintCardId) || other.hintCardId == hintCardId)&&(identical(other.isCompleted, isCompleted) || other.isCompleted == isCompleted)&&(identical(other.randomTaps, randomTaps) || other.randomTaps == randomTaps)&&(identical(other.immediateRepeatErrors, immediateRepeatErrors) || other.immediateRepeatErrors == immediateRepeatErrors)&&const DeepCollectionEquality().equals(other.tapRecords, tapRecords)&&const DeepCollectionEquality().equals(other.recentlyFlippedCardIds, recentlyFlippedCardIds)&&(identical(other.firstHalfEndTime, firstHalfEndTime) || other.firstHalfEndTime == firstHalfEndTime)&&(identical(other.firstHalfTaps, firstHalfTaps) || other.firstHalfTaps == firstHalfTaps)&&(identical(other.secondHalfTaps, secondHalfTaps) || other.secondHalfTaps == secondHalfTaps)&&const DeepCollectionEquality().equals(other.eventLogs, eventLogs)&&const DeepCollectionEquality().equals(other.revealedCardIds, revealedCardIds)&&(identical(other.revisitCount, revisitCount) || other.revisitCount == revisitCount)&&(identical(other.totalTurns, totalTurns) || other.totalTurns == totalTurns)&&const DeepCollectionEquality().equals(other.reactionTimesMs, reactionTimesMs)&&(identical(other.lastFlipTime, lastFlipTime) || other.lastFlipTime == lastFlipTime));
 }
 
 
 @override
-int get hashCode => Object.hashAll([runtimeType,gameState,countdownValue,level,const DeepCollectionEquality().hash(cards),const DeepCollectionEquality().hash(flippedCardIds),isProcessing,startTime,moves,errors,hintCardId,isCompleted,randomTaps,immediateRepeatErrors,const DeepCollectionEquality().hash(tapRecords),const DeepCollectionEquality().hash(recentlyFlippedCardIds),firstHalfEndTime,firstHalfTaps,secondHalfTaps,const DeepCollectionEquality().hash(eventLogs)]);
+int get hashCode => Object.hashAll([runtimeType,gameState,countdownValue,level,const DeepCollectionEquality().hash(cards),const DeepCollectionEquality().hash(flippedCardIds),isProcessing,startTime,moves,errors,hintCardId,isCompleted,randomTaps,immediateRepeatErrors,const DeepCollectionEquality().hash(tapRecords),const DeepCollectionEquality().hash(recentlyFlippedCardIds),firstHalfEndTime,firstHalfTaps,secondHalfTaps,const DeepCollectionEquality().hash(eventLogs),const DeepCollectionEquality().hash(revealedCardIds),revisitCount,totalTurns,const DeepCollectionEquality().hash(reactionTimesMs),lastFlipTime]);
 
 @override
 String toString() {
-  return 'AttentionTestState(gameState: $gameState, countdownValue: $countdownValue, level: $level, cards: $cards, flippedCardIds: $flippedCardIds, isProcessing: $isProcessing, startTime: $startTime, moves: $moves, errors: $errors, hintCardId: $hintCardId, isCompleted: $isCompleted, randomTaps: $randomTaps, immediateRepeatErrors: $immediateRepeatErrors, tapRecords: $tapRecords, recentlyFlippedCardIds: $recentlyFlippedCardIds, firstHalfEndTime: $firstHalfEndTime, firstHalfTaps: $firstHalfTaps, secondHalfTaps: $secondHalfTaps, eventLogs: $eventLogs)';
+  return 'AttentionTestState(gameState: $gameState, countdownValue: $countdownValue, level: $level, cards: $cards, flippedCardIds: $flippedCardIds, isProcessing: $isProcessing, startTime: $startTime, moves: $moves, errors: $errors, hintCardId: $hintCardId, isCompleted: $isCompleted, randomTaps: $randomTaps, immediateRepeatErrors: $immediateRepeatErrors, tapRecords: $tapRecords, recentlyFlippedCardIds: $recentlyFlippedCardIds, firstHalfEndTime: $firstHalfEndTime, firstHalfTaps: $firstHalfTaps, secondHalfTaps: $secondHalfTaps, eventLogs: $eventLogs, revealedCardIds: $revealedCardIds, revisitCount: $revisitCount, totalTurns: $totalTurns, reactionTimesMs: $reactionTimesMs, lastFlipTime: $lastFlipTime)';
 }
 
 
@@ -314,7 +320,7 @@ abstract mixin class $AttentionTestStateCopyWith<$Res>  {
   factory $AttentionTestStateCopyWith(AttentionTestState value, $Res Function(AttentionTestState) _then) = _$AttentionTestStateCopyWithImpl;
 @useResult
 $Res call({
- AttentionGameState gameState, int? countdownValue, int level, List<CardData> cards, List<int> flippedCardIds, bool isProcessing, DateTime? startTime, int moves, int errors, int? hintCardId, bool isCompleted, int randomTaps, int immediateRepeatErrors, List<TapRecord> tapRecords, List<int> recentlyFlippedCardIds, DateTime? firstHalfEndTime, int firstHalfTaps, int secondHalfTaps, List<TestEventLog> eventLogs
+ AttentionGameState gameState, int? countdownValue, int level, List<CardData> cards, List<int> flippedCardIds, bool isProcessing, DateTime? startTime, int moves, int errors, int? hintCardId, bool isCompleted, int randomTaps, int immediateRepeatErrors, List<TapRecord> tapRecords, List<int> recentlyFlippedCardIds, DateTime? firstHalfEndTime, int firstHalfTaps, int secondHalfTaps, List<TestEventLog> eventLogs, Set<int> revealedCardIds, int revisitCount, int totalTurns, List<int> reactionTimesMs, DateTime? lastFlipTime
 });
 
 
@@ -331,7 +337,7 @@ class _$AttentionTestStateCopyWithImpl<$Res>
 
 /// Create a copy of AttentionTestState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? gameState = null,Object? countdownValue = freezed,Object? level = null,Object? cards = null,Object? flippedCardIds = null,Object? isProcessing = null,Object? startTime = freezed,Object? moves = null,Object? errors = null,Object? hintCardId = freezed,Object? isCompleted = null,Object? randomTaps = null,Object? immediateRepeatErrors = null,Object? tapRecords = null,Object? recentlyFlippedCardIds = null,Object? firstHalfEndTime = freezed,Object? firstHalfTaps = null,Object? secondHalfTaps = null,Object? eventLogs = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? gameState = null,Object? countdownValue = freezed,Object? level = null,Object? cards = null,Object? flippedCardIds = null,Object? isProcessing = null,Object? startTime = freezed,Object? moves = null,Object? errors = null,Object? hintCardId = freezed,Object? isCompleted = null,Object? randomTaps = null,Object? immediateRepeatErrors = null,Object? tapRecords = null,Object? recentlyFlippedCardIds = null,Object? firstHalfEndTime = freezed,Object? firstHalfTaps = null,Object? secondHalfTaps = null,Object? eventLogs = null,Object? revealedCardIds = null,Object? revisitCount = null,Object? totalTurns = null,Object? reactionTimesMs = null,Object? lastFlipTime = freezed,}) {
   return _then(_self.copyWith(
 gameState: null == gameState ? _self.gameState : gameState // ignore: cast_nullable_to_non_nullable
 as AttentionGameState,countdownValue: freezed == countdownValue ? _self.countdownValue : countdownValue // ignore: cast_nullable_to_non_nullable
@@ -352,7 +358,12 @@ as List<int>,firstHalfEndTime: freezed == firstHalfEndTime ? _self.firstHalfEndT
 as DateTime?,firstHalfTaps: null == firstHalfTaps ? _self.firstHalfTaps : firstHalfTaps // ignore: cast_nullable_to_non_nullable
 as int,secondHalfTaps: null == secondHalfTaps ? _self.secondHalfTaps : secondHalfTaps // ignore: cast_nullable_to_non_nullable
 as int,eventLogs: null == eventLogs ? _self.eventLogs : eventLogs // ignore: cast_nullable_to_non_nullable
-as List<TestEventLog>,
+as List<TestEventLog>,revealedCardIds: null == revealedCardIds ? _self.revealedCardIds : revealedCardIds // ignore: cast_nullable_to_non_nullable
+as Set<int>,revisitCount: null == revisitCount ? _self.revisitCount : revisitCount // ignore: cast_nullable_to_non_nullable
+as int,totalTurns: null == totalTurns ? _self.totalTurns : totalTurns // ignore: cast_nullable_to_non_nullable
+as int,reactionTimesMs: null == reactionTimesMs ? _self.reactionTimesMs : reactionTimesMs // ignore: cast_nullable_to_non_nullable
+as List<int>,lastFlipTime: freezed == lastFlipTime ? _self.lastFlipTime : lastFlipTime // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 
@@ -437,10 +448,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( AttentionGameState gameState,  int? countdownValue,  int level,  List<CardData> cards,  List<int> flippedCardIds,  bool isProcessing,  DateTime? startTime,  int moves,  int errors,  int? hintCardId,  bool isCompleted,  int randomTaps,  int immediateRepeatErrors,  List<TapRecord> tapRecords,  List<int> recentlyFlippedCardIds,  DateTime? firstHalfEndTime,  int firstHalfTaps,  int secondHalfTaps,  List<TestEventLog> eventLogs)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( AttentionGameState gameState,  int? countdownValue,  int level,  List<CardData> cards,  List<int> flippedCardIds,  bool isProcessing,  DateTime? startTime,  int moves,  int errors,  int? hintCardId,  bool isCompleted,  int randomTaps,  int immediateRepeatErrors,  List<TapRecord> tapRecords,  List<int> recentlyFlippedCardIds,  DateTime? firstHalfEndTime,  int firstHalfTaps,  int secondHalfTaps,  List<TestEventLog> eventLogs,  Set<int> revealedCardIds,  int revisitCount,  int totalTurns,  List<int> reactionTimesMs,  DateTime? lastFlipTime)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AttentionTestState() when $default != null:
-return $default(_that.gameState,_that.countdownValue,_that.level,_that.cards,_that.flippedCardIds,_that.isProcessing,_that.startTime,_that.moves,_that.errors,_that.hintCardId,_that.isCompleted,_that.randomTaps,_that.immediateRepeatErrors,_that.tapRecords,_that.recentlyFlippedCardIds,_that.firstHalfEndTime,_that.firstHalfTaps,_that.secondHalfTaps,_that.eventLogs);case _:
+return $default(_that.gameState,_that.countdownValue,_that.level,_that.cards,_that.flippedCardIds,_that.isProcessing,_that.startTime,_that.moves,_that.errors,_that.hintCardId,_that.isCompleted,_that.randomTaps,_that.immediateRepeatErrors,_that.tapRecords,_that.recentlyFlippedCardIds,_that.firstHalfEndTime,_that.firstHalfTaps,_that.secondHalfTaps,_that.eventLogs,_that.revealedCardIds,_that.revisitCount,_that.totalTurns,_that.reactionTimesMs,_that.lastFlipTime);case _:
   return orElse();
 
 }
@@ -458,10 +469,10 @@ return $default(_that.gameState,_that.countdownValue,_that.level,_that.cards,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( AttentionGameState gameState,  int? countdownValue,  int level,  List<CardData> cards,  List<int> flippedCardIds,  bool isProcessing,  DateTime? startTime,  int moves,  int errors,  int? hintCardId,  bool isCompleted,  int randomTaps,  int immediateRepeatErrors,  List<TapRecord> tapRecords,  List<int> recentlyFlippedCardIds,  DateTime? firstHalfEndTime,  int firstHalfTaps,  int secondHalfTaps,  List<TestEventLog> eventLogs)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( AttentionGameState gameState,  int? countdownValue,  int level,  List<CardData> cards,  List<int> flippedCardIds,  bool isProcessing,  DateTime? startTime,  int moves,  int errors,  int? hintCardId,  bool isCompleted,  int randomTaps,  int immediateRepeatErrors,  List<TapRecord> tapRecords,  List<int> recentlyFlippedCardIds,  DateTime? firstHalfEndTime,  int firstHalfTaps,  int secondHalfTaps,  List<TestEventLog> eventLogs,  Set<int> revealedCardIds,  int revisitCount,  int totalTurns,  List<int> reactionTimesMs,  DateTime? lastFlipTime)  $default,) {final _that = this;
 switch (_that) {
 case _AttentionTestState():
-return $default(_that.gameState,_that.countdownValue,_that.level,_that.cards,_that.flippedCardIds,_that.isProcessing,_that.startTime,_that.moves,_that.errors,_that.hintCardId,_that.isCompleted,_that.randomTaps,_that.immediateRepeatErrors,_that.tapRecords,_that.recentlyFlippedCardIds,_that.firstHalfEndTime,_that.firstHalfTaps,_that.secondHalfTaps,_that.eventLogs);case _:
+return $default(_that.gameState,_that.countdownValue,_that.level,_that.cards,_that.flippedCardIds,_that.isProcessing,_that.startTime,_that.moves,_that.errors,_that.hintCardId,_that.isCompleted,_that.randomTaps,_that.immediateRepeatErrors,_that.tapRecords,_that.recentlyFlippedCardIds,_that.firstHalfEndTime,_that.firstHalfTaps,_that.secondHalfTaps,_that.eventLogs,_that.revealedCardIds,_that.revisitCount,_that.totalTurns,_that.reactionTimesMs,_that.lastFlipTime);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -478,10 +489,10 @@ return $default(_that.gameState,_that.countdownValue,_that.level,_that.cards,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( AttentionGameState gameState,  int? countdownValue,  int level,  List<CardData> cards,  List<int> flippedCardIds,  bool isProcessing,  DateTime? startTime,  int moves,  int errors,  int? hintCardId,  bool isCompleted,  int randomTaps,  int immediateRepeatErrors,  List<TapRecord> tapRecords,  List<int> recentlyFlippedCardIds,  DateTime? firstHalfEndTime,  int firstHalfTaps,  int secondHalfTaps,  List<TestEventLog> eventLogs)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( AttentionGameState gameState,  int? countdownValue,  int level,  List<CardData> cards,  List<int> flippedCardIds,  bool isProcessing,  DateTime? startTime,  int moves,  int errors,  int? hintCardId,  bool isCompleted,  int randomTaps,  int immediateRepeatErrors,  List<TapRecord> tapRecords,  List<int> recentlyFlippedCardIds,  DateTime? firstHalfEndTime,  int firstHalfTaps,  int secondHalfTaps,  List<TestEventLog> eventLogs,  Set<int> revealedCardIds,  int revisitCount,  int totalTurns,  List<int> reactionTimesMs,  DateTime? lastFlipTime)?  $default,) {final _that = this;
 switch (_that) {
 case _AttentionTestState() when $default != null:
-return $default(_that.gameState,_that.countdownValue,_that.level,_that.cards,_that.flippedCardIds,_that.isProcessing,_that.startTime,_that.moves,_that.errors,_that.hintCardId,_that.isCompleted,_that.randomTaps,_that.immediateRepeatErrors,_that.tapRecords,_that.recentlyFlippedCardIds,_that.firstHalfEndTime,_that.firstHalfTaps,_that.secondHalfTaps,_that.eventLogs);case _:
+return $default(_that.gameState,_that.countdownValue,_that.level,_that.cards,_that.flippedCardIds,_that.isProcessing,_that.startTime,_that.moves,_that.errors,_that.hintCardId,_that.isCompleted,_that.randomTaps,_that.immediateRepeatErrors,_that.tapRecords,_that.recentlyFlippedCardIds,_that.firstHalfEndTime,_that.firstHalfTaps,_that.secondHalfTaps,_that.eventLogs,_that.revealedCardIds,_that.revisitCount,_that.totalTurns,_that.reactionTimesMs,_that.lastFlipTime);case _:
   return null;
 
 }
@@ -493,7 +504,7 @@ return $default(_that.gameState,_that.countdownValue,_that.level,_that.cards,_th
 
 
 class _AttentionTestState implements AttentionTestState {
-  const _AttentionTestState({this.gameState = AttentionGameState.countdown, this.countdownValue = null, this.level = 1, final  List<CardData> cards = const [], final  List<int> flippedCardIds = const [], this.isProcessing = false, this.startTime = null, this.moves = 0, this.errors = 0, this.hintCardId = null, this.isCompleted = false, this.randomTaps = 0, this.immediateRepeatErrors = 0, final  List<TapRecord> tapRecords = const [], final  List<int> recentlyFlippedCardIds = const [], this.firstHalfEndTime = null, this.firstHalfTaps = 0, this.secondHalfTaps = 0, final  List<TestEventLog> eventLogs = const []}): _cards = cards,_flippedCardIds = flippedCardIds,_tapRecords = tapRecords,_recentlyFlippedCardIds = recentlyFlippedCardIds,_eventLogs = eventLogs;
+  const _AttentionTestState({this.gameState = AttentionGameState.countdown, this.countdownValue = null, this.level = 1, final  List<CardData> cards = const [], final  List<int> flippedCardIds = const [], this.isProcessing = false, this.startTime = null, this.moves = 0, this.errors = 0, this.hintCardId = null, this.isCompleted = false, this.randomTaps = 0, this.immediateRepeatErrors = 0, final  List<TapRecord> tapRecords = const [], final  List<int> recentlyFlippedCardIds = const [], this.firstHalfEndTime = null, this.firstHalfTaps = 0, this.secondHalfTaps = 0, final  List<TestEventLog> eventLogs = const [], final  Set<int> revealedCardIds = const {}, this.revisitCount = 0, this.totalTurns = 0, final  List<int> reactionTimesMs = const [], this.lastFlipTime = null}): _cards = cards,_flippedCardIds = flippedCardIds,_tapRecords = tapRecords,_recentlyFlippedCardIds = recentlyFlippedCardIds,_eventLogs = eventLogs,_revealedCardIds = revealedCardIds,_reactionTimesMs = reactionTimesMs;
   
 
 @override@JsonKey() final  AttentionGameState gameState;
@@ -557,6 +568,32 @@ class _AttentionTestState implements AttentionTestState {
   return EqualUnmodifiableListView(_eventLogs);
 }
 
+// === MER 및 재확인율 계산용 필드 ===
+/// 이미 확인한 카드 ID 집합
+ final  Set<int> _revealedCardIds;
+// === MER 및 재확인율 계산용 필드 ===
+/// 이미 확인한 카드 ID 집합
+@override@JsonKey() Set<int> get revealedCardIds {
+  if (_revealedCardIds is EqualUnmodifiableSetView) return _revealedCardIds;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableSetView(_revealedCardIds);
+}
+
+/// 재확인 횟수 (이미 본 카드를 다시 뒤집은 횟수)
+@override@JsonKey() final  int revisitCount;
+/// 총 턴 수 (카드 2장 뒤집기 = 1턴)
+@override@JsonKey() final  int totalTurns;
+/// 개별 반응 시간 목록 (ms)
+ final  List<int> _reactionTimesMs;
+/// 개별 반응 시간 목록 (ms)
+@override@JsonKey() List<int> get reactionTimesMs {
+  if (_reactionTimesMs is EqualUnmodifiableListView) return _reactionTimesMs;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_reactionTimesMs);
+}
+
+/// 마지막 카드 뒤집기 시간 (반응시간 계산용)
+@override@JsonKey() final  DateTime? lastFlipTime;
 
 /// Create a copy of AttentionTestState
 /// with the given fields replaced by the non-null parameter values.
@@ -568,16 +605,16 @@ _$AttentionTestStateCopyWith<_AttentionTestState> get copyWith => __$AttentionTe
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AttentionTestState&&(identical(other.gameState, gameState) || other.gameState == gameState)&&(identical(other.countdownValue, countdownValue) || other.countdownValue == countdownValue)&&(identical(other.level, level) || other.level == level)&&const DeepCollectionEquality().equals(other._cards, _cards)&&const DeepCollectionEquality().equals(other._flippedCardIds, _flippedCardIds)&&(identical(other.isProcessing, isProcessing) || other.isProcessing == isProcessing)&&(identical(other.startTime, startTime) || other.startTime == startTime)&&(identical(other.moves, moves) || other.moves == moves)&&(identical(other.errors, errors) || other.errors == errors)&&(identical(other.hintCardId, hintCardId) || other.hintCardId == hintCardId)&&(identical(other.isCompleted, isCompleted) || other.isCompleted == isCompleted)&&(identical(other.randomTaps, randomTaps) || other.randomTaps == randomTaps)&&(identical(other.immediateRepeatErrors, immediateRepeatErrors) || other.immediateRepeatErrors == immediateRepeatErrors)&&const DeepCollectionEquality().equals(other._tapRecords, _tapRecords)&&const DeepCollectionEquality().equals(other._recentlyFlippedCardIds, _recentlyFlippedCardIds)&&(identical(other.firstHalfEndTime, firstHalfEndTime) || other.firstHalfEndTime == firstHalfEndTime)&&(identical(other.firstHalfTaps, firstHalfTaps) || other.firstHalfTaps == firstHalfTaps)&&(identical(other.secondHalfTaps, secondHalfTaps) || other.secondHalfTaps == secondHalfTaps)&&const DeepCollectionEquality().equals(other._eventLogs, _eventLogs));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AttentionTestState&&(identical(other.gameState, gameState) || other.gameState == gameState)&&(identical(other.countdownValue, countdownValue) || other.countdownValue == countdownValue)&&(identical(other.level, level) || other.level == level)&&const DeepCollectionEquality().equals(other._cards, _cards)&&const DeepCollectionEquality().equals(other._flippedCardIds, _flippedCardIds)&&(identical(other.isProcessing, isProcessing) || other.isProcessing == isProcessing)&&(identical(other.startTime, startTime) || other.startTime == startTime)&&(identical(other.moves, moves) || other.moves == moves)&&(identical(other.errors, errors) || other.errors == errors)&&(identical(other.hintCardId, hintCardId) || other.hintCardId == hintCardId)&&(identical(other.isCompleted, isCompleted) || other.isCompleted == isCompleted)&&(identical(other.randomTaps, randomTaps) || other.randomTaps == randomTaps)&&(identical(other.immediateRepeatErrors, immediateRepeatErrors) || other.immediateRepeatErrors == immediateRepeatErrors)&&const DeepCollectionEquality().equals(other._tapRecords, _tapRecords)&&const DeepCollectionEquality().equals(other._recentlyFlippedCardIds, _recentlyFlippedCardIds)&&(identical(other.firstHalfEndTime, firstHalfEndTime) || other.firstHalfEndTime == firstHalfEndTime)&&(identical(other.firstHalfTaps, firstHalfTaps) || other.firstHalfTaps == firstHalfTaps)&&(identical(other.secondHalfTaps, secondHalfTaps) || other.secondHalfTaps == secondHalfTaps)&&const DeepCollectionEquality().equals(other._eventLogs, _eventLogs)&&const DeepCollectionEquality().equals(other._revealedCardIds, _revealedCardIds)&&(identical(other.revisitCount, revisitCount) || other.revisitCount == revisitCount)&&(identical(other.totalTurns, totalTurns) || other.totalTurns == totalTurns)&&const DeepCollectionEquality().equals(other._reactionTimesMs, _reactionTimesMs)&&(identical(other.lastFlipTime, lastFlipTime) || other.lastFlipTime == lastFlipTime));
 }
 
 
 @override
-int get hashCode => Object.hashAll([runtimeType,gameState,countdownValue,level,const DeepCollectionEquality().hash(_cards),const DeepCollectionEquality().hash(_flippedCardIds),isProcessing,startTime,moves,errors,hintCardId,isCompleted,randomTaps,immediateRepeatErrors,const DeepCollectionEquality().hash(_tapRecords),const DeepCollectionEquality().hash(_recentlyFlippedCardIds),firstHalfEndTime,firstHalfTaps,secondHalfTaps,const DeepCollectionEquality().hash(_eventLogs)]);
+int get hashCode => Object.hashAll([runtimeType,gameState,countdownValue,level,const DeepCollectionEquality().hash(_cards),const DeepCollectionEquality().hash(_flippedCardIds),isProcessing,startTime,moves,errors,hintCardId,isCompleted,randomTaps,immediateRepeatErrors,const DeepCollectionEquality().hash(_tapRecords),const DeepCollectionEquality().hash(_recentlyFlippedCardIds),firstHalfEndTime,firstHalfTaps,secondHalfTaps,const DeepCollectionEquality().hash(_eventLogs),const DeepCollectionEquality().hash(_revealedCardIds),revisitCount,totalTurns,const DeepCollectionEquality().hash(_reactionTimesMs),lastFlipTime]);
 
 @override
 String toString() {
-  return 'AttentionTestState(gameState: $gameState, countdownValue: $countdownValue, level: $level, cards: $cards, flippedCardIds: $flippedCardIds, isProcessing: $isProcessing, startTime: $startTime, moves: $moves, errors: $errors, hintCardId: $hintCardId, isCompleted: $isCompleted, randomTaps: $randomTaps, immediateRepeatErrors: $immediateRepeatErrors, tapRecords: $tapRecords, recentlyFlippedCardIds: $recentlyFlippedCardIds, firstHalfEndTime: $firstHalfEndTime, firstHalfTaps: $firstHalfTaps, secondHalfTaps: $secondHalfTaps, eventLogs: $eventLogs)';
+  return 'AttentionTestState(gameState: $gameState, countdownValue: $countdownValue, level: $level, cards: $cards, flippedCardIds: $flippedCardIds, isProcessing: $isProcessing, startTime: $startTime, moves: $moves, errors: $errors, hintCardId: $hintCardId, isCompleted: $isCompleted, randomTaps: $randomTaps, immediateRepeatErrors: $immediateRepeatErrors, tapRecords: $tapRecords, recentlyFlippedCardIds: $recentlyFlippedCardIds, firstHalfEndTime: $firstHalfEndTime, firstHalfTaps: $firstHalfTaps, secondHalfTaps: $secondHalfTaps, eventLogs: $eventLogs, revealedCardIds: $revealedCardIds, revisitCount: $revisitCount, totalTurns: $totalTurns, reactionTimesMs: $reactionTimesMs, lastFlipTime: $lastFlipTime)';
 }
 
 
@@ -588,7 +625,7 @@ abstract mixin class _$AttentionTestStateCopyWith<$Res> implements $AttentionTes
   factory _$AttentionTestStateCopyWith(_AttentionTestState value, $Res Function(_AttentionTestState) _then) = __$AttentionTestStateCopyWithImpl;
 @override @useResult
 $Res call({
- AttentionGameState gameState, int? countdownValue, int level, List<CardData> cards, List<int> flippedCardIds, bool isProcessing, DateTime? startTime, int moves, int errors, int? hintCardId, bool isCompleted, int randomTaps, int immediateRepeatErrors, List<TapRecord> tapRecords, List<int> recentlyFlippedCardIds, DateTime? firstHalfEndTime, int firstHalfTaps, int secondHalfTaps, List<TestEventLog> eventLogs
+ AttentionGameState gameState, int? countdownValue, int level, List<CardData> cards, List<int> flippedCardIds, bool isProcessing, DateTime? startTime, int moves, int errors, int? hintCardId, bool isCompleted, int randomTaps, int immediateRepeatErrors, List<TapRecord> tapRecords, List<int> recentlyFlippedCardIds, DateTime? firstHalfEndTime, int firstHalfTaps, int secondHalfTaps, List<TestEventLog> eventLogs, Set<int> revealedCardIds, int revisitCount, int totalTurns, List<int> reactionTimesMs, DateTime? lastFlipTime
 });
 
 
@@ -605,7 +642,7 @@ class __$AttentionTestStateCopyWithImpl<$Res>
 
 /// Create a copy of AttentionTestState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? gameState = null,Object? countdownValue = freezed,Object? level = null,Object? cards = null,Object? flippedCardIds = null,Object? isProcessing = null,Object? startTime = freezed,Object? moves = null,Object? errors = null,Object? hintCardId = freezed,Object? isCompleted = null,Object? randomTaps = null,Object? immediateRepeatErrors = null,Object? tapRecords = null,Object? recentlyFlippedCardIds = null,Object? firstHalfEndTime = freezed,Object? firstHalfTaps = null,Object? secondHalfTaps = null,Object? eventLogs = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? gameState = null,Object? countdownValue = freezed,Object? level = null,Object? cards = null,Object? flippedCardIds = null,Object? isProcessing = null,Object? startTime = freezed,Object? moves = null,Object? errors = null,Object? hintCardId = freezed,Object? isCompleted = null,Object? randomTaps = null,Object? immediateRepeatErrors = null,Object? tapRecords = null,Object? recentlyFlippedCardIds = null,Object? firstHalfEndTime = freezed,Object? firstHalfTaps = null,Object? secondHalfTaps = null,Object? eventLogs = null,Object? revealedCardIds = null,Object? revisitCount = null,Object? totalTurns = null,Object? reactionTimesMs = null,Object? lastFlipTime = freezed,}) {
   return _then(_AttentionTestState(
 gameState: null == gameState ? _self.gameState : gameState // ignore: cast_nullable_to_non_nullable
 as AttentionGameState,countdownValue: freezed == countdownValue ? _self.countdownValue : countdownValue // ignore: cast_nullable_to_non_nullable
@@ -626,7 +663,12 @@ as List<int>,firstHalfEndTime: freezed == firstHalfEndTime ? _self.firstHalfEndT
 as DateTime?,firstHalfTaps: null == firstHalfTaps ? _self.firstHalfTaps : firstHalfTaps // ignore: cast_nullable_to_non_nullable
 as int,secondHalfTaps: null == secondHalfTaps ? _self.secondHalfTaps : secondHalfTaps // ignore: cast_nullable_to_non_nullable
 as int,eventLogs: null == eventLogs ? _self._eventLogs : eventLogs // ignore: cast_nullable_to_non_nullable
-as List<TestEventLog>,
+as List<TestEventLog>,revealedCardIds: null == revealedCardIds ? _self._revealedCardIds : revealedCardIds // ignore: cast_nullable_to_non_nullable
+as Set<int>,revisitCount: null == revisitCount ? _self.revisitCount : revisitCount // ignore: cast_nullable_to_non_nullable
+as int,totalTurns: null == totalTurns ? _self.totalTurns : totalTurns // ignore: cast_nullable_to_non_nullable
+as int,reactionTimesMs: null == reactionTimesMs ? _self._reactionTimesMs : reactionTimesMs // ignore: cast_nullable_to_non_nullable
+as List<int>,lastFlipTime: freezed == lastFlipTime ? _self.lastFlipTime : lastFlipTime // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 

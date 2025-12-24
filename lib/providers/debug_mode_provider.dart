@@ -15,3 +15,4 @@ class DebugMode extends _$DebugMode {
 
   void setEnabled(bool enabled) => state = enabled;
 }
+

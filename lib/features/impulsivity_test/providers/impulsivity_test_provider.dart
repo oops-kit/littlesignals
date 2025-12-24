@@ -112,14 +112,24 @@ class ImpulsivityTestController extends _$ImpulsivityTestController {
         ? state.omissionErrors + 1
         : state.omissionErrors;
 
+    // 타임아웃 상태로 변경 (페이드아웃 애니메이션용)
+    final updatedBalloon = state.currentBalloon?.copyWith(
+      tapState: BalloonTapState.timeout,
+    );
+
     state = state.copyWith(
-      currentBalloon: null,
+      currentBalloon: updatedBalloon,
       stimuliCount: state.stimuliCount + 1,
       omissionErrors: newOmissionErrors,
       eventLogs: _logRecorder.logs,
     );
 
-    _scheduleNextBalloon();
+    // 짧은 딜레이 후 풍선 제거 및 다음 풍선 스케줄
+    Future.delayed(const Duration(milliseconds: 200), () {
+      if (_isDisposed) return;
+      state = state.copyWith(currentBalloon: null);
+      _scheduleNextBalloon();
+    });
   }
 
   /// 풍선 클릭 처리
@@ -127,6 +137,8 @@ class ImpulsivityTestController extends _$ImpulsivityTestController {
   /// SRP: 흐름 조율만 담당, 터치 결과 분석은 BalloonTapHandler에 위임
   void handleBalloonClick() {
     if (state.currentBalloon == null) return;
+    // 이미 탭된 상태면 무시
+    if (state.currentBalloon!.tapState != BalloonTapState.none) return;
 
     _balloonController?.clearCurrentBalloon();
 
@@ -140,22 +152,35 @@ class ImpulsivityTestController extends _$ImpulsivityTestController {
 
     switch (result) {
       case BlueBalloonSuccess(:final reactionTimeMs):
+        // 탭 상태로 변경 (팝 애니메이션용)
+        final tappedBalloon = balloon.copyWith(
+          tapState: BalloonTapState.correctTap,
+        );
         state = state.copyWith(
           reactionTimes: [...state.reactionTimes, reactionTimeMs],
-          currentBalloon: null,
+          currentBalloon: tappedBalloon,
           stimuliCount: state.stimuliCount + 1,
           eventLogs: _logRecorder.logs,
         );
       case RedBalloonError():
+        // 탭 상태로 변경 (흔들림 애니메이션용)
+        final tappedBalloon = balloon.copyWith(
+          tapState: BalloonTapState.incorrectTap,
+        );
         state = state.copyWith(
           commissionErrors: state.commissionErrors + 1,
-          currentBalloon: null,
+          currentBalloon: tappedBalloon,
           stimuliCount: state.stimuliCount + 1,
           eventLogs: _logRecorder.logs,
         );
     }
 
-    _scheduleNextBalloon();
+    // 애니메이션 후 풍선 제거 및 다음 풍선 스케줄
+    Future.delayed(const Duration(milliseconds: 400), () {
+      if (_isDisposed) return;
+      state = state.copyWith(currentBalloon: null);
+      _scheduleNextBalloon();
+    });
   }
 
   /// 화면 터치 처리 (풍선이 없을 때 = 예측 반응)

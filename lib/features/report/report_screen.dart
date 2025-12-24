@@ -12,10 +12,12 @@ import 'providers/report_provider.dart';
 import 'widgets/behavior_style_card.dart';
 import 'widgets/event_log_card.dart';
 import 'widgets/impulsivity_data_card.dart';
+import 'widgets/key_metrics_card.dart';
 import 'widgets/observation_data_card.dart';
 import 'widgets/observe_another_button.dart';
 import 'widgets/parenting_tips_card.dart';
 import 'widgets/result_chart.dart';
+import 'widgets/result_interpretation_card.dart';
 
 /// 리포트 화면
 ///
@@ -32,6 +34,7 @@ class ReportScreen extends ConsumerWidget {
 
     final attentionResult = appState.attentionResult;
     final impulsivityResult = appState.impulsivityResult;
+    final childProfile = appState.profile;
 
     // 테스트 결과를 TestResult 인터페이스로 추상화
     final TestResult? testResult = isAttention
@@ -42,8 +45,12 @@ class ReportScreen extends ConsumerWidget {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
-    // Strategy 패턴을 통한 리포트 데이터 계산
-    final reportData = calculator.calculate(testResult, l10n);
+    // Strategy 패턴을 통한 리포트 데이터 계산 (월령 정보 포함)
+    final reportData = calculator.calculate(
+      testResult,
+      l10n,
+      ageMonths: childProfile?.ageMonths,
+    );
 
     void handleObserveAnother() {
       ref.read(appStateNotifierProvider.notifier).clearActiveTest();
@@ -66,6 +73,21 @@ class ReportScreen extends ConsumerWidget {
                 description: reportData.description,
               ),
               const SizedBox(height: 16),
+              // 핵심 지표 카드 (Z점수 분석 결과가 있을 때)
+              if (reportData.attentionAnalysis != null ||
+                  reportData.impulsivityAnalysis != null) ...[
+                KeyMetricsCard(
+                  attentionAnalysis: reportData.attentionAnalysis,
+                  impulsivityAnalysis: reportData.impulsivityAnalysis,
+                ),
+                const SizedBox(height: 16),
+                // 결과 해석 카드
+                ResultInterpretationCard(
+                  attentionAnalysis: reportData.attentionAnalysis,
+                  impulsivityAnalysis: reportData.impulsivityAnalysis,
+                ),
+                const SizedBox(height: 16),
+              ],
               // 테스트별 관찰 데이터 포인트 표시
               if (isAttention && attentionResult != null) ...[
                 ObservationDataCard(result: attentionResult),
@@ -81,6 +103,7 @@ class ReportScreen extends ConsumerWidget {
                 lowLabel: reportData.lowLabel,
                 highLabel: reportData.highLabel,
                 description: l10n.comparisonDesc,
+                zScoreResult: reportData.zScoreResult,
               ),
               const SizedBox(height: 16),
               ParentingTipsCard(

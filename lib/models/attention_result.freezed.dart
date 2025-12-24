@@ -23,7 +23,12 @@ mixin _$AttentionResult {
  double get secondHalfDurationSeconds;/// 전반부 터치 횟수
  int get firstHalfTaps;/// 후반부 터치 횟수
  int get secondHalfTaps;/// 테스트 중 발생한 이벤트 로그
- List<TestEventLog> get eventLogs;
+ List<TestEventLog> get eventLogs;// === MER 및 재확인율 계산용 필드 ===
+/// 재확인 횟수 (이미 확인한 카드를 다시 뒤집은 횟수)
+ int get revisitCount;/// 확인한 고유 카드 수
+ int get uniqueCardsRevealed;/// 총 턴 수 (카드 2장 뒤집기 = 1턴)
+ int get totalTurns;/// 개별 반응 시간 목록 (ms)
+ List<int> get reactionTimesMs;
 /// Create a copy of AttentionResult
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -36,16 +41,16 @@ $AttentionResultCopyWith<AttentionResult> get copyWith => _$AttentionResultCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AttentionResult&&(identical(other.durationSeconds, durationSeconds) || other.durationSeconds == durationSeconds)&&(identical(other.totalMoves, totalMoves) || other.totalMoves == totalMoves)&&(identical(other.errors, errors) || other.errors == errors)&&(identical(other.completionStatus, completionStatus) || other.completionStatus == completionStatus)&&(identical(other.randomTapCount, randomTapCount) || other.randomTapCount == randomTapCount)&&(identical(other.immediateRepeatErrors, immediateRepeatErrors) || other.immediateRepeatErrors == immediateRepeatErrors)&&(identical(other.firstHalfDurationSeconds, firstHalfDurationSeconds) || other.firstHalfDurationSeconds == firstHalfDurationSeconds)&&(identical(other.secondHalfDurationSeconds, secondHalfDurationSeconds) || other.secondHalfDurationSeconds == secondHalfDurationSeconds)&&(identical(other.firstHalfTaps, firstHalfTaps) || other.firstHalfTaps == firstHalfTaps)&&(identical(other.secondHalfTaps, secondHalfTaps) || other.secondHalfTaps == secondHalfTaps)&&const DeepCollectionEquality().equals(other.eventLogs, eventLogs));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AttentionResult&&(identical(other.durationSeconds, durationSeconds) || other.durationSeconds == durationSeconds)&&(identical(other.totalMoves, totalMoves) || other.totalMoves == totalMoves)&&(identical(other.errors, errors) || other.errors == errors)&&(identical(other.completionStatus, completionStatus) || other.completionStatus == completionStatus)&&(identical(other.randomTapCount, randomTapCount) || other.randomTapCount == randomTapCount)&&(identical(other.immediateRepeatErrors, immediateRepeatErrors) || other.immediateRepeatErrors == immediateRepeatErrors)&&(identical(other.firstHalfDurationSeconds, firstHalfDurationSeconds) || other.firstHalfDurationSeconds == firstHalfDurationSeconds)&&(identical(other.secondHalfDurationSeconds, secondHalfDurationSeconds) || other.secondHalfDurationSeconds == secondHalfDurationSeconds)&&(identical(other.firstHalfTaps, firstHalfTaps) || other.firstHalfTaps == firstHalfTaps)&&(identical(other.secondHalfTaps, secondHalfTaps) || other.secondHalfTaps == secondHalfTaps)&&const DeepCollectionEquality().equals(other.eventLogs, eventLogs)&&(identical(other.revisitCount, revisitCount) || other.revisitCount == revisitCount)&&(identical(other.uniqueCardsRevealed, uniqueCardsRevealed) || other.uniqueCardsRevealed == uniqueCardsRevealed)&&(identical(other.totalTurns, totalTurns) || other.totalTurns == totalTurns)&&const DeepCollectionEquality().equals(other.reactionTimesMs, reactionTimesMs));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,durationSeconds,totalMoves,errors,completionStatus,randomTapCount,immediateRepeatErrors,firstHalfDurationSeconds,secondHalfDurationSeconds,firstHalfTaps,secondHalfTaps,const DeepCollectionEquality().hash(eventLogs));
+int get hashCode => Object.hash(runtimeType,durationSeconds,totalMoves,errors,completionStatus,randomTapCount,immediateRepeatErrors,firstHalfDurationSeconds,secondHalfDurationSeconds,firstHalfTaps,secondHalfTaps,const DeepCollectionEquality().hash(eventLogs),revisitCount,uniqueCardsRevealed,totalTurns,const DeepCollectionEquality().hash(reactionTimesMs));
 
 @override
 String toString() {
-  return 'AttentionResult(durationSeconds: $durationSeconds, totalMoves: $totalMoves, errors: $errors, completionStatus: $completionStatus, randomTapCount: $randomTapCount, immediateRepeatErrors: $immediateRepeatErrors, firstHalfDurationSeconds: $firstHalfDurationSeconds, secondHalfDurationSeconds: $secondHalfDurationSeconds, firstHalfTaps: $firstHalfTaps, secondHalfTaps: $secondHalfTaps, eventLogs: $eventLogs)';
+  return 'AttentionResult(durationSeconds: $durationSeconds, totalMoves: $totalMoves, errors: $errors, completionStatus: $completionStatus, randomTapCount: $randomTapCount, immediateRepeatErrors: $immediateRepeatErrors, firstHalfDurationSeconds: $firstHalfDurationSeconds, secondHalfDurationSeconds: $secondHalfDurationSeconds, firstHalfTaps: $firstHalfTaps, secondHalfTaps: $secondHalfTaps, eventLogs: $eventLogs, revisitCount: $revisitCount, uniqueCardsRevealed: $uniqueCardsRevealed, totalTurns: $totalTurns, reactionTimesMs: $reactionTimesMs)';
 }
 
 
@@ -56,7 +61,7 @@ abstract mixin class $AttentionResultCopyWith<$Res>  {
   factory $AttentionResultCopyWith(AttentionResult value, $Res Function(AttentionResult) _then) = _$AttentionResultCopyWithImpl;
 @useResult
 $Res call({
- double durationSeconds, int totalMoves, int errors, CompletionStatus completionStatus, int randomTapCount, int immediateRepeatErrors, double firstHalfDurationSeconds, double secondHalfDurationSeconds, int firstHalfTaps, int secondHalfTaps, List<TestEventLog> eventLogs
+ double durationSeconds, int totalMoves, int errors, CompletionStatus completionStatus, int randomTapCount, int immediateRepeatErrors, double firstHalfDurationSeconds, double secondHalfDurationSeconds, int firstHalfTaps, int secondHalfTaps, List<TestEventLog> eventLogs, int revisitCount, int uniqueCardsRevealed, int totalTurns, List<int> reactionTimesMs
 });
 
 
@@ -73,7 +78,7 @@ class _$AttentionResultCopyWithImpl<$Res>
 
 /// Create a copy of AttentionResult
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? durationSeconds = null,Object? totalMoves = null,Object? errors = null,Object? completionStatus = null,Object? randomTapCount = null,Object? immediateRepeatErrors = null,Object? firstHalfDurationSeconds = null,Object? secondHalfDurationSeconds = null,Object? firstHalfTaps = null,Object? secondHalfTaps = null,Object? eventLogs = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? durationSeconds = null,Object? totalMoves = null,Object? errors = null,Object? completionStatus = null,Object? randomTapCount = null,Object? immediateRepeatErrors = null,Object? firstHalfDurationSeconds = null,Object? secondHalfDurationSeconds = null,Object? firstHalfTaps = null,Object? secondHalfTaps = null,Object? eventLogs = null,Object? revisitCount = null,Object? uniqueCardsRevealed = null,Object? totalTurns = null,Object? reactionTimesMs = null,}) {
   return _then(_self.copyWith(
 durationSeconds: null == durationSeconds ? _self.durationSeconds : durationSeconds // ignore: cast_nullable_to_non_nullable
 as double,totalMoves: null == totalMoves ? _self.totalMoves : totalMoves // ignore: cast_nullable_to_non_nullable
@@ -86,7 +91,11 @@ as double,secondHalfDurationSeconds: null == secondHalfDurationSeconds ? _self.s
 as double,firstHalfTaps: null == firstHalfTaps ? _self.firstHalfTaps : firstHalfTaps // ignore: cast_nullable_to_non_nullable
 as int,secondHalfTaps: null == secondHalfTaps ? _self.secondHalfTaps : secondHalfTaps // ignore: cast_nullable_to_non_nullable
 as int,eventLogs: null == eventLogs ? _self.eventLogs : eventLogs // ignore: cast_nullable_to_non_nullable
-as List<TestEventLog>,
+as List<TestEventLog>,revisitCount: null == revisitCount ? _self.revisitCount : revisitCount // ignore: cast_nullable_to_non_nullable
+as int,uniqueCardsRevealed: null == uniqueCardsRevealed ? _self.uniqueCardsRevealed : uniqueCardsRevealed // ignore: cast_nullable_to_non_nullable
+as int,totalTurns: null == totalTurns ? _self.totalTurns : totalTurns // ignore: cast_nullable_to_non_nullable
+as int,reactionTimesMs: null == reactionTimesMs ? _self.reactionTimesMs : reactionTimesMs // ignore: cast_nullable_to_non_nullable
+as List<int>,
   ));
 }
 
@@ -171,10 +180,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( double durationSeconds,  int totalMoves,  int errors,  CompletionStatus completionStatus,  int randomTapCount,  int immediateRepeatErrors,  double firstHalfDurationSeconds,  double secondHalfDurationSeconds,  int firstHalfTaps,  int secondHalfTaps,  List<TestEventLog> eventLogs)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( double durationSeconds,  int totalMoves,  int errors,  CompletionStatus completionStatus,  int randomTapCount,  int immediateRepeatErrors,  double firstHalfDurationSeconds,  double secondHalfDurationSeconds,  int firstHalfTaps,  int secondHalfTaps,  List<TestEventLog> eventLogs,  int revisitCount,  int uniqueCardsRevealed,  int totalTurns,  List<int> reactionTimesMs)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AttentionResult() when $default != null:
-return $default(_that.durationSeconds,_that.totalMoves,_that.errors,_that.completionStatus,_that.randomTapCount,_that.immediateRepeatErrors,_that.firstHalfDurationSeconds,_that.secondHalfDurationSeconds,_that.firstHalfTaps,_that.secondHalfTaps,_that.eventLogs);case _:
+return $default(_that.durationSeconds,_that.totalMoves,_that.errors,_that.completionStatus,_that.randomTapCount,_that.immediateRepeatErrors,_that.firstHalfDurationSeconds,_that.secondHalfDurationSeconds,_that.firstHalfTaps,_that.secondHalfTaps,_that.eventLogs,_that.revisitCount,_that.uniqueCardsRevealed,_that.totalTurns,_that.reactionTimesMs);case _:
   return orElse();
 
 }
@@ -192,10 +201,10 @@ return $default(_that.durationSeconds,_that.totalMoves,_that.errors,_that.comple
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( double durationSeconds,  int totalMoves,  int errors,  CompletionStatus completionStatus,  int randomTapCount,  int immediateRepeatErrors,  double firstHalfDurationSeconds,  double secondHalfDurationSeconds,  int firstHalfTaps,  int secondHalfTaps,  List<TestEventLog> eventLogs)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( double durationSeconds,  int totalMoves,  int errors,  CompletionStatus completionStatus,  int randomTapCount,  int immediateRepeatErrors,  double firstHalfDurationSeconds,  double secondHalfDurationSeconds,  int firstHalfTaps,  int secondHalfTaps,  List<TestEventLog> eventLogs,  int revisitCount,  int uniqueCardsRevealed,  int totalTurns,  List<int> reactionTimesMs)  $default,) {final _that = this;
 switch (_that) {
 case _AttentionResult():
-return $default(_that.durationSeconds,_that.totalMoves,_that.errors,_that.completionStatus,_that.randomTapCount,_that.immediateRepeatErrors,_that.firstHalfDurationSeconds,_that.secondHalfDurationSeconds,_that.firstHalfTaps,_that.secondHalfTaps,_that.eventLogs);case _:
+return $default(_that.durationSeconds,_that.totalMoves,_that.errors,_that.completionStatus,_that.randomTapCount,_that.immediateRepeatErrors,_that.firstHalfDurationSeconds,_that.secondHalfDurationSeconds,_that.firstHalfTaps,_that.secondHalfTaps,_that.eventLogs,_that.revisitCount,_that.uniqueCardsRevealed,_that.totalTurns,_that.reactionTimesMs);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -212,10 +221,10 @@ return $default(_that.durationSeconds,_that.totalMoves,_that.errors,_that.comple
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( double durationSeconds,  int totalMoves,  int errors,  CompletionStatus completionStatus,  int randomTapCount,  int immediateRepeatErrors,  double firstHalfDurationSeconds,  double secondHalfDurationSeconds,  int firstHalfTaps,  int secondHalfTaps,  List<TestEventLog> eventLogs)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( double durationSeconds,  int totalMoves,  int errors,  CompletionStatus completionStatus,  int randomTapCount,  int immediateRepeatErrors,  double firstHalfDurationSeconds,  double secondHalfDurationSeconds,  int firstHalfTaps,  int secondHalfTaps,  List<TestEventLog> eventLogs,  int revisitCount,  int uniqueCardsRevealed,  int totalTurns,  List<int> reactionTimesMs)?  $default,) {final _that = this;
 switch (_that) {
 case _AttentionResult() when $default != null:
-return $default(_that.durationSeconds,_that.totalMoves,_that.errors,_that.completionStatus,_that.randomTapCount,_that.immediateRepeatErrors,_that.firstHalfDurationSeconds,_that.secondHalfDurationSeconds,_that.firstHalfTaps,_that.secondHalfTaps,_that.eventLogs);case _:
+return $default(_that.durationSeconds,_that.totalMoves,_that.errors,_that.completionStatus,_that.randomTapCount,_that.immediateRepeatErrors,_that.firstHalfDurationSeconds,_that.secondHalfDurationSeconds,_that.firstHalfTaps,_that.secondHalfTaps,_that.eventLogs,_that.revisitCount,_that.uniqueCardsRevealed,_that.totalTurns,_that.reactionTimesMs);case _:
   return null;
 
 }
@@ -227,7 +236,7 @@ return $default(_that.durationSeconds,_that.totalMoves,_that.errors,_that.comple
 @JsonSerializable()
 
 class _AttentionResult extends AttentionResult {
-  const _AttentionResult({required this.durationSeconds, required this.totalMoves, required this.errors, required this.completionStatus, this.randomTapCount = 0, this.immediateRepeatErrors = 0, this.firstHalfDurationSeconds = 0.0, this.secondHalfDurationSeconds = 0.0, this.firstHalfTaps = 0, this.secondHalfTaps = 0, final  List<TestEventLog> eventLogs = const []}): _eventLogs = eventLogs,super._();
+  const _AttentionResult({required this.durationSeconds, required this.totalMoves, required this.errors, required this.completionStatus, this.randomTapCount = 0, this.immediateRepeatErrors = 0, this.firstHalfDurationSeconds = 0.0, this.secondHalfDurationSeconds = 0.0, this.firstHalfTaps = 0, this.secondHalfTaps = 0, final  List<TestEventLog> eventLogs = const [], this.revisitCount = 0, this.uniqueCardsRevealed = 0, this.totalTurns = 0, final  List<int> reactionTimesMs = const []}): _eventLogs = eventLogs,_reactionTimesMs = reactionTimesMs,super._();
   factory _AttentionResult.fromJson(Map<String, dynamic> json) => _$AttentionResultFromJson(json);
 
 @override final  double durationSeconds;
@@ -256,6 +265,22 @@ class _AttentionResult extends AttentionResult {
   return EqualUnmodifiableListView(_eventLogs);
 }
 
+// === MER 및 재확인율 계산용 필드 ===
+/// 재확인 횟수 (이미 확인한 카드를 다시 뒤집은 횟수)
+@override@JsonKey() final  int revisitCount;
+/// 확인한 고유 카드 수
+@override@JsonKey() final  int uniqueCardsRevealed;
+/// 총 턴 수 (카드 2장 뒤집기 = 1턴)
+@override@JsonKey() final  int totalTurns;
+/// 개별 반응 시간 목록 (ms)
+ final  List<int> _reactionTimesMs;
+/// 개별 반응 시간 목록 (ms)
+@override@JsonKey() List<int> get reactionTimesMs {
+  if (_reactionTimesMs is EqualUnmodifiableListView) return _reactionTimesMs;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_reactionTimesMs);
+}
+
 
 /// Create a copy of AttentionResult
 /// with the given fields replaced by the non-null parameter values.
@@ -270,16 +295,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AttentionResult&&(identical(other.durationSeconds, durationSeconds) || other.durationSeconds == durationSeconds)&&(identical(other.totalMoves, totalMoves) || other.totalMoves == totalMoves)&&(identical(other.errors, errors) || other.errors == errors)&&(identical(other.completionStatus, completionStatus) || other.completionStatus == completionStatus)&&(identical(other.randomTapCount, randomTapCount) || other.randomTapCount == randomTapCount)&&(identical(other.immediateRepeatErrors, immediateRepeatErrors) || other.immediateRepeatErrors == immediateRepeatErrors)&&(identical(other.firstHalfDurationSeconds, firstHalfDurationSeconds) || other.firstHalfDurationSeconds == firstHalfDurationSeconds)&&(identical(other.secondHalfDurationSeconds, secondHalfDurationSeconds) || other.secondHalfDurationSeconds == secondHalfDurationSeconds)&&(identical(other.firstHalfTaps, firstHalfTaps) || other.firstHalfTaps == firstHalfTaps)&&(identical(other.secondHalfTaps, secondHalfTaps) || other.secondHalfTaps == secondHalfTaps)&&const DeepCollectionEquality().equals(other._eventLogs, _eventLogs));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AttentionResult&&(identical(other.durationSeconds, durationSeconds) || other.durationSeconds == durationSeconds)&&(identical(other.totalMoves, totalMoves) || other.totalMoves == totalMoves)&&(identical(other.errors, errors) || other.errors == errors)&&(identical(other.completionStatus, completionStatus) || other.completionStatus == completionStatus)&&(identical(other.randomTapCount, randomTapCount) || other.randomTapCount == randomTapCount)&&(identical(other.immediateRepeatErrors, immediateRepeatErrors) || other.immediateRepeatErrors == immediateRepeatErrors)&&(identical(other.firstHalfDurationSeconds, firstHalfDurationSeconds) || other.firstHalfDurationSeconds == firstHalfDurationSeconds)&&(identical(other.secondHalfDurationSeconds, secondHalfDurationSeconds) || other.secondHalfDurationSeconds == secondHalfDurationSeconds)&&(identical(other.firstHalfTaps, firstHalfTaps) || other.firstHalfTaps == firstHalfTaps)&&(identical(other.secondHalfTaps, secondHalfTaps) || other.secondHalfTaps == secondHalfTaps)&&const DeepCollectionEquality().equals(other._eventLogs, _eventLogs)&&(identical(other.revisitCount, revisitCount) || other.revisitCount == revisitCount)&&(identical(other.uniqueCardsRevealed, uniqueCardsRevealed) || other.uniqueCardsRevealed == uniqueCardsRevealed)&&(identical(other.totalTurns, totalTurns) || other.totalTurns == totalTurns)&&const DeepCollectionEquality().equals(other._reactionTimesMs, _reactionTimesMs));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,durationSeconds,totalMoves,errors,completionStatus,randomTapCount,immediateRepeatErrors,firstHalfDurationSeconds,secondHalfDurationSeconds,firstHalfTaps,secondHalfTaps,const DeepCollectionEquality().hash(_eventLogs));
+int get hashCode => Object.hash(runtimeType,durationSeconds,totalMoves,errors,completionStatus,randomTapCount,immediateRepeatErrors,firstHalfDurationSeconds,secondHalfDurationSeconds,firstHalfTaps,secondHalfTaps,const DeepCollectionEquality().hash(_eventLogs),revisitCount,uniqueCardsRevealed,totalTurns,const DeepCollectionEquality().hash(_reactionTimesMs));
 
 @override
 String toString() {
-  return 'AttentionResult(durationSeconds: $durationSeconds, totalMoves: $totalMoves, errors: $errors, completionStatus: $completionStatus, randomTapCount: $randomTapCount, immediateRepeatErrors: $immediateRepeatErrors, firstHalfDurationSeconds: $firstHalfDurationSeconds, secondHalfDurationSeconds: $secondHalfDurationSeconds, firstHalfTaps: $firstHalfTaps, secondHalfTaps: $secondHalfTaps, eventLogs: $eventLogs)';
+  return 'AttentionResult(durationSeconds: $durationSeconds, totalMoves: $totalMoves, errors: $errors, completionStatus: $completionStatus, randomTapCount: $randomTapCount, immediateRepeatErrors: $immediateRepeatErrors, firstHalfDurationSeconds: $firstHalfDurationSeconds, secondHalfDurationSeconds: $secondHalfDurationSeconds, firstHalfTaps: $firstHalfTaps, secondHalfTaps: $secondHalfTaps, eventLogs: $eventLogs, revisitCount: $revisitCount, uniqueCardsRevealed: $uniqueCardsRevealed, totalTurns: $totalTurns, reactionTimesMs: $reactionTimesMs)';
 }
 
 
@@ -290,7 +315,7 @@ abstract mixin class _$AttentionResultCopyWith<$Res> implements $AttentionResult
   factory _$AttentionResultCopyWith(_AttentionResult value, $Res Function(_AttentionResult) _then) = __$AttentionResultCopyWithImpl;
 @override @useResult
 $Res call({
- double durationSeconds, int totalMoves, int errors, CompletionStatus completionStatus, int randomTapCount, int immediateRepeatErrors, double firstHalfDurationSeconds, double secondHalfDurationSeconds, int firstHalfTaps, int secondHalfTaps, List<TestEventLog> eventLogs
+ double durationSeconds, int totalMoves, int errors, CompletionStatus completionStatus, int randomTapCount, int immediateRepeatErrors, double firstHalfDurationSeconds, double secondHalfDurationSeconds, int firstHalfTaps, int secondHalfTaps, List<TestEventLog> eventLogs, int revisitCount, int uniqueCardsRevealed, int totalTurns, List<int> reactionTimesMs
 });
 
 
@@ -307,7 +332,7 @@ class __$AttentionResultCopyWithImpl<$Res>
 
 /// Create a copy of AttentionResult
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? durationSeconds = null,Object? totalMoves = null,Object? errors = null,Object? completionStatus = null,Object? randomTapCount = null,Object? immediateRepeatErrors = null,Object? firstHalfDurationSeconds = null,Object? secondHalfDurationSeconds = null,Object? firstHalfTaps = null,Object? secondHalfTaps = null,Object? eventLogs = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? durationSeconds = null,Object? totalMoves = null,Object? errors = null,Object? completionStatus = null,Object? randomTapCount = null,Object? immediateRepeatErrors = null,Object? firstHalfDurationSeconds = null,Object? secondHalfDurationSeconds = null,Object? firstHalfTaps = null,Object? secondHalfTaps = null,Object? eventLogs = null,Object? revisitCount = null,Object? uniqueCardsRevealed = null,Object? totalTurns = null,Object? reactionTimesMs = null,}) {
   return _then(_AttentionResult(
 durationSeconds: null == durationSeconds ? _self.durationSeconds : durationSeconds // ignore: cast_nullable_to_non_nullable
 as double,totalMoves: null == totalMoves ? _self.totalMoves : totalMoves // ignore: cast_nullable_to_non_nullable
@@ -320,7 +345,11 @@ as double,secondHalfDurationSeconds: null == secondHalfDurationSeconds ? _self.s
 as double,firstHalfTaps: null == firstHalfTaps ? _self.firstHalfTaps : firstHalfTaps // ignore: cast_nullable_to_non_nullable
 as int,secondHalfTaps: null == secondHalfTaps ? _self.secondHalfTaps : secondHalfTaps // ignore: cast_nullable_to_non_nullable
 as int,eventLogs: null == eventLogs ? _self._eventLogs : eventLogs // ignore: cast_nullable_to_non_nullable
-as List<TestEventLog>,
+as List<TestEventLog>,revisitCount: null == revisitCount ? _self.revisitCount : revisitCount // ignore: cast_nullable_to_non_nullable
+as int,uniqueCardsRevealed: null == uniqueCardsRevealed ? _self.uniqueCardsRevealed : uniqueCardsRevealed // ignore: cast_nullable_to_non_nullable
+as int,totalTurns: null == totalTurns ? _self.totalTurns : totalTurns // ignore: cast_nullable_to_non_nullable
+as int,reactionTimesMs: null == reactionTimesMs ? _self._reactionTimesMs : reactionTimesMs // ignore: cast_nullable_to_non_nullable
+as List<int>,
   ));
 }
 

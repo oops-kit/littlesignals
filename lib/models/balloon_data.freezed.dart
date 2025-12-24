@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$BalloonData {
 
- int get id; bool get isBlue; double get x; double get y; DateTime get spawnTime;
+ int get id; bool get isBlue; double get x; double get y; DateTime get spawnTime; BalloonTapState get tapState;
 /// Create a copy of BalloonData
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $BalloonDataCopyWith<BalloonData> get copyWith => _$BalloonDataCopyWithImpl<Ball
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is BalloonData&&(identical(other.id, id) || other.id == id)&&(identical(other.isBlue, isBlue) || other.isBlue == isBlue)&&(identical(other.x, x) || other.x == x)&&(identical(other.y, y) || other.y == y)&&(identical(other.spawnTime, spawnTime) || other.spawnTime == spawnTime));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is BalloonData&&(identical(other.id, id) || other.id == id)&&(identical(other.isBlue, isBlue) || other.isBlue == isBlue)&&(identical(other.x, x) || other.x == x)&&(identical(other.y, y) || other.y == y)&&(identical(other.spawnTime, spawnTime) || other.spawnTime == spawnTime)&&(identical(other.tapState, tapState) || other.tapState == tapState));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,isBlue,x,y,spawnTime);
+int get hashCode => Object.hash(runtimeType,id,isBlue,x,y,spawnTime,tapState);
 
 @override
 String toString() {
-  return 'BalloonData(id: $id, isBlue: $isBlue, x: $x, y: $y, spawnTime: $spawnTime)';
+  return 'BalloonData(id: $id, isBlue: $isBlue, x: $x, y: $y, spawnTime: $spawnTime, tapState: $tapState)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $BalloonDataCopyWith<$Res>  {
   factory $BalloonDataCopyWith(BalloonData value, $Res Function(BalloonData) _then) = _$BalloonDataCopyWithImpl;
 @useResult
 $Res call({
- int id, bool isBlue, double x, double y, DateTime spawnTime
+ int id, bool isBlue, double x, double y, DateTime spawnTime, BalloonTapState tapState
 });
 
 
@@ -62,14 +62,15 @@ class _$BalloonDataCopyWithImpl<$Res>
 
 /// Create a copy of BalloonData
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? isBlue = null,Object? x = null,Object? y = null,Object? spawnTime = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? isBlue = null,Object? x = null,Object? y = null,Object? spawnTime = null,Object? tapState = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,isBlue: null == isBlue ? _self.isBlue : isBlue // ignore: cast_nullable_to_non_nullable
 as bool,x: null == x ? _self.x : x // ignore: cast_nullable_to_non_nullable
 as double,y: null == y ? _self.y : y // ignore: cast_nullable_to_non_nullable
 as double,spawnTime: null == spawnTime ? _self.spawnTime : spawnTime // ignore: cast_nullable_to_non_nullable
-as DateTime,
+as DateTime,tapState: null == tapState ? _self.tapState : tapState // ignore: cast_nullable_to_non_nullable
+as BalloonTapState,
   ));
 }
 
@@ -154,10 +155,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  bool isBlue,  double x,  double y,  DateTime spawnTime)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  bool isBlue,  double x,  double y,  DateTime spawnTime,  BalloonTapState tapState)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _BalloonData() when $default != null:
-return $default(_that.id,_that.isBlue,_that.x,_that.y,_that.spawnTime);case _:
+return $default(_that.id,_that.isBlue,_that.x,_that.y,_that.spawnTime,_that.tapState);case _:
   return orElse();
 
 }
@@ -175,10 +176,10 @@ return $default(_that.id,_that.isBlue,_that.x,_that.y,_that.spawnTime);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  bool isBlue,  double x,  double y,  DateTime spawnTime)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  bool isBlue,  double x,  double y,  DateTime spawnTime,  BalloonTapState tapState)  $default,) {final _that = this;
 switch (_that) {
 case _BalloonData():
-return $default(_that.id,_that.isBlue,_that.x,_that.y,_that.spawnTime);case _:
+return $default(_that.id,_that.isBlue,_that.x,_that.y,_that.spawnTime,_that.tapState);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -195,10 +196,10 @@ return $default(_that.id,_that.isBlue,_that.x,_that.y,_that.spawnTime);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  bool isBlue,  double x,  double y,  DateTime spawnTime)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  bool isBlue,  double x,  double y,  DateTime spawnTime,  BalloonTapState tapState)?  $default,) {final _that = this;
 switch (_that) {
 case _BalloonData() when $default != null:
-return $default(_that.id,_that.isBlue,_that.x,_that.y,_that.spawnTime);case _:
+return $default(_that.id,_that.isBlue,_that.x,_that.y,_that.spawnTime,_that.tapState);case _:
   return null;
 
 }
@@ -210,7 +211,7 @@ return $default(_that.id,_that.isBlue,_that.x,_that.y,_that.spawnTime);case _:
 
 
 class _BalloonData implements BalloonData {
-  const _BalloonData({required this.id, required this.isBlue, required this.x, required this.y, required this.spawnTime});
+  const _BalloonData({required this.id, required this.isBlue, required this.x, required this.y, required this.spawnTime, this.tapState = BalloonTapState.none});
   
 
 @override final  int id;
@@ -218,6 +219,7 @@ class _BalloonData implements BalloonData {
 @override final  double x;
 @override final  double y;
 @override final  DateTime spawnTime;
+@override@JsonKey() final  BalloonTapState tapState;
 
 /// Create a copy of BalloonData
 /// with the given fields replaced by the non-null parameter values.
@@ -229,16 +231,16 @@ _$BalloonDataCopyWith<_BalloonData> get copyWith => __$BalloonDataCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _BalloonData&&(identical(other.id, id) || other.id == id)&&(identical(other.isBlue, isBlue) || other.isBlue == isBlue)&&(identical(other.x, x) || other.x == x)&&(identical(other.y, y) || other.y == y)&&(identical(other.spawnTime, spawnTime) || other.spawnTime == spawnTime));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _BalloonData&&(identical(other.id, id) || other.id == id)&&(identical(other.isBlue, isBlue) || other.isBlue == isBlue)&&(identical(other.x, x) || other.x == x)&&(identical(other.y, y) || other.y == y)&&(identical(other.spawnTime, spawnTime) || other.spawnTime == spawnTime)&&(identical(other.tapState, tapState) || other.tapState == tapState));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,isBlue,x,y,spawnTime);
+int get hashCode => Object.hash(runtimeType,id,isBlue,x,y,spawnTime,tapState);
 
 @override
 String toString() {
-  return 'BalloonData(id: $id, isBlue: $isBlue, x: $x, y: $y, spawnTime: $spawnTime)';
+  return 'BalloonData(id: $id, isBlue: $isBlue, x: $x, y: $y, spawnTime: $spawnTime, tapState: $tapState)';
 }
 
 
@@ -249,7 +251,7 @@ abstract mixin class _$BalloonDataCopyWith<$Res> implements $BalloonDataCopyWith
   factory _$BalloonDataCopyWith(_BalloonData value, $Res Function(_BalloonData) _then) = __$BalloonDataCopyWithImpl;
 @override @useResult
 $Res call({
- int id, bool isBlue, double x, double y, DateTime spawnTime
+ int id, bool isBlue, double x, double y, DateTime spawnTime, BalloonTapState tapState
 });
 
 
@@ -266,14 +268,15 @@ class __$BalloonDataCopyWithImpl<$Res>
 
 /// Create a copy of BalloonData
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? isBlue = null,Object? x = null,Object? y = null,Object? spawnTime = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? isBlue = null,Object? x = null,Object? y = null,Object? spawnTime = null,Object? tapState = null,}) {
   return _then(_BalloonData(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,isBlue: null == isBlue ? _self.isBlue : isBlue // ignore: cast_nullable_to_non_nullable
 as bool,x: null == x ? _self.x : x // ignore: cast_nullable_to_non_nullable
 as double,y: null == y ? _self.y : y // ignore: cast_nullable_to_non_nullable
 as double,spawnTime: null == spawnTime ? _self.spawnTime : spawnTime // ignore: cast_nullable_to_non_nullable
-as DateTime,
+as DateTime,tapState: null == tapState ? _self.tapState : tapState // ignore: cast_nullable_to_non_nullable
+as BalloonTapState,
   ));
 }
 
