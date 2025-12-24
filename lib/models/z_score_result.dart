@@ -115,3 +115,4 @@ abstract class ImpulsivityAnalysisResult with _$ImpulsivityAnalysisResult {
   }) = _ImpulsivityAnalysisResult;
 }
 
+
