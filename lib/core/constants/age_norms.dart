@@ -95,6 +95,17 @@ class ImpulsivityAgeNorms {
     AgeNormData(minMonths: 60, maxMonths: 72, mean: 0.89, stdDev: 0.137),
   ];
 
+  /// 월령별 부주의(Omission) 비율 규준값
+  /// 주의: omission 비율은 낮을수록 좋으므로 Z점수 계산 시 방향 반전 필요
+  static const List<AgeNormData> omissionRateNorms = [
+    // 3세 기준 - 부주의 비율이 상대적으로 높음
+    AgeNormData(minMonths: 36, maxMonths: 47, mean: 0.18, stdDev: 0.12),
+    // 4세 기준 - 집중력 향상으로 부주의 감소
+    AgeNormData(minMonths: 48, maxMonths: 59, mean: 0.12, stdDev: 0.08),
+    // 5세 기준 - 더욱 안정적인 집중력
+    AgeNormData(minMonths: 60, maxMonths: 72, mean: 0.08, stdDev: 0.05),
+  ];
+
   /// 월령별 반응시간(ms) 규준값
   static const List<AgeNormData> reactionTimeNorms = [
     // 3세 기준
@@ -108,6 +119,11 @@ class ImpulsivityAgeNorms {
   /// 월령에 해당하는 억제 비율 규준값 반환
   static AgeNormData getInhibitionRateNorm(double ageMonths) {
     return _findNorm(inhibitionRateNorms, ageMonths);
+  }
+
+  /// 월령에 해당하는 부주의 비율 규준값 반환
+  static AgeNormData getOmissionRateNorm(double ageMonths) {
+    return _findNorm(omissionRateNorms, ageMonths);
   }
 
   /// 월령에 해당하는 반응시간 규준값 반환

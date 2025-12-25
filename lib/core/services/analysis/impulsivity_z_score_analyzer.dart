@@ -73,29 +73,52 @@ class ImpulsivityZScoreAnalyzer {
     logger?.logZScoreInfo('');
     logger?.logZScoreInfo('⏱️ 평균 반응시간: ${avgReactionTime.toStringAsFixed(0)}ms');
 
+    // Go 자극 수 계산 (파란 풍선)
+    final goCount = result.totalStimuli - noGoCount;
+
+    // 부주의 비율 계산: omissionErrors / Go자극수
+    final omissionRate = goCount > 0 ? result.omissionErrors / goCount : 0.0;
+
+    dev.log('부주의 비율 계산:', name: 'ImpulsivityZScore');
+    dev.log('  Go 자극 수: $goCount', name: 'ImpulsivityZScore');
+    dev.log('  부주의 비율: ${(omissionRate * 100).toStringAsFixed(1)}%', name: 'ImpulsivityZScore');
+
+    logger?.logZScoreInfo('');
+    logger?.logZScoreInfo('👀 부주의 비율 계산');
+    logger?.logZScoreInfo('  Go 자극 수: $goCount');
+    logger?.logZScoreInfo('  부주의 비율: ${(omissionRate * 100).toStringAsFixed(1)}%');
+
     // 규준값 가져오기
     final inhibitionNorm = ImpulsivityAgeNorms.getInhibitionRateNorm(ageMonths);
+    final omissionNorm = ImpulsivityAgeNorms.getOmissionRateNorm(ageMonths);
     final rtNorm = ImpulsivityAgeNorms.getReactionTimeNorm(ageMonths);
 
     dev.log('규준값:', name: 'ImpulsivityZScore');
     dev.log('  억제비율 또래평균(μ): ${(inhibitionNorm.mean * 100).toStringAsFixed(1)}%, 표준편차(σ): ${(inhibitionNorm.stdDev * 100).toStringAsFixed(1)}%', name: 'ImpulsivityZScore');
+    dev.log('  부주의비율 또래평균(μ): ${(omissionNorm.mean * 100).toStringAsFixed(1)}%, 표준편차(σ): ${(omissionNorm.stdDev * 100).toStringAsFixed(1)}%', name: 'ImpulsivityZScore');
     dev.log('  반응시간 또래평균(μ): ${rtNorm.mean.toStringAsFixed(0)}ms, 표준편차(σ): ${rtNorm.stdDev.toStringAsFixed(0)}ms', name: 'ImpulsivityZScore');
 
     logger?.logZScoreInfo('');
     logger?.logZScoreInfo('📐 또래 규준값 (${inhibitionNorm.minMonths}~${inhibitionNorm.maxMonths}개월)');
     logger?.logZScoreInfo('  억제비율 평균(μ): ${(inhibitionNorm.mean * 100).toStringAsFixed(1)}%');
     logger?.logZScoreInfo('  억제비율 표준편차(σ): ${(inhibitionNorm.stdDev * 100).toStringAsFixed(1)}%');
+    logger?.logZScoreInfo('  부주의비율 평균(μ): ${(omissionNorm.mean * 100).toStringAsFixed(1)}%');
+    logger?.logZScoreInfo('  부주의비율 표준편차(σ): ${(omissionNorm.stdDev * 100).toStringAsFixed(1)}%');
     logger?.logZScoreInfo('  반응시간 평균(μ): ${rtNorm.mean.toStringAsFixed(0)}ms');
     logger?.logZScoreInfo('  반응시간 표준편차(σ): ${rtNorm.stdDev.toStringAsFixed(0)}ms');
 
     // Z점수 계산
     final inhibitionZ = inhibitionNorm.calculateZScore(inhibitionRate);
+    // 부주의 비율은 낮을수록 좋으므로 방향 반전
+    final omissionZ = omissionNorm.calculateZScore(omissionRate, invertDirection: true);
 
     dev.log('억제 비율 Z점수: ${inhibitionZ.toStringAsFixed(3)}', name: 'ImpulsivityZScore');
+    dev.log('부주의 비율 Z점수: ${omissionZ.toStringAsFixed(3)}', name: 'ImpulsivityZScore');
     
     logger?.logZScoreInfo('');
     logger?.logZScoreInfo('📊 Z점수 계산 결과');
     logger?.logZScoreInfo('  억제 비율 Z점수: ${inhibitionZ.toStringAsFixed(3)}');
+    logger?.logZScoreInfo('  부주의 비율 Z점수: ${omissionZ.toStringAsFixed(3)}');
 
     // 반응시간이 또래 평균보다 빠른지 판단
     final isFastReactor = avgReactionTime < rtNorm.mean;
@@ -111,8 +134,10 @@ class ImpulsivityZScoreAnalyzer {
     );
 
     final inhibitionLabel = ZScoreLabelProvider.getInhibitionLabel(inhibitionZ, l10n);
+    final omissionLabel = ZScoreLabelProvider.getOmissionLabel(omissionZ, l10n);
 
     dev.log('억제 비율 라벨: $inhibitionLabel', name: 'ImpulsivityZScore');
+    dev.log('부주의 비율 라벨: $omissionLabel', name: 'ImpulsivityZScore');
     dev.log('행동 패턴: ${pattern.name}', name: 'ImpulsivityZScore');
     dev.log('=== 충동성 Z점수 분석 완료 ===\n', name: 'ImpulsivityZScore');
 
@@ -130,8 +155,16 @@ class ImpulsivityZScoreAnalyzer {
         peerStdDev: inhibitionNorm.stdDev,
         observedValue: inhibitionRate,
       ),
+      omissionZScore: ZScoreResult(
+        zScore: omissionZ,
+        label: omissionLabel,
+        peerMean: omissionNorm.mean,
+        peerStdDev: omissionNorm.stdDev,
+        observedValue: omissionRate,
+      ),
       behaviorPattern: pattern,
       inhibitionRate: inhibitionRate,
+      omissionRate: omissionRate,
       avgReactionTime: avgReactionTime,
       isFastReactor: isFastReactor,
     );

@@ -104,14 +104,20 @@ abstract class AttentionAnalysisResult with _$AttentionAnalysisResult {
 @freezed
 abstract class ImpulsivityAnalysisResult with _$ImpulsivityAnalysisResult {
   const factory ImpulsivityAnalysisResult({
-    /// 억제 비율 Z점수 결과
+    /// 억제 비율 Z점수 결과 (충동성 지표)
     required ZScoreResult inhibitionZScore,
+
+    /// 부주의 비율 Z점수 결과 (omission 지표)
+    required ZScoreResult omissionZScore,
 
     /// 행동 패턴 유형
     required ImpulsivityBehaviorPattern behaviorPattern,
 
     /// 억제 비율 (0-1)
     required double inhibitionRate,
+
+    /// 부주의 비율 (0-1)
+    required double omissionRate,
 
     /// 평균 반응시간 (ms)
     required double avgReactionTime,

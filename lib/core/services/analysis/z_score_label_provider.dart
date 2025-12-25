@@ -38,6 +38,18 @@ class ZScoreLabelProvider {
       return l10n.highEnergy;
     }
   }
+
+  /// 부주의(Omission) Z점수에 대한 부모용 라벨
+  /// 주의: Z점수가 높을수록 집중력이 좋음 (방향 반전됨)
+  static String getOmissionLabel(double z, AppLocalizations l10n) {
+    if (z >= -1 && z <= 1) {
+      return l10n.peerAverage;
+    } else if (z > 1) {
+      return l10n.attentionGood;
+    } else {
+      return l10n.attentionNeeds;
+    }
+  }
 }
 
 

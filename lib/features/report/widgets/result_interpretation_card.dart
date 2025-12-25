@@ -136,7 +136,7 @@ class ResultInterpretationCard extends StatelessWidget {
   ) {
     final interpretations = <_InterpretationItem>[];
 
-    // 억제 비율 해석
+    // 충동성 (억제 비율) 해석
     final inhibitionZ = analysis.inhibitionZScore.zScore;
     final inhibitionValue = (analysis.inhibitionRate * 100).toStringAsFixed(0);
     final inhibitionPeer = (analysis.inhibitionZScore.peerMean * 100).toStringAsFixed(0);
@@ -145,7 +145,7 @@ class ResultInterpretationCard extends StatelessWidget {
       interpretations.add(_InterpretationItem(
         icon: Icons.star,
         iconColor: Colors.amber,
-        title: '억제 비율 $inhibitionValue% (또래 평균 $inhibitionPeer%)',
+        title: '충동성 $inhibitionValue% (또래 평균 $inhibitionPeer%)',
         description: l10n.inhibitionHighExplanation,
         isPositive: true,
       ));
@@ -153,7 +153,7 @@ class ResultInterpretationCard extends StatelessWidget {
       interpretations.add(_InterpretationItem(
         icon: Icons.check_circle,
         iconColor: Colors.green,
-        title: '억제 비율 $inhibitionValue% (또래 평균 $inhibitionPeer%)',
+        title: '충동성 $inhibitionValue% (또래 평균 $inhibitionPeer%)',
         description: l10n.inhibitionAverageExplanation,
         isPositive: true,
       ));
@@ -161,8 +161,39 @@ class ResultInterpretationCard extends StatelessWidget {
       interpretations.add(_InterpretationItem(
         icon: Icons.lightbulb_outline,
         iconColor: Colors.orange,
-        title: '억제 비율 $inhibitionValue% (또래 평균 $inhibitionPeer%)',
+        title: '충동성 $inhibitionValue% (또래 평균 $inhibitionPeer%)',
         description: l10n.inhibitionLowExplanation,
+        isPositive: false,
+      ));
+    }
+
+    // 부주의 (omission) 해석
+    final omissionZ = analysis.omissionZScore.zScore;
+    final omissionValue = (analysis.omissionRate * 100).toStringAsFixed(0);
+    final omissionPeer = (analysis.omissionZScore.peerMean * 100).toStringAsFixed(0);
+    
+    if (omissionZ > 1) {
+      interpretations.add(_InterpretationItem(
+        icon: Icons.visibility,
+        iconColor: Colors.blue,
+        title: '부주의 $omissionValue% (또래 평균 $omissionPeer%)',
+        description: l10n.omissionHighExplanation,
+        isPositive: true,
+      ));
+    } else if (omissionZ >= -1) {
+      interpretations.add(_InterpretationItem(
+        icon: Icons.check_circle,
+        iconColor: Colors.green,
+        title: '부주의 $omissionValue% (또래 평균 $omissionPeer%)',
+        description: l10n.omissionAverageExplanation,
+        isPositive: true,
+      ));
+    } else {
+      interpretations.add(_InterpretationItem(
+        icon: Icons.lightbulb_outline,
+        iconColor: Colors.orange,
+        title: '부주의 $omissionValue% (또래 평균 $omissionPeer%)',
+        description: l10n.omissionLowExplanation,
         isPositive: false,
       ));
     }

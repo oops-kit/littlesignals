@@ -111,7 +111,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get deepFocus => '깊은 집중';
 
   @override
-  String get highEnergy => '높은 에너지';
+  String get highEnergy => '에너지가 많음';
 
   @override
   String get calmControl => '차분한 조절';
@@ -286,7 +286,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get activeExploration => '활발한 탐색';
 
   @override
-  String get goodSelfControl => '자기 조절을 잘 함';
+  String get goodSelfControl => '참을성이 좋음';
 
   @override
   String get carefulExplorerTitle => '신중한 탐색가';
@@ -471,6 +471,17 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String get inhibitionLowExplanation =>
       '빨간 풍선을 참기 어려웠어요. 이 나이에는 자연스러운 반응이며, 연습을 통해 조절력이 향상될 수 있어요.';
+
+  @override
+  String get omissionHighExplanation => '파란 풍선을 잘 눌렀어요! 집중력이 또래보다 잘 발달되어 있어요.';
+
+  @override
+  String get omissionAverageExplanation =>
+      '파란 풍선에 반응하는 것이 또래와 비슷한 수준이에요. 연령에 맞는 정상적인 집중력을 보이고 있어요.';
+
+  @override
+  String get omissionLowExplanation =>
+      '파란 풍선을 놓치는 경우가 있었어요. 이 나이에는 자연스러운 반응이며, 집중력 연습을 통해 향상될 수 있어요.';
 
   @override
   String get reactionFastExplanation =>

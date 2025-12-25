@@ -37,7 +37,7 @@
   "comparisonDesc": "또래 발달 기준과의 비교입니다.",
   "freeSpirit": "자유로운 영혼",
   "deepFocus": "깊은 집중",
-  "highEnergy": "높은 에너지",
+  "highEnergy": "에너지가 많음",
   "calmControl": "차분한 조절",
   "parentingTips": "양육 팁",
   "attentionTip1": "한 번에 장난감 하나만 꺼내서 깊이 놀게 해주세요.",
@@ -96,7 +96,7 @@
   "developingMemory": "기억력 발달 중",
   "stableMemory": "안정적인 기억 유지",
   "activeExploration": "활발한 탐색",
-  "goodSelfControl": "자기 조절을 잘 함",
+  "goodSelfControl": "참을성이 좋음",
 
   "carefulExplorerTitle": "신중한 탐색가",
   "carefulExplorerDesc": "아이의 속도는 느릴 수 있지만, 한 번 본 정보는 잘 기억하고 신중하게 행동하는 편이에요.",
@@ -177,6 +177,10 @@
   "inhibitionHighExplanation": "빨간 풍선을 잘 참았어요! 충동을 조절하는 능력이 또래보다 잘 발달되어 있어요.",
   "inhibitionAverageExplanation": "빨간 풍선을 참는 것이 또래와 비슷한 수준이에요. 연령에 맞는 정상적인 발달을 보이고 있어요.",
   "inhibitionLowExplanation": "빨간 풍선을 참기 어려웠어요. 이 나이에는 자연스러운 반응이며, 연습을 통해 조절력이 향상될 수 있어요.",
+  
+  "omissionHighExplanation": "파란 풍선을 잘 눌렀어요! 집중력이 또래보다 잘 발달되어 있어요.",
+  "omissionAverageExplanation": "파란 풍선에 반응하는 것이 또래와 비슷한 수준이에요. 연령에 맞는 정상적인 집중력을 보이고 있어요.",
+  "omissionLowExplanation": "파란 풍선을 놓치는 경우가 있었어요. 이 나이에는 자연스러운 반응이며, 집중력 연습을 통해 향상될 수 있어요.",
   
   "reactionFastExplanation": "반응이 빠른 편이에요. 빠른 반응은 좋지만, 때로는 신중함도 필요해요.",
   "reactionNormalExplanation": "반응 속도가 또래와 비슷해요. 적절한 속도로 과제를 수행했어요.",

@@ -182,12 +182,12 @@ class ResultChart extends StatelessWidget {
                     },
                   ),
                 ),
-                // Z점수 라벨 표시 (숫자 대신 텍스트)
+                // Z점수 라벨 표시 (평균값으로 표시)
                 Positioned(
                   left: 0,
                   right: 0,
                   bottom: 0,
-                  child: _buildZScoreLabel(zScoreResult!),
+                  child: _buildZScoreLabel(zScoreResult!, l10n),
                 ),
               ],
             ),
@@ -228,8 +228,8 @@ class ResultChart extends StatelessWidget {
     );
   }
 
-  /// Z점수 라벨 위젯 (숫자 대신 텍스트로 표시)
-  Widget _buildZScoreLabel(ZScoreResult result) {
+  /// Z점수 라벨 위젯 (평균값으로 표시)
+  Widget _buildZScoreLabel(ZScoreResult result, AppLocalizations l10n) {
     final Color chipColor;
     if (result.isWithinPeerRange) {
       chipColor = Colors.green;
@@ -239,6 +239,10 @@ class ResultChart extends StatelessWidget {
       chipColor = Colors.orange;
     }
 
+    // 내 아이 값과 또래 평균값을 퍼센트로 표시
+    final myValue = (result.observedValue * 100).toStringAsFixed(0);
+    final peerMean = (result.peerMean * 100).toStringAsFixed(0);
+
     return Center(
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -247,7 +251,7 @@ class ResultChart extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
         ),
         child: Text(
-          result.label,
+          '${l10n.myChildValue} $myValue% · ${l10n.peerAvgLabel} $peerMean%',
           style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w600,

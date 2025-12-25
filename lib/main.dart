@@ -8,12 +8,12 @@ import 'package:littlesignals/firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // 웹에서 URL 전략을 path 기반으로 설정 (# 제거)
   if (kIsWeb) {
     usePathUrlStrategy();
   }
-  
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const ProviderScope(child: LittleSignalsApp()));
 }

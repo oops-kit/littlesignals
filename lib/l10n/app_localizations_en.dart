@@ -508,6 +508,17 @@ class AppLocalizationsEn extends AppLocalizations {
       'Had difficulty stopping at red balloons. This is natural at this age and can improve with practice.';
 
   @override
+  String get omissionHighExplanation => '파란 풍선을 잘 눌렀어요! 집중력이 또래보다 잘 발달되어 있어요.';
+
+  @override
+  String get omissionAverageExplanation =>
+      '파란 풍선에 반응하는 것이 또래와 비슷한 수준이에요. 연령에 맞는 정상적인 집중력을 보이고 있어요.';
+
+  @override
+  String get omissionLowExplanation =>
+      '파란 풍선을 놓치는 경우가 있었어요. 이 나이에는 자연스러운 반응이며, 집중력 연습을 통해 향상될 수 있어요.';
+
+  @override
   String get reactionFastExplanation =>
       'Reactions were quick. Fast reactions are good, but sometimes being careful is also important.';
 

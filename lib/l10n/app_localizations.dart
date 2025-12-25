@@ -305,7 +305,7 @@ abstract class AppLocalizations {
   /// No description provided for @highEnergy.
   ///
   /// In ko, this message translates to:
-  /// **'높은 에너지'**
+  /// **'에너지가 많음'**
   String get highEnergy;
 
   /// No description provided for @calmControl.
@@ -653,7 +653,7 @@ abstract class AppLocalizations {
   /// No description provided for @goodSelfControl.
   ///
   /// In ko, this message translates to:
-  /// **'자기 조절을 잘 함'**
+  /// **'참을성이 좋음'**
   String get goodSelfControl;
 
   /// No description provided for @carefulExplorerTitle.
@@ -985,6 +985,24 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'빨간 풍선을 참기 어려웠어요. 이 나이에는 자연스러운 반응이며, 연습을 통해 조절력이 향상될 수 있어요.'**
   String get inhibitionLowExplanation;
+
+  /// No description provided for @omissionHighExplanation.
+  ///
+  /// In ko, this message translates to:
+  /// **'파란 풍선을 잘 눌렀어요! 집중력이 또래보다 잘 발달되어 있어요.'**
+  String get omissionHighExplanation;
+
+  /// No description provided for @omissionAverageExplanation.
+  ///
+  /// In ko, this message translates to:
+  /// **'파란 풍선에 반응하는 것이 또래와 비슷한 수준이에요. 연령에 맞는 정상적인 집중력을 보이고 있어요.'**
+  String get omissionAverageExplanation;
+
+  /// No description provided for @omissionLowExplanation.
+  ///
+  /// In ko, this message translates to:
+  /// **'파란 풍선을 놓치는 경우가 있었어요. 이 나이에는 자연스러운 반응이며, 집중력 연습을 통해 향상될 수 있어요.'**
+  String get omissionLowExplanation;
 
   /// No description provided for @reactionFastExplanation.
   ///

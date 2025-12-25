@@ -618,10 +618,12 @@ $ZScoreResultCopyWith<$Res> get revisitingRateZScore {
 /// @nodoc
 mixin _$ImpulsivityAnalysisResult {
 
-/// 억제 비율 Z점수 결과
- ZScoreResult get inhibitionZScore;/// 행동 패턴 유형
+/// 억제 비율 Z점수 결과 (충동성 지표)
+ ZScoreResult get inhibitionZScore;/// 부주의 비율 Z점수 결과 (omission 지표)
+ ZScoreResult get omissionZScore;/// 행동 패턴 유형
  ImpulsivityBehaviorPattern get behaviorPattern;/// 억제 비율 (0-1)
- double get inhibitionRate;/// 평균 반응시간 (ms)
+ double get inhibitionRate;/// 부주의 비율 (0-1)
+ double get omissionRate;/// 평균 반응시간 (ms)
  double get avgReactionTime;/// 반응시간이 또래 평균보다 빠른지
  bool get isFastReactor;
 /// Create a copy of ImpulsivityAnalysisResult
@@ -634,16 +636,16 @@ $ImpulsivityAnalysisResultCopyWith<ImpulsivityAnalysisResult> get copyWith => _$
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ImpulsivityAnalysisResult&&(identical(other.inhibitionZScore, inhibitionZScore) || other.inhibitionZScore == inhibitionZScore)&&(identical(other.behaviorPattern, behaviorPattern) || other.behaviorPattern == behaviorPattern)&&(identical(other.inhibitionRate, inhibitionRate) || other.inhibitionRate == inhibitionRate)&&(identical(other.avgReactionTime, avgReactionTime) || other.avgReactionTime == avgReactionTime)&&(identical(other.isFastReactor, isFastReactor) || other.isFastReactor == isFastReactor));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ImpulsivityAnalysisResult&&(identical(other.inhibitionZScore, inhibitionZScore) || other.inhibitionZScore == inhibitionZScore)&&(identical(other.omissionZScore, omissionZScore) || other.omissionZScore == omissionZScore)&&(identical(other.behaviorPattern, behaviorPattern) || other.behaviorPattern == behaviorPattern)&&(identical(other.inhibitionRate, inhibitionRate) || other.inhibitionRate == inhibitionRate)&&(identical(other.omissionRate, omissionRate) || other.omissionRate == omissionRate)&&(identical(other.avgReactionTime, avgReactionTime) || other.avgReactionTime == avgReactionTime)&&(identical(other.isFastReactor, isFastReactor) || other.isFastReactor == isFastReactor));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,inhibitionZScore,behaviorPattern,inhibitionRate,avgReactionTime,isFastReactor);
+int get hashCode => Object.hash(runtimeType,inhibitionZScore,omissionZScore,behaviorPattern,inhibitionRate,omissionRate,avgReactionTime,isFastReactor);
 
 @override
 String toString() {
-  return 'ImpulsivityAnalysisResult(inhibitionZScore: $inhibitionZScore, behaviorPattern: $behaviorPattern, inhibitionRate: $inhibitionRate, avgReactionTime: $avgReactionTime, isFastReactor: $isFastReactor)';
+  return 'ImpulsivityAnalysisResult(inhibitionZScore: $inhibitionZScore, omissionZScore: $omissionZScore, behaviorPattern: $behaviorPattern, inhibitionRate: $inhibitionRate, omissionRate: $omissionRate, avgReactionTime: $avgReactionTime, isFastReactor: $isFastReactor)';
 }
 
 
@@ -654,11 +656,11 @@ abstract mixin class $ImpulsivityAnalysisResultCopyWith<$Res>  {
   factory $ImpulsivityAnalysisResultCopyWith(ImpulsivityAnalysisResult value, $Res Function(ImpulsivityAnalysisResult) _then) = _$ImpulsivityAnalysisResultCopyWithImpl;
 @useResult
 $Res call({
- ZScoreResult inhibitionZScore, ImpulsivityBehaviorPattern behaviorPattern, double inhibitionRate, double avgReactionTime, bool isFastReactor
+ ZScoreResult inhibitionZScore, ZScoreResult omissionZScore, ImpulsivityBehaviorPattern behaviorPattern, double inhibitionRate, double omissionRate, double avgReactionTime, bool isFastReactor
 });
 
 
-$ZScoreResultCopyWith<$Res> get inhibitionZScore;
+$ZScoreResultCopyWith<$Res> get inhibitionZScore;$ZScoreResultCopyWith<$Res> get omissionZScore;
 
 }
 /// @nodoc
@@ -671,11 +673,13 @@ class _$ImpulsivityAnalysisResultCopyWithImpl<$Res>
 
 /// Create a copy of ImpulsivityAnalysisResult
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? inhibitionZScore = null,Object? behaviorPattern = null,Object? inhibitionRate = null,Object? avgReactionTime = null,Object? isFastReactor = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? inhibitionZScore = null,Object? omissionZScore = null,Object? behaviorPattern = null,Object? inhibitionRate = null,Object? omissionRate = null,Object? avgReactionTime = null,Object? isFastReactor = null,}) {
   return _then(_self.copyWith(
 inhibitionZScore: null == inhibitionZScore ? _self.inhibitionZScore : inhibitionZScore // ignore: cast_nullable_to_non_nullable
+as ZScoreResult,omissionZScore: null == omissionZScore ? _self.omissionZScore : omissionZScore // ignore: cast_nullable_to_non_nullable
 as ZScoreResult,behaviorPattern: null == behaviorPattern ? _self.behaviorPattern : behaviorPattern // ignore: cast_nullable_to_non_nullable
 as ImpulsivityBehaviorPattern,inhibitionRate: null == inhibitionRate ? _self.inhibitionRate : inhibitionRate // ignore: cast_nullable_to_non_nullable
+as double,omissionRate: null == omissionRate ? _self.omissionRate : omissionRate // ignore: cast_nullable_to_non_nullable
 as double,avgReactionTime: null == avgReactionTime ? _self.avgReactionTime : avgReactionTime // ignore: cast_nullable_to_non_nullable
 as double,isFastReactor: null == isFastReactor ? _self.isFastReactor : isFastReactor // ignore: cast_nullable_to_non_nullable
 as bool,
@@ -689,6 +693,15 @@ $ZScoreResultCopyWith<$Res> get inhibitionZScore {
   
   return $ZScoreResultCopyWith<$Res>(_self.inhibitionZScore, (value) {
     return _then(_self.copyWith(inhibitionZScore: value));
+  });
+}/// Create a copy of ImpulsivityAnalysisResult
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ZScoreResultCopyWith<$Res> get omissionZScore {
+  
+  return $ZScoreResultCopyWith<$Res>(_self.omissionZScore, (value) {
+    return _then(_self.copyWith(omissionZScore: value));
   });
 }
 }
@@ -772,10 +785,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ZScoreResult inhibitionZScore,  ImpulsivityBehaviorPattern behaviorPattern,  double inhibitionRate,  double avgReactionTime,  bool isFastReactor)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ZScoreResult inhibitionZScore,  ZScoreResult omissionZScore,  ImpulsivityBehaviorPattern behaviorPattern,  double inhibitionRate,  double omissionRate,  double avgReactionTime,  bool isFastReactor)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ImpulsivityAnalysisResult() when $default != null:
-return $default(_that.inhibitionZScore,_that.behaviorPattern,_that.inhibitionRate,_that.avgReactionTime,_that.isFastReactor);case _:
+return $default(_that.inhibitionZScore,_that.omissionZScore,_that.behaviorPattern,_that.inhibitionRate,_that.omissionRate,_that.avgReactionTime,_that.isFastReactor);case _:
   return orElse();
 
 }
@@ -793,10 +806,10 @@ return $default(_that.inhibitionZScore,_that.behaviorPattern,_that.inhibitionRat
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ZScoreResult inhibitionZScore,  ImpulsivityBehaviorPattern behaviorPattern,  double inhibitionRate,  double avgReactionTime,  bool isFastReactor)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ZScoreResult inhibitionZScore,  ZScoreResult omissionZScore,  ImpulsivityBehaviorPattern behaviorPattern,  double inhibitionRate,  double omissionRate,  double avgReactionTime,  bool isFastReactor)  $default,) {final _that = this;
 switch (_that) {
 case _ImpulsivityAnalysisResult():
-return $default(_that.inhibitionZScore,_that.behaviorPattern,_that.inhibitionRate,_that.avgReactionTime,_that.isFastReactor);case _:
+return $default(_that.inhibitionZScore,_that.omissionZScore,_that.behaviorPattern,_that.inhibitionRate,_that.omissionRate,_that.avgReactionTime,_that.isFastReactor);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -813,10 +826,10 @@ return $default(_that.inhibitionZScore,_that.behaviorPattern,_that.inhibitionRat
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ZScoreResult inhibitionZScore,  ImpulsivityBehaviorPattern behaviorPattern,  double inhibitionRate,  double avgReactionTime,  bool isFastReactor)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ZScoreResult inhibitionZScore,  ZScoreResult omissionZScore,  ImpulsivityBehaviorPattern behaviorPattern,  double inhibitionRate,  double omissionRate,  double avgReactionTime,  bool isFastReactor)?  $default,) {final _that = this;
 switch (_that) {
 case _ImpulsivityAnalysisResult() when $default != null:
-return $default(_that.inhibitionZScore,_that.behaviorPattern,_that.inhibitionRate,_that.avgReactionTime,_that.isFastReactor);case _:
+return $default(_that.inhibitionZScore,_that.omissionZScore,_that.behaviorPattern,_that.inhibitionRate,_that.omissionRate,_that.avgReactionTime,_that.isFastReactor);case _:
   return null;
 
 }
@@ -828,15 +841,19 @@ return $default(_that.inhibitionZScore,_that.behaviorPattern,_that.inhibitionRat
 
 
 class _ImpulsivityAnalysisResult implements ImpulsivityAnalysisResult {
-  const _ImpulsivityAnalysisResult({required this.inhibitionZScore, required this.behaviorPattern, required this.inhibitionRate, required this.avgReactionTime, required this.isFastReactor});
+  const _ImpulsivityAnalysisResult({required this.inhibitionZScore, required this.omissionZScore, required this.behaviorPattern, required this.inhibitionRate, required this.omissionRate, required this.avgReactionTime, required this.isFastReactor});
   
 
-/// 억제 비율 Z점수 결과
+/// 억제 비율 Z점수 결과 (충동성 지표)
 @override final  ZScoreResult inhibitionZScore;
+/// 부주의 비율 Z점수 결과 (omission 지표)
+@override final  ZScoreResult omissionZScore;
 /// 행동 패턴 유형
 @override final  ImpulsivityBehaviorPattern behaviorPattern;
 /// 억제 비율 (0-1)
 @override final  double inhibitionRate;
+/// 부주의 비율 (0-1)
+@override final  double omissionRate;
 /// 평균 반응시간 (ms)
 @override final  double avgReactionTime;
 /// 반응시간이 또래 평균보다 빠른지
@@ -852,16 +869,16 @@ _$ImpulsivityAnalysisResultCopyWith<_ImpulsivityAnalysisResult> get copyWith => 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ImpulsivityAnalysisResult&&(identical(other.inhibitionZScore, inhibitionZScore) || other.inhibitionZScore == inhibitionZScore)&&(identical(other.behaviorPattern, behaviorPattern) || other.behaviorPattern == behaviorPattern)&&(identical(other.inhibitionRate, inhibitionRate) || other.inhibitionRate == inhibitionRate)&&(identical(other.avgReactionTime, avgReactionTime) || other.avgReactionTime == avgReactionTime)&&(identical(other.isFastReactor, isFastReactor) || other.isFastReactor == isFastReactor));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ImpulsivityAnalysisResult&&(identical(other.inhibitionZScore, inhibitionZScore) || other.inhibitionZScore == inhibitionZScore)&&(identical(other.omissionZScore, omissionZScore) || other.omissionZScore == omissionZScore)&&(identical(other.behaviorPattern, behaviorPattern) || other.behaviorPattern == behaviorPattern)&&(identical(other.inhibitionRate, inhibitionRate) || other.inhibitionRate == inhibitionRate)&&(identical(other.omissionRate, omissionRate) || other.omissionRate == omissionRate)&&(identical(other.avgReactionTime, avgReactionTime) || other.avgReactionTime == avgReactionTime)&&(identical(other.isFastReactor, isFastReactor) || other.isFastReactor == isFastReactor));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,inhibitionZScore,behaviorPattern,inhibitionRate,avgReactionTime,isFastReactor);
+int get hashCode => Object.hash(runtimeType,inhibitionZScore,omissionZScore,behaviorPattern,inhibitionRate,omissionRate,avgReactionTime,isFastReactor);
 
 @override
 String toString() {
-  return 'ImpulsivityAnalysisResult(inhibitionZScore: $inhibitionZScore, behaviorPattern: $behaviorPattern, inhibitionRate: $inhibitionRate, avgReactionTime: $avgReactionTime, isFastReactor: $isFastReactor)';
+  return 'ImpulsivityAnalysisResult(inhibitionZScore: $inhibitionZScore, omissionZScore: $omissionZScore, behaviorPattern: $behaviorPattern, inhibitionRate: $inhibitionRate, omissionRate: $omissionRate, avgReactionTime: $avgReactionTime, isFastReactor: $isFastReactor)';
 }
 
 
@@ -872,11 +889,11 @@ abstract mixin class _$ImpulsivityAnalysisResultCopyWith<$Res> implements $Impul
   factory _$ImpulsivityAnalysisResultCopyWith(_ImpulsivityAnalysisResult value, $Res Function(_ImpulsivityAnalysisResult) _then) = __$ImpulsivityAnalysisResultCopyWithImpl;
 @override @useResult
 $Res call({
- ZScoreResult inhibitionZScore, ImpulsivityBehaviorPattern behaviorPattern, double inhibitionRate, double avgReactionTime, bool isFastReactor
+ ZScoreResult inhibitionZScore, ZScoreResult omissionZScore, ImpulsivityBehaviorPattern behaviorPattern, double inhibitionRate, double omissionRate, double avgReactionTime, bool isFastReactor
 });
 
 
-@override $ZScoreResultCopyWith<$Res> get inhibitionZScore;
+@override $ZScoreResultCopyWith<$Res> get inhibitionZScore;@override $ZScoreResultCopyWith<$Res> get omissionZScore;
 
 }
 /// @nodoc
@@ -889,11 +906,13 @@ class __$ImpulsivityAnalysisResultCopyWithImpl<$Res>
 
 /// Create a copy of ImpulsivityAnalysisResult
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? inhibitionZScore = null,Object? behaviorPattern = null,Object? inhibitionRate = null,Object? avgReactionTime = null,Object? isFastReactor = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? inhibitionZScore = null,Object? omissionZScore = null,Object? behaviorPattern = null,Object? inhibitionRate = null,Object? omissionRate = null,Object? avgReactionTime = null,Object? isFastReactor = null,}) {
   return _then(_ImpulsivityAnalysisResult(
 inhibitionZScore: null == inhibitionZScore ? _self.inhibitionZScore : inhibitionZScore // ignore: cast_nullable_to_non_nullable
+as ZScoreResult,omissionZScore: null == omissionZScore ? _self.omissionZScore : omissionZScore // ignore: cast_nullable_to_non_nullable
 as ZScoreResult,behaviorPattern: null == behaviorPattern ? _self.behaviorPattern : behaviorPattern // ignore: cast_nullable_to_non_nullable
 as ImpulsivityBehaviorPattern,inhibitionRate: null == inhibitionRate ? _self.inhibitionRate : inhibitionRate // ignore: cast_nullable_to_non_nullable
+as double,omissionRate: null == omissionRate ? _self.omissionRate : omissionRate // ignore: cast_nullable_to_non_nullable
 as double,avgReactionTime: null == avgReactionTime ? _self.avgReactionTime : avgReactionTime // ignore: cast_nullable_to_non_nullable
 as double,isFastReactor: null == isFastReactor ? _self.isFastReactor : isFastReactor // ignore: cast_nullable_to_non_nullable
 as bool,
@@ -908,6 +927,15 @@ $ZScoreResultCopyWith<$Res> get inhibitionZScore {
   
   return $ZScoreResultCopyWith<$Res>(_self.inhibitionZScore, (value) {
     return _then(_self.copyWith(inhibitionZScore: value));
+  });
+}/// Create a copy of ImpulsivityAnalysisResult
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ZScoreResultCopyWith<$Res> get omissionZScore {
+  
+  return $ZScoreResultCopyWith<$Res>(_self.omissionZScore, (value) {
+    return _then(_self.copyWith(omissionZScore: value));
   });
 }
 }
