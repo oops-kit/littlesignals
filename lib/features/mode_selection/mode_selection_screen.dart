@@ -8,7 +8,6 @@ import 'package:littlesignals/core/widgets/section_header.dart';
 import 'package:littlesignals/features/mode_selection/widgets/test_mode_card.dart';
 import 'package:littlesignals/l10n/app_localizations.dart';
 import 'package:littlesignals/models/app_state.dart';
-import 'package:littlesignals/providers/app_state_provider.dart';
 import 'package:littlesignals/router/app_router.dart';
 
 /// 모드 선택 화면
@@ -20,21 +19,6 @@ class ModeSelectionScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final appState = ref.watch(appStateNotifierProvider);
-
-    // profile이 없으면 landing 화면으로 리다이렉트
-    if (appState.profile == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (context.mounted) {
-          context.go(AppRoutes.landing);
-        }
-      });
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
-    }
 
     void handleSelectMode(TestType testType) {
       // #region agent log
@@ -70,7 +54,8 @@ class ModeSelectionScreen extends ConsumerWidget {
                     attentionDesc: l10n.attentionDesc,
                     impulsivityTitle: l10n.impulsivityTitle,
                     impulsivityDesc: l10n.impulsivityDesc,
-                    onSelectAttention: () => handleSelectMode(TestType.attention),
+                    onSelectAttention: () =>
+                        handleSelectMode(TestType.attention),
                     onSelectImpulsivity: () =>
                         handleSelectMode(TestType.impulsivity),
                   ),

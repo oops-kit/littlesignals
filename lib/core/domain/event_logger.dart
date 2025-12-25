@@ -20,6 +20,9 @@ abstract class EventLogger {
   /// 레벨 완료 로그
   void logLevelComplete(int level);
 
+  /// Z점수 분석 정보 로그
+  void logZScoreInfo(String info);
+
   /// 로그 초기화
   void clear();
 }

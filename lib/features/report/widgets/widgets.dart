@@ -1,7 +1,5 @@
 // report/widgets 배럴 파일
 export 'behavior_style_card.dart';
-export 'debug_metrics_card.dart';
-export 'event_log_card.dart';
 export 'impulsivity_data_card.dart';
 export 'key_metrics_card.dart';
 export 'observation_data_card.dart';

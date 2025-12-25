@@ -181,9 +181,5 @@
   "peerAvgLabel": "또래 평균",
   "myChildValue": "내 아이",
   "lowerIsBetter": "(낮을수록 좋음)",
-  "higherIsBetter": "(높을수록 좋음)",
-  
-  "resultDebugTitle": "결과 디버그",
-  "eventDebugTitle": "이벤트 디버그",
-  "debugMenu": "디버그 메뉴"
+  "higherIsBetter": "(높을수록 좋음)"
 }

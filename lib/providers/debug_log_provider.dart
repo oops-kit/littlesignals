@@ -35,22 +35,18 @@ class DebugLogState {
   const DebugLogState({
     this.logs = const [],
     this.isPanelExpanded = false,
-    this.showResultDebug = false,
   });
 
   final List<DebugLogEntry> logs;
   final bool isPanelExpanded;
-  final bool showResultDebug;
 
   DebugLogState copyWith({
     List<DebugLogEntry>? logs,
     bool? isPanelExpanded,
-    bool? showResultDebug,
   }) {
     return DebugLogState(
       logs: logs ?? this.logs,
       isPanelExpanded: isPanelExpanded ?? this.isPanelExpanded,
-      showResultDebug: showResultDebug ?? this.showResultDebug,
     );
   }
 }
@@ -85,14 +81,6 @@ class DebugLog extends _$DebugLog {
 
   void togglePanel() {
     state = state.copyWith(isPanelExpanded: !state.isPanelExpanded);
-  }
-
-  void toggleResultDebug() {
-    state = state.copyWith(showResultDebug: !state.showResultDebug);
-  }
-
-  void setResultDebug(bool value) {
-    state = state.copyWith(showResultDebug: value);
   }
 }
 

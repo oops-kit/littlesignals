@@ -49,6 +49,12 @@ class EventLogRecorder implements EventLogger {
     add(TestEventType.levelComplete, '레벨 $level 완료! 🌟');
   }
 
+  /// Z점수 분석 정보 로그
+  @override
+  void logZScoreInfo(String info) {
+    add(TestEventType.zScoreInfo, info);
+  }
+
   /// 로그 초기화
   @override
   void clear() {

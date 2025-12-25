@@ -28,19 +28,15 @@ class AttentionTestScreen extends HookConsumerWidget {
     final testState = ref.watch(attentionTestControllerProvider);
     final controller = ref.read(attentionTestControllerProvider.notifier);
 
-    // profile이나 activeTest가 없으면 landing 화면으로 리다이렉트
-    if (appState.profile == null || appState.activeTest != TestType.attention) {
+    // activeTest가 attention이 아니면 mode selection으로 리다이렉트
+    if (appState.activeTest != TestType.attention) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (context.mounted) {
           ref.read(appStateNotifierProvider.notifier).clearActiveTest();
-          context.go(AppRoutes.landing);
+          context.go(AppRoutes.modeSelection);
         }
       });
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     // 게임 시작
@@ -98,42 +94,40 @@ class AttentionTestScreen extends HookConsumerWidget {
           backgroundColor: AppTheme.attentionOrangeLight,
           body: SafeArea(
             child: Stack(
-            children: [
-              Column(
-                children: [
-                  GameHeader(
-                    title: l10n.findAnimalFriends,
-                    exitLabel: l10n.exit,
-                    onExit: handleExit,
-                    titleColor: Colors.orange.shade800,
-                    exitColor: Colors.orange.shade400,
-                  ),
-                  Expanded(
-                    child: CardGrid(
-                      cards: testState.cards,
-                      columns: columns,
-                      hintCardId: testState.hintCardId,
-                      onCardTap: controller.handleCardClick,
+              children: [
+                Column(
+                  children: [
+                    GameHeader(
+                      title: l10n.findAnimalFriends,
+                      exitLabel: l10n.exit,
+                      onExit: handleExit,
+                      titleColor: Colors.orange.shade800,
+                      exitColor: Colors.orange.shade400,
                     ),
-                  ),
-                  // 기획서: 3쌍 고정, 레벨 시스템 없음
-                  const SizedBox(height: 16),
-                ],
-              ),
-              // 카운트다운 오버레이
-              if (testState.gameState == AttentionGameState.countdown &&
-                  testState.countdownValue != null)
-                CountdownOverlay(
-                  value: testState.countdownValue!,
-                  circleColor: Colors.orange.shade500,
+                    Expanded(
+                      child: CardGrid(
+                        cards: testState.cards,
+                        columns: columns,
+                        hintCardId: testState.hintCardId,
+                        onCardTap: controller.handleCardClick,
+                      ),
+                    ),
+                    // 기획서: 3쌍 고정, 레벨 시스템 없음
+                    const SizedBox(height: 16),
+                  ],
                 ),
-            ],
+                // 카운트다운 오버레이
+                if (testState.gameState == AttentionGameState.countdown &&
+                    testState.countdownValue != null)
+                  CountdownOverlay(
+                    value: testState.countdownValue!,
+                    circleColor: Colors.orange.shade500,
+                  ),
+              ],
+            ),
           ),
-        ),
         ),
       ),
     );
   }
 }
-
-

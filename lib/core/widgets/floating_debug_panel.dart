@@ -12,7 +12,7 @@ class FloatingDebugPanel extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isDebugMode = ref.watch(debugModeProvider);
-    
+
     if (!isDebugMode) {
       return const SizedBox.shrink();
     }
@@ -38,9 +38,7 @@ class FloatingDebugPanel extends ConsumerWidget {
 }
 
 class _ExpandedPanel extends ConsumerWidget {
-  const _ExpandedPanel({
-    required this.logs,
-  });
+  const _ExpandedPanel({required this.logs});
 
   final List<DebugLogEntry> logs;
 
@@ -66,9 +64,7 @@ class _ExpandedPanel extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: const BoxDecoration(
-              border: Border(
-                bottom: BorderSide(color: Colors.white24),
-              ),
+              border: Border(bottom: BorderSide(color: Colors.white24)),
             ),
             child: Row(
               children: [
@@ -105,10 +101,7 @@ class _ExpandedPanel extends ConsumerWidget {
                 ? const Center(
                     child: Text(
                       'No logs yet',
-                      style: TextStyle(
-                        color: Colors.white54,
-                        fontSize: 12,
-                      ),
+                      style: TextStyle(color: Colors.white54, fontSize: 12),
                     ),
                   )
                 : ListView.builder(
@@ -167,11 +160,7 @@ class _LogEntry extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            _getIconForLevel(log.level),
-            size: 14,
-            color: color,
-          ),
+          Icon(_getIconForLevel(log.level), size: 14, color: color),
           const SizedBox(width: 6),
           Text(
             log.formattedTime,
@@ -218,4 +207,3 @@ class _ToggleButton extends ConsumerWidget {
     );
   }
 }
-

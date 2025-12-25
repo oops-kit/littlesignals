@@ -1,13 +1,17 @@
+import 'package:flutter/material.dart';
 import 'package:littlesignals/core/constants/app_constants.dart';
 import 'package:littlesignals/core/domain/event_logger.dart';
+import 'package:littlesignals/core/services/analysis/impulsivity_z_score_analyzer.dart';
 import 'package:littlesignals/core/services/impulsivity/balloon_tap_handler.dart';
 import 'package:littlesignals/core/utils/balloon_spawn_controller.dart';
 import 'package:littlesignals/core/utils/countdown_controller.dart';
 import 'package:littlesignals/core/utils/event_log_recorder.dart';
 import 'package:littlesignals/features/impulsivity_test/providers/impulsivity_test_state.dart';
+import 'package:littlesignals/l10n/app_localizations.dart';
 import 'package:littlesignals/models/balloon_data.dart';
 import 'package:littlesignals/models/impulsivity_result.dart';
 import 'package:littlesignals/providers/app_state_provider.dart';
+import 'package:littlesignals/providers/debug_log_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'impulsivity_test_provider.g.dart';
@@ -218,8 +222,8 @@ class ImpulsivityTestController extends _$ImpulsivityTestController {
 
     // 테스트 완료 로그 추가
     _logRecorder.logTestComplete(duration);
-    final finalLogs = _logRecorder.logs;
 
+    // 먼저 기본 result 생성
     final result = ImpulsivityResult(
       reactionTimeAverage: avgRT,
       commissionErrors: state.commissionErrors,
@@ -228,16 +232,85 @@ class ImpulsivityTestController extends _$ImpulsivityTestController {
       completionStatus: 'completed',
       anticipatoryResponses: state.anticipatoryResponses,
       reactionTimes: state.reactionTimes,
-      eventLogs: finalLogs,
+      eventLogs: _logRecorder.logs,
     );
 
-    ref.read(appStateNotifierProvider.notifier).setImpulsivityResult(result);
+    // 월령 정보가 있으면 Z점수 계산 및 로그 추가
+    final profile = ref.read(appStateNotifierProvider).profile;
+    final ageMonths = profile?.ageMonths;
+    if (ageMonths != null) {
+      _addZScoreLogsForImpulsivity(result, ageMonths);
+    }
+
+    final finalLogs = _logRecorder.logs;
+
+    // 최종 result 생성 (업데이트된 로그 포함)
+    final finalResult = result.copyWith(eventLogs: finalLogs);
+
+    ref
+        .read(appStateNotifierProvider.notifier)
+        .setImpulsivityResult(finalResult);
 
     state = state.copyWith(
       gameState: ImpulsivityGameState.finished,
       isCompleted: true,
       eventLogs: finalLogs,
     );
+  }
+
+  /// Z점수 분석 로그 추가 (충동성)
+  void _addZScoreLogsForImpulsivity(
+    ImpulsivityResult result,
+    double ageMonths,
+  ) {
+    // 한국어 로케일로 l10n 가져오기
+    final l10n = lookupAppLocalizations(const Locale('ko'));
+    final debugLog = ref.read(debugLogProvider.notifier);
+
+    // 원본 데이터 로그 추가
+    debugLog.addLog('━━━ 충동성 원본 데이터 ━━━');
+    debugLog.addLog('🎈 총 자극 수: ${result.totalStimuli}개');
+    debugLog.addLog(
+      '⏱️ 평균 반응시간: ${result.reactionTimeAverage.toStringAsFixed(0)}ms',
+    );
+    debugLog.addLog('🔴 Commission 오류: ${result.commissionErrors}회');
+    debugLog.addLog('⚪ Omission 오류: ${result.omissionErrors}회');
+    debugLog.addLog('⚡ 예측 반응: ${result.anticipatoryResponses}회');
+
+    if (result.reactionTimes.isNotEmpty) {
+      debugLog.addLog('📊 반응시간 목록: ${result.reactionTimes.length}개');
+    }
+
+    // Z점수 분석 수행
+    final analysis = ImpulsivityZScoreAnalyzer.analyze(
+      result: result,
+      ageMonths: ageMonths,
+      l10n: l10n,
+      logger: _logRecorder,
+    );
+
+    // Z점수 분석 결과를 디버그 패널에 추가
+    debugLog.addLog('━━━ 충동성 Z점수 분석 ━━━');
+    debugLog.addLog(
+      '🛑 억제비율 (원본): ${(analysis.inhibitionRate * 100).toStringAsFixed(1)}%',
+    );
+    debugLog.addLog(
+      '📊 억제비율 Z점수: ${analysis.inhibitionZScore.zScore.toStringAsFixed(3)}',
+    );
+    debugLog.addLog(
+      '📐 억제비율 또래평균(μ): ${(analysis.inhibitionZScore.peerMean * 100).toStringAsFixed(1)}%',
+    );
+    debugLog.addLog(
+      '📐 억제비율 표준편차(σ): ${(analysis.inhibitionZScore.peerStdDev * 100).toStringAsFixed(1)}%',
+    );
+    debugLog.addLog('🏷️ 억제비율 라벨: ${analysis.inhibitionZScore.label}');
+    debugLog.addLog('');
+    debugLog.addLog(
+      '⏱️ 평균 반응시간: ${analysis.avgReactionTime.toStringAsFixed(0)}ms',
+    );
+    debugLog.addLog('⚡ 빠른 반응자: ${analysis.isFastReactor ? "예" : "아니오"}');
+    debugLog.addLog('🎯 행동 패턴: ${analysis.behaviorPattern.name}');
+    debugLog.addLog('━━━━━━━━━━━━━━━━━━');
   }
 
   /// 테스트 리셋

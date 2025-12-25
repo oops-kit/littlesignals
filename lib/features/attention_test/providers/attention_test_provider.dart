@@ -1,18 +1,22 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:littlesignals/core/constants/app_constants.dart';
 import 'package:littlesignals/core/domain/deck_generator.dart';
 import 'package:littlesignals/core/domain/event_logger.dart';
 import 'package:littlesignals/core/providers/core_providers.dart';
+import 'package:littlesignals/core/services/analysis/attention_z_score_analyzer.dart';
 import 'package:littlesignals/core/services/attention/attention_metrics_collector.dart';
 import 'package:littlesignals/core/services/attention/card_matching_service.dart';
 import 'package:littlesignals/core/utils/countdown_controller.dart';
 import 'package:littlesignals/core/utils/event_log_recorder.dart';
 import 'package:littlesignals/core/utils/hint_timer_controller.dart';
 import 'package:littlesignals/features/attention_test/providers/attention_test_state.dart';
+import 'package:littlesignals/l10n/app_localizations.dart';
 import 'package:littlesignals/models/attention_result.dart';
 import 'package:littlesignals/models/card_data.dart';
 import 'package:littlesignals/providers/app_state_provider.dart';
+import 'package:littlesignals/providers/debug_log_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'attention_test_provider.g.dart';
@@ -206,7 +210,9 @@ class AttentionTestController extends _$AttentionTestController {
     // === MER 및 재확인율 계산용 데이터 수집 ===
     // 재확인 여부 체크 (이미 본 카드인지)
     final isRevisit = state.revealedCardIds.contains(cardId);
-    final newRevisitCount = isRevisit ? state.revisitCount + 1 : state.revisitCount;
+    final newRevisitCount = isRevisit
+        ? state.revisitCount + 1
+        : state.revisitCount;
 
     // 확인한 카드 목록 업데이트
     final newRevealedCardIds = {...state.revealedCardIds, cardId};
@@ -313,7 +319,8 @@ class AttentionTestController extends _$AttentionTestController {
     final totalPairs = AppConstants.attentionPairCount;
 
     // 전반부/후반부 구분: 절반(2쌍) 매칭 시 전반부 종료
-    if (matchedPairs == (totalPairs ~/ 2 + 1) && state.firstHalfEndTime == null) {
+    if (matchedPairs == (totalPairs ~/ 2 + 1) &&
+        state.firstHalfEndTime == null) {
       state = state.copyWith(firstHalfEndTime: DateTime.now());
     }
 
@@ -349,8 +356,8 @@ class AttentionTestController extends _$AttentionTestController {
 
     // 테스트 완료 로그 추가
     _logRecorder.logTestComplete(duration);
-    final finalLogs = _logRecorder.logs;
 
+    // 먼저 기본 result 생성
     final result = AttentionResult(
       durationSeconds: duration,
       totalMoves: state.moves,
@@ -363,7 +370,7 @@ class AttentionTestController extends _$AttentionTestController {
       secondHalfDurationSeconds: secondHalfDuration,
       firstHalfTaps: state.firstHalfTaps,
       secondHalfTaps: state.secondHalfTaps,
-      eventLogs: finalLogs,
+      eventLogs: _logRecorder.logs,
       // MER 및 재확인율 관련 필드
       revisitCount: state.revisitCount,
       uniqueCardsRevealed: state.revealedCardIds.length,
@@ -373,12 +380,96 @@ class AttentionTestController extends _$AttentionTestController {
       hintUsedCount: state.hintUsedCount,
     );
 
-    ref.read(appStateNotifierProvider.notifier).setAttentionResult(result);
+    // 월령 정보가 있으면 Z점수 계산 및 로그 추가
+    final profile = ref.read(appStateNotifierProvider).profile;
+    final ageMonths = profile?.ageMonths;
+    if (ageMonths != null) {
+      _addZScoreLogsForAttention(result, ageMonths);
+    }
+
+    final finalLogs = _logRecorder.logs;
+
+    // 최종 result 생성 (업데이트된 로그 포함)
+    final finalResult = result.copyWith(eventLogs: finalLogs);
+
+    ref.read(appStateNotifierProvider.notifier).setAttentionResult(finalResult);
     state = state.copyWith(
       gameState: AttentionGameState.finished,
       isCompleted: true,
       eventLogs: finalLogs,
     );
+  }
+
+  /// Z점수 분석 로그 추가 (주의력)
+  void _addZScoreLogsForAttention(AttentionResult result, double ageMonths) {
+    // 한국어 로케일로 l10n 가져오기
+    final l10n = lookupAppLocalizations(const Locale('ko'));
+    final debugLog = ref.read(debugLogProvider.notifier);
+
+    // 원본 데이터 로그 추가
+    debugLog.addLog('━━━ 주의력 원본 데이터 ━━━');
+    debugLog.addLog('📊 총 소요시간: ${result.durationSeconds.toStringAsFixed(1)}초');
+    debugLog.addLog('👆 총 이동(터치) 횟수: ${result.totalMoves}회');
+    debugLog.addLog('🎴 총 턴 수: ${result.totalTurns}턴');
+    debugLog.addLog('❌ 오류 횟수: ${result.errors}회');
+    debugLog.addLog('🔄 재확인 횟수: ${result.revisitCount}회');
+    debugLog.addLog('👀 확인한 카드 수: ${result.uniqueCardsRevealed}장');
+    debugLog.addLog('💡 힌트 사용 횟수: ${result.hintUsedCount}회');
+    debugLog.addLog('🎲 무작위 터치: ${result.randomTapCount}회');
+    debugLog.addLog('🔁 즉시 반복 오류: ${result.immediateRepeatErrors}회');
+
+    if (result.reactionTimesMs.isNotEmpty) {
+      final avgReactionTime =
+          result.reactionTimesMs.reduce((a, b) => a + b) /
+          result.reactionTimesMs.length;
+      debugLog.addLog('⏱️ 반응시간 목록: ${result.reactionTimesMs.length}개');
+      debugLog.addLog('⏱️ 반응시간 평균: ${avgReactionTime.toStringAsFixed(0)}ms');
+    }
+
+    // Z점수 분석 수행
+    final analysis = AttentionZScoreAnalyzer.analyze(
+      result: result,
+      ageMonths: ageMonths,
+      l10n: l10n,
+      logger: _logRecorder,
+    );
+
+    // Z점수 분석 결과를 디버그 패널에 추가
+    debugLog.addLog('━━━ 주의력 Z점수 분석 ━━━');
+    debugLog.addLog('📈 MER (원본): ${analysis.mer.toStringAsFixed(4)}');
+    debugLog.addLog(
+      '📊 MER Z점수: ${analysis.merZScore.zScore.toStringAsFixed(3)}',
+    );
+    debugLog.addLog(
+      '📐 MER 또래평균(μ): ${analysis.merZScore.peerMean.toStringAsFixed(3)}',
+    );
+    debugLog.addLog(
+      '📐 MER 표준편차(σ): ${analysis.merZScore.peerStdDev.toStringAsFixed(3)}',
+    );
+    debugLog.addLog('🏷️ MER 라벨: ${analysis.merZScore.label}');
+    debugLog.addLog('');
+    debugLog.addLog(
+      '🔄 재확인율 (원본): ${(analysis.revisitingRate * 100).toStringAsFixed(1)}%',
+    );
+    debugLog.addLog(
+      '📊 재확인율 Z점수: ${analysis.revisitingRateZScore.zScore.toStringAsFixed(3)}',
+    );
+    debugLog.addLog(
+      '📐 재확인율 또래평균(μ): ${(analysis.revisitingRateZScore.peerMean * 100).toStringAsFixed(1)}%',
+    );
+    debugLog.addLog(
+      '📐 재확인율 표준편차(σ): ${(analysis.revisitingRateZScore.peerStdDev * 100).toStringAsFixed(1)}%',
+    );
+    debugLog.addLog('🏷️ 재확인율 라벨: ${analysis.revisitingRateZScore.label}');
+    debugLog.addLog('');
+    debugLog.addLog(
+      '⏱️ 평균 반응시간: ${analysis.avgReactionTime.toStringAsFixed(2)}초',
+    );
+    debugLog.addLog(
+      '✅ 반응시간 정상범위: ${analysis.isReactionTimeNormal ? "예" : "아니오"}',
+    );
+    debugLog.addLog('🎯 행동 패턴: ${analysis.behaviorPattern.name}');
+    debugLog.addLog('━━━━━━━━━━━━━━━━━━');
   }
 
   /// 테스트 리셋

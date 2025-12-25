@@ -35,4 +35,5 @@ const _$TestEventTypeEnumMap = {
   TestEventType.anticipatoryTap: 'anticipatory_tap',
   TestEventType.testStart: 'test_start',
   TestEventType.testComplete: 'test_complete',
+  TestEventType.zScoreInfo: 'z_score_info',
 };

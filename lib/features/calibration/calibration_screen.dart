@@ -25,22 +25,7 @@ class CalibrationScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final appState = ref.watch(appStateNotifierProvider);
     final poppedIndices = useState<Set<int>>({});
-
-    // profile이 없으면 landing 화면으로 리다이렉트
-    if (appState.profile == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (context.mounted) {
-          context.go(AppRoutes.landing);
-        }
-      });
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
-    }
 
     void navigateToTest() {
       // calibration -> test: replace

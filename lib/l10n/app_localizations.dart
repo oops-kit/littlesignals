@@ -1027,24 +1027,6 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'(높을수록 좋음)'**
   String get higherIsBetter;
-
-  /// No description provided for @resultDebugTitle.
-  ///
-  /// In ko, this message translates to:
-  /// **'결과 디버그'**
-  String get resultDebugTitle;
-
-  /// No description provided for @eventDebugTitle.
-  ///
-  /// In ko, this message translates to:
-  /// **'이벤트 디버그'**
-  String get eventDebugTitle;
-
-  /// No description provided for @debugMenu.
-  ///
-  /// In ko, this message translates to:
-  /// **'디버그 메뉴'**
-  String get debugMenu;
 }
 
 class _AppLocalizationsDelegate

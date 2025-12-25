@@ -52,6 +52,10 @@ enum TestEventType {
   /// 테스트 완료
   @JsonValue('test_complete')
   testComplete,
+
+  /// Z점수 분석 정보
+  @JsonValue('z_score_info')
+  zScoreInfo,
 }
 
 /// 테스트 이벤트 로그 항목

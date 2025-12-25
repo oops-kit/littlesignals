@@ -32,13 +32,12 @@ class ImpulsivityTestScreen extends HookConsumerWidget {
     final testState = ref.watch(impulsivityTestControllerProvider);
     final controller = ref.read(impulsivityTestControllerProvider.notifier);
 
-    // profile이나 activeTest가 없으면 landing 화면으로 리다이렉트
-    if (appState.profile == null ||
-        appState.activeTest != TestType.impulsivity) {
+    // activeTest가 impulsivity가 아니면 mode selection으로 리다이렉트
+    if (appState.activeTest != TestType.impulsivity) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (context.mounted) {
           ref.read(appStateNotifierProvider.notifier).clearActiveTest();
-          context.go(AppRoutes.landing);
+          context.go(AppRoutes.modeSelection);
         }
       });
       return const Scaffold(

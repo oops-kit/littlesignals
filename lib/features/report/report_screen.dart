@@ -36,12 +36,12 @@ class ReportScreen extends ConsumerWidget {
         ? attentionResult
         : impulsivityResult;
 
-    // 테스트 결과가 없으면 landing 화면으로 리다이렉트
+    // 테스트 결과가 없으면 mode selection으로 리다이렉트
     if (testResult == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (context.mounted) {
           ref.read(appStateNotifierProvider.notifier).clearActiveTest();
-          context.go(AppRoutes.landing);
+          context.go(AppRoutes.modeSelection);
         }
       });
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
@@ -55,18 +55,18 @@ class ReportScreen extends ConsumerWidget {
     );
 
     void handleObserveAnother() {
-      // 다른 관찰하기 시 mode selection까지 pop (mode-selection만 남김)
+      // 다른 관찰하기 시 mode selection 화면으로 이동
       ref.read(appStateNotifierProvider.notifier).clearActiveTest();
-      context.pop();
+      context.go(AppRoutes.modeSelection);
     }
 
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, dynamic result) {
         if (!didPop) {
-          // 뒤로가기 시 mode selection까지 pop (mode-selection만 남김)
+          // 뒤로가기 시 mode selection 화면으로 이동
           ref.read(appStateNotifierProvider.notifier).clearActiveTest();
-          context.pop();
+          context.go(AppRoutes.modeSelection);
         }
       },
       child: Scaffold(
