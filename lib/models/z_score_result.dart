@@ -50,6 +50,12 @@ enum AttentionBehaviorPattern {
 
   /// 성실한 시도형 (MER 낮음, 재확인율 높음, 반응속도 느림)
   diligentTrier,
+
+  /// 확인형 기억 우수형 (MER 높음, 재확인율 높음)
+  confirmingMemory,
+
+  /// 직관적 추측형 (MER 낮음, 재확인율 낮음)
+  intuitiveGuesser,
 }
 
 /// 충동성 테스트 행동 패턴 유형 (4분면 기반)

@@ -107,6 +107,12 @@
   "diligentTrierTitle": "Diligent Trier",
   "diligentTrierDesc": "Your child shows effort to do their best. However, the amount of information to remember may still be challenging.",
 
+  "confirmingMemoryTitle": "Confirming Memory Type",
+  "confirmingMemoryDesc": "Your child has stable memory. However, they tend to double-check their choices with a cautious approach.",
+
+  "intuitiveGuesserTitle": "Intuitive Guesser",
+  "intuitiveGuesserDesc": "Your child tends to move quickly. Right now, they rely more on intuition than memory strategies.",
+
   "quickAndControlledTitle": "Quick but Controlled",
   "quickAndControlledDesc": "Your child quickly catches new stimuli and can stop when signaled. They know how to use speed and brakes.",
 
@@ -130,6 +136,12 @@
 
   "diligentTrierTip1": "Encourage even small successes. The effort matters.",
   "diligentTrierTip2": "Reduce the amount to remember at once and repeat.",
+
+  "confirmingMemoryTip1": "Acknowledge your child's careful nature and encourage confidence.",
+  "confirmingMemoryTip2": "Practice sticking with choices once made, like a fun challenge.",
+
+  "intuitiveGuesserTip1": "Try short memory games frequently to build memory strategies.",
+  "intuitiveGuesserTip2": "Show that thinking slowly before choosing can be fun too.",
 
   "quickAndControlledTip1": "Let them be the 'leader and safety officer' in team play or sports.",
   "quickAndControlledTip2": "Enjoy more games that involve acting on signals.",

@@ -27,12 +27,18 @@ class BehaviorPatternClassifier {
     final isSlowReaction = avgReactionTime > rtNorm.midValue;
 
     if (isHighMer && isLowRevisit) {
-      // MER 높고 재확인율 낮음
+      // MER 높음 + 재확인율 낮음
       return isSlowReaction
           ? AttentionBehaviorPattern.carefulExplorer
           : AttentionBehaviorPattern.quickProcessor;
+    } else if (isHighMer && !isLowRevisit) {
+      // MER 높음 + 재확인율 높음 → 확인형 기억 우수형
+      return AttentionBehaviorPattern.confirmingMemory;
+    } else if (!isHighMer && isLowRevisit) {
+      // MER 낮음 + 재확인율 낮음 → 직관적 추측형
+      return AttentionBehaviorPattern.intuitiveGuesser;
     } else {
-      // MER 낮거나 재확인율 높음
+      // MER 낮음 + 재확인율 높음
       return isSlowReaction
           ? AttentionBehaviorPattern.diligentTrier
           : AttentionBehaviorPattern.energeticExplorer;

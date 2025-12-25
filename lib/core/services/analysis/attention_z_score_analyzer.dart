@@ -186,6 +186,10 @@ class AttentionZScoreAnalyzer {
         return '활발한 탐험가';
       case AttentionBehaviorPattern.diligentTrier:
         return '끈기있는 도전자';
+      case AttentionBehaviorPattern.confirmingMemory:
+        return '확인형 기억 우수형';
+      case AttentionBehaviorPattern.intuitiveGuesser:
+        return '직관적 추측형';
     }
   }
 }

@@ -131,6 +131,18 @@ class AttentionReportCalculator implements ReportCalculator {
           l10n.diligentTrierDesc,
           [l10n.diligentTrierTip1, l10n.diligentTrierTip2],
         );
+      case AttentionBehaviorPattern.confirmingMemory:
+        return (
+          l10n.confirmingMemoryTitle,
+          l10n.confirmingMemoryDesc,
+          [l10n.confirmingMemoryTip1, l10n.confirmingMemoryTip2],
+        );
+      case AttentionBehaviorPattern.intuitiveGuesser:
+        return (
+          l10n.intuitiveGuesserTitle,
+          l10n.intuitiveGuesserDesc,
+          [l10n.intuitiveGuesserTip1, l10n.intuitiveGuesserTip2],
+        );
     }
   }
 }

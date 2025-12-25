@@ -331,6 +331,20 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your child shows effort to do their best. However, the amount of information to remember may still be challenging.';
 
   @override
+  String get confirmingMemoryTitle => 'Confirming Memory Type';
+
+  @override
+  String get confirmingMemoryDesc =>
+      'Your child has stable memory. However, they tend to double-check their choices with a cautious approach.';
+
+  @override
+  String get intuitiveGuesserTitle => 'Intuitive Guesser';
+
+  @override
+  String get intuitiveGuesserDesc =>
+      'Your child tends to move quickly. Right now, they rely more on intuition than memory strategies.';
+
+  @override
   String get quickAndControlledTitle => 'Quick but Controlled';
 
   @override
@@ -389,6 +403,22 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get diligentTrierTip2 =>
       'Reduce the amount to remember at once and repeat.';
+
+  @override
+  String get confirmingMemoryTip1 =>
+      'Acknowledge your child\'s careful nature and encourage confidence.';
+
+  @override
+  String get confirmingMemoryTip2 =>
+      'Practice sticking with choices once made, like a fun challenge.';
+
+  @override
+  String get intuitiveGuesserTip1 =>
+      'Try short memory games frequently to build memory strategies.';
+
+  @override
+  String get intuitiveGuesserTip2 =>
+      'Show that thinking slowly before choosing can be fun too.';
 
   @override
   String get quickAndControlledTip1 =>

@@ -704,6 +704,30 @@ abstract class AppLocalizations {
   /// **'아이 스스로 잘 해보려는 모습이 보여요. 다만 기억해야 할 정보가 아직은 조금 많은 단계일 수 있어요.'**
   String get diligentTrierDesc;
 
+  /// No description provided for @confirmingMemoryTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'확인형 기억 우수형'**
+  String get confirmingMemoryTitle;
+
+  /// No description provided for @confirmingMemoryDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'아이의 기억력은 안정적인 편이에요. 다만 스스로 한 선택을 다시 확인하려는 신중함이 함께 나타나요.'**
+  String get confirmingMemoryDesc;
+
+  /// No description provided for @intuitiveGuesserTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'직관적 추측형'**
+  String get intuitiveGuesserTitle;
+
+  /// No description provided for @intuitiveGuesserDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'아이는 빠르게 진행하려는 경향이 있어요. 지금은 기억을 활용하기보다는 직관적으로 반응하는 모습이 더 두드러져요.'**
+  String get intuitiveGuesserDesc;
+
   /// No description provided for @quickAndControlledTitle.
   ///
   /// In ko, this message translates to:
@@ -799,6 +823,30 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'한 번에 기억해야 할 양을 줄이고 반복해주세요.'**
   String get diligentTrierTip2;
+
+  /// No description provided for @confirmingMemoryTip1.
+  ///
+  /// In ko, this message translates to:
+  /// **'아이의 신중함을 인정해주고, 자신감을 가질 수 있도록 격려해주세요.'**
+  String get confirmingMemoryTip1;
+
+  /// No description provided for @confirmingMemoryTip2.
+  ///
+  /// In ko, this message translates to:
+  /// **'한 번 선택하면 그대로 진행해보는 연습을 놀이처럼 해보세요.'**
+  String get confirmingMemoryTip2;
+
+  /// No description provided for @intuitiveGuesserTip1.
+  ///
+  /// In ko, this message translates to:
+  /// **'기억 게임을 짧게 자주 반복하여 기억 전략을 연습해보세요.'**
+  String get intuitiveGuesserTip1;
+
+  /// No description provided for @intuitiveGuesserTip2.
+  ///
+  /// In ko, this message translates to:
+  /// **'천천히 생각하고 선택하는 것도 재미있다는 것을 알려주세요.'**
+  String get intuitiveGuesserTip2;
 
   /// No description provided for @quickAndControlledTip1.
   ///
