@@ -177,5 +177,9 @@
   "peerAvgLabel": "Peer Avg",
   "myChildValue": "My Child",
   "lowerIsBetter": "(lower is better)",
-  "higherIsBetter": "(higher is better)"
+  "higherIsBetter": "(higher is better)",
+  
+  "resultDebugTitle": "Result Debug",
+  "eventDebugTitle": "Event Debug",
+  "debugMenu": "Debug Menu"
 }

@@ -522,4 +522,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get higherIsBetter => '(higher is better)';
+
+  @override
+  String get resultDebugTitle => 'Result Debug';
+
+  @override
+  String get eventDebugTitle => 'Event Debug';
+
+  @override
+  String get debugMenu => 'Debug Menu';
 }

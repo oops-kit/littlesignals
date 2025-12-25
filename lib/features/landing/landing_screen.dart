@@ -9,7 +9,6 @@ import 'package:littlesignals/features/landing/widgets/primary_button.dart';
 import 'package:littlesignals/l10n/app_localizations.dart';
 import 'package:littlesignals/models/child_profile.dart';
 import 'package:littlesignals/providers/app_state_provider.dart';
-import 'package:littlesignals/providers/debug_mode_provider.dart';
 import 'package:littlesignals/router/app_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -82,8 +81,6 @@ class LandingScreen extends HookConsumerWidget {
                     onPressed: handleStart,
                   ),
                   const SizedBox(height: 48),
-                  const _DebugModeSwitch(),
-                  const SizedBox(height: 24),
                   const _VersionText(),
                 ],
               ),
@@ -91,41 +88,6 @@ class LandingScreen extends HookConsumerWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _DebugModeSwitch extends ConsumerWidget {
-  const _DebugModeSwitch();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isDebugMode = ref.watch(debugModeProvider);
-
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const Icon(
-          Icons.bug_report_outlined,
-          size: 16,
-          color: AppTheme.slate400,
-        ),
-        const SizedBox(width: 4),
-        const Text(
-          'Debug Mode',
-          style: TextStyle(fontSize: 12, color: AppTheme.slate400),
-        ),
-        const SizedBox(width: 8),
-        SizedBox(
-          height: 24,
-          child: Switch(
-            value: isDebugMode,
-            onChanged: (_) => ref.read(debugModeProvider.notifier).toggle(),
-            activeTrackColor: AppTheme.primaryBlue.withValues(alpha: 0.5),
-            activeThumbColor: AppTheme.primaryBlue,
-          ),
-        ),
-      ],
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:littlesignals/core/theme/app_theme.dart';
+import 'package:littlesignals/core/widgets/floating_debug_panel.dart';
 import 'package:littlesignals/l10n/app_localizations.dart';
 import 'package:littlesignals/router/app_router.dart';
 
@@ -25,6 +26,14 @@ class LittleSignalsApp extends ConsumerWidget {
       ],
       supportedLocales: const [Locale('ko'), Locale('en')],
       locale: const Locale('ko'),
+      builder: (context, child) {
+        return Stack(
+          children: [
+            if (child != null) child,
+            const FloatingDebugPanel(),
+          ],
+        );
+      },
     );
   }
 }

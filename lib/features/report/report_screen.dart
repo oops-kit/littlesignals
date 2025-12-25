@@ -5,11 +5,6 @@ import 'package:littlesignals/core/domain/test_result.dart';
 import 'package:littlesignals/core/theme/app_theme.dart';
 import 'package:littlesignals/features/report/providers/report_provider.dart';
 import 'package:littlesignals/features/report/widgets/behavior_style_card.dart';
-import 'package:littlesignals/features/report/widgets/debug_metrics_card.dart';
-import 'package:littlesignals/features/report/widgets/event_log_card.dart';
-import 'package:littlesignals/features/report/widgets/impulsivity_data_card.dart';
-import 'package:littlesignals/features/report/widgets/key_metrics_card.dart';
-import 'package:littlesignals/features/report/widgets/observation_data_card.dart';
 import 'package:littlesignals/features/report/widgets/observe_another_button.dart';
 import 'package:littlesignals/features/report/widgets/parenting_tips_card.dart';
 import 'package:littlesignals/features/report/widgets/result_chart.dart';
@@ -74,42 +69,19 @@ class ReportScreen extends ConsumerWidget {
               const SizedBox(height: 16),
               _PageTitle(title: l10n.observationSummary),
               const SizedBox(height: 24),
-              // 디버그 모드에서만 표시되는 내부 계산값 카드
-              DebugMetricsCard(
-                attentionResult: attentionResult,
-                impulsivityResult: impulsivityResult,
-                attentionAnalysis: reportData.attentionAnalysis,
-                impulsivityAnalysis: reportData.impulsivityAnalysis,
-              ),
-              const SizedBox(height: 16),
               BehaviorStyleCard(
                 label: l10n.behaviorStyle,
                 title: reportData.title,
                 description: reportData.description,
               ),
               const SizedBox(height: 16),
-              // 핵심 지표 카드 (Z점수 분석 결과가 있을 때)
+              // 결과 해석 카드 (Z점수 분석 결과가 있을 때)
               if (reportData.attentionAnalysis != null ||
                   reportData.impulsivityAnalysis != null) ...[
-                KeyMetricsCard(
-                  attentionAnalysis: reportData.attentionAnalysis,
-                  impulsivityAnalysis: reportData.impulsivityAnalysis,
-                ),
-                const SizedBox(height: 16),
-                // 결과 해석 카드
                 ResultInterpretationCard(
                   attentionAnalysis: reportData.attentionAnalysis,
                   impulsivityAnalysis: reportData.impulsivityAnalysis,
                 ),
-                const SizedBox(height: 16),
-              ],
-              // 테스트별 관찰 데이터 포인트 표시
-              if (isAttention && attentionResult != null) ...[
-                ObservationDataCard(result: attentionResult),
-                const SizedBox(height: 16),
-              ],
-              if (!isAttention && impulsivityResult != null) ...[
-                ImpulsivityDataCard(result: impulsivityResult),
                 const SizedBox(height: 16),
               ],
               ResultChart(
@@ -124,14 +96,6 @@ class ReportScreen extends ConsumerWidget {
               ParentingTipsCard(
                 title: l10n.parentingTips,
                 tips: reportData.tips,
-              ),
-              const SizedBox(height: 16),
-              // 이벤트 로그 - TestResult 인터페이스 활용
-              EventLogCard(
-                eventLogs: testResult.eventLogs,
-                startTime: testResult.eventLogs.isNotEmpty
-                    ? testResult.eventLogs.first.timestamp
-                    : null,
               ),
               const SizedBox(height: 24),
               ObserveAnotherButton(

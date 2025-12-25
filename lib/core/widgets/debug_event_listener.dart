@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:littlesignals/models/test_event_log.dart';
+import 'package:littlesignals/providers/debug_log_provider.dart';
 import 'package:littlesignals/providers/debug_mode_provider.dart';
 
-/// 디버그 모드에서 이벤트 로그를 SnackBar로 표시하는 위젯
+/// 디버그 모드에서 이벤트 로그를 디버그 패널로 전송하는 위젯
 ///
 /// SRP: 디버그 모드 이벤트 로그 표시만 담당합니다.
 /// 테스트 화면에서 이 위젯을 사용하여 UI/로직 분리를 달성합니다.
@@ -35,18 +36,11 @@ class DebugEventListener extends HookConsumerWidget {
       final currentCount = eventLogs.length;
       if (currentCount > prevLogCount.value && eventLogs.isNotEmpty) {
         final newLog = eventLogs.last;
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(newLog.description),
-                duration: const Duration(milliseconds: 800),
-                behavior: SnackBarBehavior.floating,
-                margin: const EdgeInsets.only(bottom: 80, left: 16, right: 16),
-              ),
-            );
-          }
-        });
+        // 디버그 로그 패널에 추가
+        ref.read(debugLogProvider.notifier).addLog(
+          newLog.description,
+          level: DebugLogLevel.info,
+        );
       }
       prevLogCount.value = currentCount;
       return null;

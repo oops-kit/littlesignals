@@ -489,4 +489,13 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get higherIsBetter => '(높을수록 좋음)';
+
+  @override
+  String get resultDebugTitle => '결과 디버그';
+
+  @override
+  String get eventDebugTitle => '이벤트 디버그';
+
+  @override
+  String get debugMenu => '디버그 메뉴';
 }
