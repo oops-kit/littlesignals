@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:littlesignals/core/theme/app_theme.dart';
 import 'package:littlesignals/features/landing/widgets/app_logo.dart';
-import 'package:littlesignals/features/landing/widgets/date_selector.dart';
+import 'package:littlesignals/features/landing/widgets/birthday_dropdown_selector.dart';
 import 'package:littlesignals/features/landing/widgets/primary_button.dart';
 import 'package:littlesignals/l10n/app_localizations.dart';
 import 'package:littlesignals/models/child_profile.dart';
@@ -22,31 +22,55 @@ class LandingScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final selectedDate = useState<DateTime?>(null);
+    final selectedYear = useState<int?>(null);
+    final selectedMonth = useState<int?>(null);
+    final selectedDay = useState<int?>(null);
     final errorMessage = useState<String?>(null);
 
-    Future<void> selectDate() async {
-      final now = DateTime.now();
-      final picked = await showDatePicker(
-        context: context,
-        initialDate: DateTime(now.year - 3, now.month, now.day),
-        firstDate: DateTime(now.year - 5),
-        lastDate: DateTime(now.year - 2),
-        helpText: l10n.childBirthday,
-      );
-      if (picked != null) {
-        selectedDate.value = picked;
-        errorMessage.value = null;
+    DateTime? getSelectedDate() {
+      if (selectedYear.value != null &&
+          selectedMonth.value != null &&
+          selectedDay.value != null) {
+        try {
+          return DateTime(
+            selectedYear.value!,
+            selectedMonth.value!,
+            selectedDay.value!,
+          );
+        } catch (e) {
+          return null;
+        }
       }
+      return null;
+    }
+
+    String? getAgeText() {
+      final birthDate = getSelectedDate();
+      if (birthDate == null) return null;
+
+      final now = DateTime.now();
+      final age = now.year - birthDate.year;
+      final monthDiff = now.month - birthDate.month;
+      final dayDiff = now.day - birthDate.day;
+
+      int totalMonths = age * 12 + monthDiff;
+      if (dayDiff < 0) {
+        totalMonths--;
+      }
+
+      final years = totalMonths ~/ 12;
+
+      return '만 $years세 ($totalMonths개월)';
     }
 
     void handleStart() {
-      if (selectedDate.value == null) {
+      final selectedDate = getSelectedDate();
+      if (selectedDate == null) {
         errorMessage.value = l10n.enterBirthday;
         return;
       }
 
-      final profile = createProfileFromBirthDate(selectedDate.value!);
+      final profile = createProfileFromBirthDate(selectedDate);
       ref.read(appStateNotifierProvider.notifier).setProfile(profile);
       context.go(AppRoutes.modeSelection);
     }
@@ -67,11 +91,28 @@ class LandingScreen extends HookConsumerWidget {
                   const SizedBox(height: 16),
                   _Subtitle(subtitle: l10n.landingSubtitle),
                   const SizedBox(height: 48),
-                  DateSelector(
+                  BirthdayDropdownSelector(
                     label: l10n.childBirthday,
-                    selectedDate: selectedDate.value,
-                    onTap: selectDate,
+                    selectedYear: selectedYear.value,
+                    selectedMonth: selectedMonth.value,
+                    selectedDay: selectedDay.value,
+                    onYearChanged: (value) {
+                      selectedYear.value = value;
+                      errorMessage.value = null;
+                    },
+                    onMonthChanged: (value) {
+                      selectedMonth.value = value;
+                      errorMessage.value = null;
+                    },
+                    onDayChanged: (value) {
+                      selectedDay.value = value;
+                      errorMessage.value = null;
+                    },
                   ),
+                  if (getAgeText() != null) ...[
+                    const SizedBox(height: 12),
+                    _AgeDisplay(ageText: getAgeText()!),
+                  ],
                   if (errorMessage.value != null) ...[
                     const SizedBox(height: 8),
                     _ErrorMessage(message: errorMessage.value!),
@@ -131,6 +172,24 @@ class _Subtitle extends StatelessWidget {
   }
 }
 
+class _AgeDisplay extends StatelessWidget {
+  const _AgeDisplay({required this.ageText});
+
+  final String ageText;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      ageText,
+      style: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        color: AppTheme.freshGreen,
+      ),
+    );
+  }
+}
+
 class _ErrorMessage extends StatelessWidget {
   const _ErrorMessage({required this.message});
 
@@ -166,28 +225,25 @@ class _VersionText extends HookConsumerWidget {
     void handleTap() {
       final now = DateTime.now();
       final lastTap = lastTapTime.value;
-      
+
       // 2초 이내에 탭하지 않으면 카운트 리셋
-      if (lastTap != null && 
-          now.difference(lastTap).inSeconds > 2) {
+      if (lastTap != null && now.difference(lastTap).inSeconds > 2) {
         tapCount.value = 0;
       }
-      
+
       tapCount.value++;
       lastTapTime.value = now;
-      
+
       // 5번 탭하면 디버그 모드 토글
       if (tapCount.value >= 5) {
         ref.read(debugModeProvider.notifier).toggle();
         tapCount.value = 0;
-        
+
         // 디버그 모드 상태 표시
         final isDebugMode = ref.read(debugModeProvider);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              isDebugMode ? 'Debug Mode ON 🐛' : 'Debug Mode OFF',
-            ),
+            content: Text(isDebugMode ? 'Debug Mode ON 🐛' : 'Debug Mode OFF'),
             duration: const Duration(seconds: 1),
             behavior: SnackBarBehavior.floating,
           ),
