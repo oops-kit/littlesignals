@@ -19,8 +19,8 @@ class ObserveAnotherButton extends StatelessWidget {
       child: OutlinedButton(
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          side: const BorderSide(color: AppTheme.slate200),
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          side: const BorderSide(color: AppTheme.slate200, width: 2),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -30,6 +30,7 @@ class ObserveAnotherButton extends StatelessWidget {
           style: const TextStyle(
             color: AppTheme.slate600,
             fontWeight: FontWeight.bold,
+            fontSize: 16,
           ),
         ),
       ),

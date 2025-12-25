@@ -144,6 +144,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get observeAnotherTrait => 'Observe Another Trait';
 
   @override
+  String get getFreeReport => 'Get Free Observation Report';
+
+  @override
   String get disclaimer =>
       'This result is not a medical diagnosis. Results may vary based on sleep, hunger, or mood.';
 

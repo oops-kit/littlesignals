@@ -135,6 +135,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get observeAnotherTrait => '다른 특성 관찰하기';
 
   @override
+  String get getFreeReport => '무료로 관찰 보고서 받기';
+
+  @override
   String get disclaimer =>
       '이 결과는 의학적 진단이 아닙니다. 결과는 아이의 수면, 배고픔, 기분에 따라 달라질 수 있습니다.';
 

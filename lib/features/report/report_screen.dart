@@ -112,6 +112,13 @@ class ReportScreen extends ConsumerWidget {
                   label: l10n.observeAnotherTrait,
                   onPressed: handleObserveAnother,
                 ),
+                const SizedBox(height: 16),
+                _GetReportButton(
+                  label: l10n.getFreeReport,
+                  onPressed: () {
+                    // TODO: 무료 보고서 받기 기능 구현
+                  },
+                ),
                 const SizedBox(height: 24),
                 _DisclaimerText(text: l10n.disclaimer),
                 const SizedBox(height: 32),
@@ -132,6 +139,36 @@ class _PageTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(title, style: Theme.of(context).textTheme.headlineMedium);
+  }
+}
+
+class _GetReportButton extends StatelessWidget {
+  const _GetReportButton({required this.label, required this.onPressed});
+
+  final String label;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 18),
+          backgroundColor: AppTheme.primaryOrange,
+          foregroundColor: Colors.white,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        child: Text(
+          label,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
+      ),
+    );
   }
 }
 

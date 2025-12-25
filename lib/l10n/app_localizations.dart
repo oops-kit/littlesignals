@@ -350,6 +350,12 @@ abstract class AppLocalizations {
   /// **'다른 특성 관찰하기'**
   String get observeAnotherTrait;
 
+  /// No description provided for @getFreeReport.
+  ///
+  /// In ko, this message translates to:
+  /// **'무료로 관찰 보고서 받기'**
+  String get getFreeReport;
+
   /// No description provided for @disclaimer.
   ///
   /// In ko, this message translates to:
