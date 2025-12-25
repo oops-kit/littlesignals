@@ -72,59 +72,63 @@ class LandingScreen extends HookConsumerWidget {
 
       final profile = createProfileFromBirthDate(selectedDate);
       ref.read(appStateNotifierProvider.notifier).setProfile(profile);
-      context.go(AppRoutes.modeSelection);
+      // landing -> mode-selection: push
+      context.push(AppRoutes.modeSelection);
     }
 
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 400),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const AppLogo(),
-                  const SizedBox(height: 32),
-                  _Title(title: l10n.appTitle),
-                  const SizedBox(height: 16),
-                  _Subtitle(subtitle: l10n.landingSubtitle),
-                  const SizedBox(height: 48),
-                  BirthdayDropdownSelector(
-                    label: l10n.childBirthday,
-                    selectedYear: selectedYear.value,
-                    selectedMonth: selectedMonth.value,
-                    selectedDay: selectedDay.value,
-                    onYearChanged: (value) {
-                      selectedYear.value = value;
-                      errorMessage.value = null;
-                    },
-                    onMonthChanged: (value) {
-                      selectedMonth.value = value;
-                      errorMessage.value = null;
-                    },
-                    onDayChanged: (value) {
-                      selectedDay.value = value;
-                      errorMessage.value = null;
-                    },
-                  ),
-                  if (getAgeText() != null) ...[
-                    const SizedBox(height: 12),
-                    _AgeDisplay(ageText: getAgeText()!),
+    return PopScope(
+      canPop: true,
+      child: Scaffold(
+        body: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 400),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const AppLogo(),
+                    const SizedBox(height: 32),
+                    _Title(title: l10n.appTitle),
+                    const SizedBox(height: 16),
+                    _Subtitle(subtitle: l10n.landingSubtitle),
+                    const SizedBox(height: 48),
+                    BirthdayDropdownSelector(
+                      label: l10n.childBirthday,
+                      selectedYear: selectedYear.value,
+                      selectedMonth: selectedMonth.value,
+                      selectedDay: selectedDay.value,
+                      onYearChanged: (value) {
+                        selectedYear.value = value;
+                        errorMessage.value = null;
+                      },
+                      onMonthChanged: (value) {
+                        selectedMonth.value = value;
+                        errorMessage.value = null;
+                      },
+                      onDayChanged: (value) {
+                        selectedDay.value = value;
+                        errorMessage.value = null;
+                      },
+                    ),
+                    if (getAgeText() != null) ...[
+                      const SizedBox(height: 12),
+                      _AgeDisplay(ageText: getAgeText()!),
+                    ],
+                    if (errorMessage.value != null) ...[
+                      const SizedBox(height: 8),
+                      _ErrorMessage(message: errorMessage.value!),
+                    ],
+                    const SizedBox(height: 32),
+                    PrimaryButton(
+                      label: l10n.startButton,
+                      onPressed: handleStart,
+                    ),
+                    const SizedBox(height: 48),
+                    const _VersionText(),
                   ],
-                  if (errorMessage.value != null) ...[
-                    const SizedBox(height: 8),
-                    _ErrorMessage(message: errorMessage.value!),
-                  ],
-                  const SizedBox(height: 32),
-                  PrimaryButton(
-                    label: l10n.startButton,
-                    onPressed: handleStart,
-                  ),
-                  const SizedBox(height: 48),
-                  const _VersionText(),
-                ],
+                ),
               ),
             ),
           ),

@@ -25,14 +25,30 @@ class CalibrationScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
+    final appState = ref.watch(appStateNotifierProvider);
     final poppedIndices = useState<Set<int>>({});
 
+    // profile이 없으면 landing 화면으로 리다이렉트
+    if (appState.profile == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (context.mounted) {
+          context.go(AppRoutes.landing);
+        }
+      });
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     void navigateToTest() {
+      // calibration -> test: replace
       switch (testType) {
         case TestType.attention:
-          context.go(AppRoutes.attentionTest);
+          context.replace(AppRoutes.attentionTest);
         case TestType.impulsivity:
-          context.go(AppRoutes.impulsivityTest);
+          context.replace(AppRoutes.impulsivityTest);
       }
     }
 
@@ -58,30 +74,40 @@ class CalibrationScreen extends HookConsumerWidget {
       }
     }
 
-    return Scaffold(
-      backgroundColor: AppTheme.slateLight,
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SectionHeader(title: l10n.warmUp, subtitle: l10n.warmUpDesc),
-            const SizedBox(height: 48),
-            SizedBox(
-              height: 120,
-              child: Center(
-                child: BubbleRow(
-                  poppedIndices: poppedIndices.value,
-                  onPop: handlePop,
-                  popText: l10n.pop,
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, dynamic result) {
+        if (!didPop) {
+          // 뒤로가기 시 mode selection까지 pop (mode-selection만 남김)
+          ref.read(appStateNotifierProvider.notifier).clearActiveTest();
+          context.pop();
+        }
+      },
+      child: Scaffold(
+        backgroundColor: AppTheme.slateLight,
+        body: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SectionHeader(title: l10n.warmUp, subtitle: l10n.warmUpDesc),
+              const SizedBox(height: 48),
+              SizedBox(
+                height: 120,
+                child: Center(
+                  child: BubbleRow(
+                    poppedIndices: poppedIndices.value,
+                    onPop: handlePop,
+                    popText: l10n.pop,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 32),
-            ProgressText(
-              current: poppedIndices.value.length,
-              total: AppConstants.calibrationRequiredTaps,
-            ),
-          ],
+              const SizedBox(height: 32),
+              ProgressText(
+                current: poppedIndices.value.length,
+                total: AppConstants.calibrationRequiredTaps,
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -14,7 +14,9 @@ import 'package:littlesignals/features/impulsivity_test/providers/impulsivity_te
 import 'package:littlesignals/features/impulsivity_test/widgets/balloon_positioned.dart';
 import 'package:littlesignals/features/impulsivity_test/widgets/rules_indicator.dart';
 import 'package:littlesignals/l10n/app_localizations.dart';
+import 'package:littlesignals/models/app_state.dart';
 import 'package:littlesignals/models/balloon_data.dart';
+import 'package:littlesignals/providers/app_state_provider.dart';
 import 'package:littlesignals/router/app_router.dart';
 
 /// 충동성 테스트 화면
@@ -26,8 +28,25 @@ class ImpulsivityTestScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
+    final appState = ref.watch(appStateNotifierProvider);
     final testState = ref.watch(impulsivityTestControllerProvider);
     final controller = ref.read(impulsivityTestControllerProvider.notifier);
+
+    // profile이나 activeTest가 없으면 landing 화면으로 리다이렉트
+    if (appState.profile == null ||
+        appState.activeTest != TestType.impulsivity) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (context.mounted) {
+          ref.read(appStateNotifierProvider.notifier).clearActiveTest();
+          context.go(AppRoutes.landing);
+        }
+      });
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
 
     // 게임 시작
     useEffect(() {
@@ -47,7 +66,8 @@ class ImpulsivityTestScreen extends HookConsumerWidget {
       if (previous?.isCompleted != true && next.isCompleted) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (context.mounted) {
-            context.go(AppRoutes.report);
+            // test -> report: replace
+            context.replace(AppRoutes.report);
           }
         });
       }
@@ -56,17 +76,30 @@ class ImpulsivityTestScreen extends HookConsumerWidget {
     void handleExit() {
       ExitConfirmDialog.show(
         context: context,
-        onConfirm: () => context.go(AppRoutes.modeSelection),
+        onConfirm: () {
+          // Exit 시 mode selection까지 pop (mode-selection만 남김)
+          ref.read(appStateNotifierProvider.notifier).clearActiveTest();
+          context.pop();
+        },
       );
     }
 
     // SRP: 디버그 로깅을 DebugEventListener에 위임
     return DebugEventListener(
       eventLogs: testState.eventLogs,
-      child: Scaffold(
-        backgroundColor: AppTheme.impulsivitySkyLight,
-        body: SafeArea(
-          child: GestureDetector(
+      child: PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (bool didPop, dynamic result) {
+          if (!didPop) {
+            // 뒤로가기 시 mode selection까지 pop (mode-selection만 남김)
+            ref.read(appStateNotifierProvider.notifier).clearActiveTest();
+            context.pop();
+          }
+        },
+        child: Scaffold(
+          backgroundColor: AppTheme.impulsivitySkyLight,
+          body: SafeArea(
+            child: GestureDetector(
             // 화면 전체 터치 감지 (예측 반응 측정용)
             onTapDown: (_) => controller.handleScreenTap(),
             behavior: HitTestBehavior.translucent,
@@ -118,6 +151,7 @@ class ImpulsivityTestScreen extends HookConsumerWidget {
               ],
             ),
           ),
+        ),
         ),
       ),
     );

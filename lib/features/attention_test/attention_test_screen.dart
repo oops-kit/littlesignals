@@ -11,6 +11,8 @@ import 'package:littlesignals/features/attention_test/providers/attention_test_p
 import 'package:littlesignals/features/attention_test/providers/attention_test_state.dart';
 import 'package:littlesignals/features/attention_test/widgets/card_grid.dart';
 import 'package:littlesignals/l10n/app_localizations.dart';
+import 'package:littlesignals/models/app_state.dart';
+import 'package:littlesignals/providers/app_state_provider.dart';
 import 'package:littlesignals/router/app_router.dart';
 
 /// 주의력 테스트 화면
@@ -22,8 +24,24 @@ class AttentionTestScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
+    final appState = ref.watch(appStateNotifierProvider);
     final testState = ref.watch(attentionTestControllerProvider);
     final controller = ref.read(attentionTestControllerProvider.notifier);
+
+    // profile이나 activeTest가 없으면 landing 화면으로 리다이렉트
+    if (appState.profile == null || appState.activeTest != TestType.attention) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (context.mounted) {
+          ref.read(appStateNotifierProvider.notifier).clearActiveTest();
+          context.go(AppRoutes.landing);
+        }
+      });
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
 
     // 게임 시작
     useEffect(() {
@@ -43,7 +61,8 @@ class AttentionTestScreen extends HookConsumerWidget {
       if (previous?.isCompleted != true && next.isCompleted) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (context.mounted) {
-            context.go(AppRoutes.report);
+            // test -> report: replace
+            context.replace(AppRoutes.report);
           }
         });
       }
@@ -52,7 +71,11 @@ class AttentionTestScreen extends HookConsumerWidget {
     void handleExit() {
       ExitConfirmDialog.show(
         context: context,
-        onConfirm: () => context.go(AppRoutes.modeSelection),
+        onConfirm: () {
+          // Exit 시 mode selection까지 pop (mode-selection만 남김)
+          ref.read(appStateNotifierProvider.notifier).clearActiveTest();
+          context.pop();
+        },
       );
     }
 
@@ -62,10 +85,19 @@ class AttentionTestScreen extends HookConsumerWidget {
     // SRP: 디버그 로깅을 DebugEventListener에 위임
     return DebugEventListener(
       eventLogs: testState.eventLogs,
-      child: Scaffold(
-        backgroundColor: AppTheme.attentionOrangeLight,
-        body: SafeArea(
-          child: Stack(
+      child: PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (bool didPop, dynamic result) {
+          if (!didPop) {
+            // 뒤로가기 시 mode selection까지 pop (mode-selection만 남김)
+            ref.read(appStateNotifierProvider.notifier).clearActiveTest();
+            context.pop();
+          }
+        },
+        child: Scaffold(
+          backgroundColor: AppTheme.attentionOrangeLight,
+          body: SafeArea(
+            child: Stack(
             children: [
               Column(
                 children: [
@@ -97,6 +129,7 @@ class AttentionTestScreen extends HookConsumerWidget {
                 ),
             ],
           ),
+        ),
         ),
       ),
     );

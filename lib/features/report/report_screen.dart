@@ -36,7 +36,14 @@ class ReportScreen extends ConsumerWidget {
         ? attentionResult
         : impulsivityResult;
 
+    // 테스트 결과가 없으면 landing 화면으로 리다이렉트
     if (testResult == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (context.mounted) {
+          ref.read(appStateNotifierProvider.notifier).clearActiveTest();
+          context.go(AppRoutes.landing);
+        }
+      });
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
@@ -48,64 +55,68 @@ class ReportScreen extends ConsumerWidget {
     );
 
     void handleObserveAnother() {
+      // 다른 관찰하기 시 mode selection까지 pop (mode-selection만 남김)
       ref.read(appStateNotifierProvider.notifier).clearActiveTest();
-      // 스택을 정리하기 위해 먼저 루트로 이동
-      context.go(AppRoutes.landing);
-      // 다음 프레임에서 modeSelection으로 이동하여 스택 중복 방지
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (context.mounted) {
-          context.go(AppRoutes.modeSelection);
-        }
-      });
+      context.pop();
     }
 
-    return Scaffold(
-      backgroundColor: AppTheme.slateLight,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            children: [
-              const SizedBox(height: 16),
-              _PageTitle(title: l10n.observationSummary),
-              const SizedBox(height: 24),
-              BehaviorStyleCard(
-                label: l10n.behaviorStyle,
-                title: reportData.title,
-                description: reportData.description,
-              ),
-              const SizedBox(height: 16),
-              // 결과 해석 카드 (Z점수 분석 결과가 있을 때)
-              if (reportData.attentionAnalysis != null ||
-                  reportData.impulsivityAnalysis != null) ...[
-                ResultInterpretationCard(
-                  attentionAnalysis: reportData.attentionAnalysis,
-                  impulsivityAnalysis: reportData.impulsivityAnalysis,
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, dynamic result) {
+        if (!didPop) {
+          // 뒤로가기 시 mode selection까지 pop (mode-selection만 남김)
+          ref.read(appStateNotifierProvider.notifier).clearActiveTest();
+          context.pop();
+        }
+      },
+      child: Scaffold(
+        backgroundColor: AppTheme.slateLight,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              children: [
+                const SizedBox(height: 16),
+                _PageTitle(title: l10n.observationSummary),
+                const SizedBox(height: 24),
+                BehaviorStyleCard(
+                  label: l10n.behaviorStyle,
+                  title: reportData.title,
+                  description: reportData.description,
                 ),
                 const SizedBox(height: 16),
+                // 결과 해석 카드 (Z점수 분석 결과가 있을 때)
+                if (reportData.attentionAnalysis != null ||
+                    reportData.impulsivityAnalysis != null) ...[
+                  ResultInterpretationCard(
+                    attentionAnalysis: reportData.attentionAnalysis,
+                    impulsivityAnalysis: reportData.impulsivityAnalysis,
+                  ),
+                  const SizedBox(height: 16),
+                ],
+                ResultChart(
+                  score: reportData.visualScore,
+                  label: l10n.typicalRangeForAge,
+                  lowLabel: reportData.lowLabel,
+                  highLabel: reportData.highLabel,
+                  description: l10n.comparisonDesc,
+                  zScoreResult: reportData.zScoreResult,
+                ),
+                const SizedBox(height: 16),
+                ParentingTipsCard(
+                  title: l10n.parentingTips,
+                  tips: reportData.tips,
+                ),
+                const SizedBox(height: 24),
+                ObserveAnotherButton(
+                  label: l10n.observeAnotherTrait,
+                  onPressed: handleObserveAnother,
+                ),
+                const SizedBox(height: 24),
+                _DisclaimerText(text: l10n.disclaimer),
+                const SizedBox(height: 32),
               ],
-              ResultChart(
-                score: reportData.visualScore,
-                label: l10n.typicalRangeForAge,
-                lowLabel: reportData.lowLabel,
-                highLabel: reportData.highLabel,
-                description: l10n.comparisonDesc,
-                zScoreResult: reportData.zScoreResult,
-              ),
-              const SizedBox(height: 16),
-              ParentingTipsCard(
-                title: l10n.parentingTips,
-                tips: reportData.tips,
-              ),
-              const SizedBox(height: 24),
-              ObserveAnotherButton(
-                label: l10n.observeAnotherTrait,
-                onPressed: handleObserveAnother,
-              ),
-              const SizedBox(height: 24),
-              _DisclaimerText(text: l10n.disclaimer),
-              const SizedBox(height: 32),
-            ],
+            ),
           ),
         ),
       ),

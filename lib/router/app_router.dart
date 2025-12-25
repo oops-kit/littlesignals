@@ -32,6 +32,9 @@ abstract class AppRoutes {
 GoRouter appRouter(Ref ref) {
   return GoRouter(
     initialLocation: AppRoutes.landing,
+    debugLogDiagnostics: false,
+    // 웹 브라우저 뒤로가기 지원을 위한 URL 전략
+    routerNeglect: false,
     routes: [
       GoRoute(
         path: AppRoutes.landing,
