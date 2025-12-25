@@ -9,6 +9,7 @@ import 'package:littlesignals/features/landing/widgets/primary_button.dart';
 import 'package:littlesignals/l10n/app_localizations.dart';
 import 'package:littlesignals/models/child_profile.dart';
 import 'package:littlesignals/providers/app_state_provider.dart';
+import 'package:littlesignals/providers/debug_mode_provider.dart';
 import 'package:littlesignals/router/app_router.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -146,12 +147,14 @@ class _ErrorMessage extends StatelessWidget {
   }
 }
 
-class _VersionText extends HookWidget {
+class _VersionText extends HookConsumerWidget {
   const _VersionText();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final versionInfo = useState<String>('');
+    final tapCount = useState<int>(0);
+    final lastTapTime = useState<DateTime?>(null);
 
     useEffect(() {
       PackageInfo.fromPlatform().then((info) {
@@ -160,9 +163,44 @@ class _VersionText extends HookWidget {
       return null;
     }, []);
 
-    return Text(
-      versionInfo.value,
-      style: const TextStyle(fontSize: 12, color: AppTheme.slate400),
+    void handleTap() {
+      final now = DateTime.now();
+      final lastTap = lastTapTime.value;
+      
+      // 2초 이내에 탭하지 않으면 카운트 리셋
+      if (lastTap != null && 
+          now.difference(lastTap).inSeconds > 2) {
+        tapCount.value = 0;
+      }
+      
+      tapCount.value++;
+      lastTapTime.value = now;
+      
+      // 5번 탭하면 디버그 모드 토글
+      if (tapCount.value >= 5) {
+        ref.read(debugModeProvider.notifier).toggle();
+        tapCount.value = 0;
+        
+        // 디버그 모드 상태 표시
+        final isDebugMode = ref.read(debugModeProvider);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              isDebugMode ? 'Debug Mode ON 🐛' : 'Debug Mode OFF',
+            ),
+            duration: const Duration(seconds: 1),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    }
+
+    return GestureDetector(
+      onTap: handleTap,
+      child: Text(
+        versionInfo.value,
+        style: const TextStyle(fontSize: 12, color: AppTheme.slate400),
+      ),
     );
   }
 }
