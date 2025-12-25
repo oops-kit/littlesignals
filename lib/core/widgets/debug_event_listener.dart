@@ -36,11 +36,13 @@ class DebugEventListener extends HookConsumerWidget {
       final currentCount = eventLogs.length;
       if (currentCount > prevLogCount.value && eventLogs.isNotEmpty) {
         final newLog = eventLogs.last;
-        // 디버그 로그 패널에 추가
-        ref.read(debugLogProvider.notifier).addLog(
-          newLog.description,
-          level: DebugLogLevel.info,
-        );
+        // 디버그 로그 패널에 추가 (빌드 완료 후 실행)
+        Future(() {
+          ref.read(debugLogProvider.notifier).addLog(
+            newLog.description,
+            level: DebugLogLevel.info,
+          );
+        });
       }
       prevLogCount.value = currentCount;
       return null;

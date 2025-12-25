@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:littlesignals/l10n/app_localizations.dart';
-import 'package:littlesignals/providers/app_state_provider.dart';
 import 'package:littlesignals/providers/debug_log_provider.dart';
 import 'package:littlesignals/providers/debug_mode_provider.dart';
-import 'package:littlesignals/router/app_router.dart';
 
 /// 플로팅 디버그 패널
 ///
@@ -22,7 +18,6 @@ class FloatingDebugPanel extends ConsumerWidget {
     }
 
     final debugLogState = ref.watch(debugLogProvider);
-    final l10n = AppLocalizations.of(context)!;
 
     return Positioned(
       right: 16,
@@ -32,7 +27,7 @@ class FloatingDebugPanel extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           if (debugLogState.isPanelExpanded) ...[
-            _ExpandedPanel(logs: debugLogState.logs, l10n: l10n),
+            _ExpandedPanel(logs: debugLogState.logs),
             const SizedBox(height: 8),
           ],
           _ToggleButton(isExpanded: debugLogState.isPanelExpanded),
@@ -45,18 +40,12 @@ class FloatingDebugPanel extends ConsumerWidget {
 class _ExpandedPanel extends ConsumerWidget {
   const _ExpandedPanel({
     required this.logs,
-    required this.l10n,
   });
 
   final List<DebugLogEntry> logs;
-  final AppLocalizations l10n;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appState = ref.watch(appStateNotifierProvider);
-    final hasResults = appState.attentionResult != null || 
-        appState.impulsivityResult != null;
-
     return Container(
       width: 320,
       height: 400,
@@ -132,50 +121,6 @@ class _ExpandedPanel extends ConsumerWidget {
                     },
                   ),
           ),
-          // 디버그 결과 버튼들
-          if (hasResults) ...[
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: const BoxDecoration(
-                border: Border(
-                  top: BorderSide(color: Colors.white24),
-                ),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text(
-                    'Debug Results',
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _DebugResultButton(
-                          label: l10n.resultDebugTitle,
-                          icon: Icons.analytics_outlined,
-                          onPressed: () => context.go(AppRoutes.resultDebug),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: _DebugResultButton(
-                          label: l10n.eventDebugTitle,
-                          icon: Icons.list_alt_outlined,
-                          onPressed: () => context.go(AppRoutes.eventDebug),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
         ],
       ),
     );
@@ -248,35 +193,6 @@ class _LogEntry extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _DebugResultButton extends StatelessWidget {
-  const _DebugResultButton({
-    required this.label,
-    required this.icon,
-    required this.onPressed,
-  });
-
-  final String label;
-  final IconData icon;
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return OutlinedButton.icon(
-      onPressed: onPressed,
-      style: OutlinedButton.styleFrom(
-        foregroundColor: Colors.white70,
-        side: const BorderSide(color: Colors.white24),
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-      ),
-      icon: Icon(icon, size: 14),
-      label: Text(
-        label,
-        style: const TextStyle(fontSize: 10),
       ),
     );
   }
