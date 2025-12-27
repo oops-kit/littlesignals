@@ -9,36 +9,98 @@
 /// - Wiebe SA, et al. (2012) Child Dev.
 library;
 
+import 'package:littlesignals/core/constants/algorithm_config.dart';
+
 /// 주의력 테스트 월령별 규준값
 class AttentionAgeNorms {
   AttentionAgeNorms._();
 
   /// 카드 뒤집기 과제 기준 턴 수 (3쌍 = 6카드)
-  static const int baselineTurns = 6;
+  static int get baselineTurns => AttentionAlgorithmConfig.baselineTurns;
 
   /// 월령 구간별 MER(Memory Efficiency Ratio) 규준값
   static const List<AgeNormData> merNorms = [
-    AgeNormData(minMonths: 36, maxMonths: 41, mean: 0.42, stdDev: 0.15),
-    AgeNormData(minMonths: 42, maxMonths: 47, mean: 0.55, stdDev: 0.14),
-    AgeNormData(minMonths: 48, maxMonths: 53, mean: 0.68, stdDev: 0.12),
-    AgeNormData(minMonths: 54, maxMonths: 60, mean: 0.78, stdDev: 0.10),
+    AgeNormData(
+      minMonths: 36,
+      maxMonths: 41,
+      mean: AttentionAlgorithmConfig.mer36to41Mean,
+      stdDev: AttentionAlgorithmConfig.mer36to41StdDev,
+    ),
+    AgeNormData(
+      minMonths: 42,
+      maxMonths: 47,
+      mean: AttentionAlgorithmConfig.mer42to47Mean,
+      stdDev: AttentionAlgorithmConfig.mer42to47StdDev,
+    ),
+    AgeNormData(
+      minMonths: 48,
+      maxMonths: 53,
+      mean: AttentionAlgorithmConfig.mer48to53Mean,
+      stdDev: AttentionAlgorithmConfig.mer48to53StdDev,
+    ),
+    AgeNormData(
+      minMonths: 54,
+      maxMonths: 60,
+      mean: AttentionAlgorithmConfig.mer54to60Mean,
+      stdDev: AttentionAlgorithmConfig.mer54to60StdDev,
+    ),
   ];
 
   /// 월령 구간별 재확인율(Revisiting Rate) 규준값
   /// 주의: 재확인율은 낮을수록 좋으므로 Z점수 계산 시 방향 반전 필요
   static const List<AgeNormData> revisitingRateNorms = [
-    AgeNormData(minMonths: 36, maxMonths: 41, mean: 0.30, stdDev: 0.10),
-    AgeNormData(minMonths: 42, maxMonths: 47, mean: 0.22, stdDev: 0.08),
-    AgeNormData(minMonths: 48, maxMonths: 53, mean: 0.14, stdDev: 0.06),
-    AgeNormData(minMonths: 54, maxMonths: 60, mean: 0.08, stdDev: 0.05),
+    AgeNormData(
+      minMonths: 36,
+      maxMonths: 41,
+      mean: AttentionAlgorithmConfig.revisit36to41Mean,
+      stdDev: AttentionAlgorithmConfig.revisit36to41StdDev,
+    ),
+    AgeNormData(
+      minMonths: 42,
+      maxMonths: 47,
+      mean: AttentionAlgorithmConfig.revisit42to47Mean,
+      stdDev: AttentionAlgorithmConfig.revisit42to47StdDev,
+    ),
+    AgeNormData(
+      minMonths: 48,
+      maxMonths: 53,
+      mean: AttentionAlgorithmConfig.revisit48to53Mean,
+      stdDev: AttentionAlgorithmConfig.revisit48to53StdDev,
+    ),
+    AgeNormData(
+      minMonths: 54,
+      maxMonths: 60,
+      mean: AttentionAlgorithmConfig.revisit54to60Mean,
+      stdDev: AttentionAlgorithmConfig.revisit54to60StdDev,
+    ),
   ];
 
   /// 월령 구간별 평균 반응시간(초) 규준값
   static const List<AgeRangeNormData> reactionTimeNorms = [
-    AgeRangeNormData(minMonths: 36, maxMonths: 41, minValue: 3.0, maxValue: 4.5),
-    AgeRangeNormData(minMonths: 42, maxMonths: 47, minValue: 2.5, maxValue: 3.5),
-    AgeRangeNormData(minMonths: 48, maxMonths: 53, minValue: 2.0, maxValue: 3.0),
-    AgeRangeNormData(minMonths: 54, maxMonths: 60, minValue: 1.5, maxValue: 2.5),
+    AgeRangeNormData(
+      minMonths: 36,
+      maxMonths: 41,
+      minValue: AttentionAlgorithmConfig.reactionTime36to41Min,
+      maxValue: AttentionAlgorithmConfig.reactionTime36to41Max,
+    ),
+    AgeRangeNormData(
+      minMonths: 42,
+      maxMonths: 47,
+      minValue: AttentionAlgorithmConfig.reactionTime42to47Min,
+      maxValue: AttentionAlgorithmConfig.reactionTime42to47Max,
+    ),
+    AgeRangeNormData(
+      minMonths: 48,
+      maxMonths: 53,
+      minValue: AttentionAlgorithmConfig.reactionTime48to53Min,
+      maxValue: AttentionAlgorithmConfig.reactionTime48to53Max,
+    ),
+    AgeRangeNormData(
+      minMonths: 54,
+      maxMonths: 60,
+      minValue: AttentionAlgorithmConfig.reactionTime54to60Min,
+      maxValue: AttentionAlgorithmConfig.reactionTime54to60Max,
+    ),
   ];
 
   /// 월령에 해당하는 MER 규준값 반환
@@ -88,32 +150,77 @@ class ImpulsivityAgeNorms {
   /// 월령별 No-go 억제 비율 규준값
   static const List<AgeNormData> inhibitionRateNorms = [
     // 3세 9개월 (45개월) 기준
-    AgeNormData(minMonths: 36, maxMonths: 47, mean: 0.74, stdDev: 0.312),
+    AgeNormData(
+      minMonths: 36,
+      maxMonths: 47,
+      mean: ImpulsivityAlgorithmConfig.inhibition36to47Mean,
+      stdDev: ImpulsivityAlgorithmConfig.inhibition36to47StdDev,
+    ),
     // 4세 6개월 (54개월) 기준
-    AgeNormData(minMonths: 48, maxMonths: 59, mean: 0.84, stdDev: 0.206),
+    AgeNormData(
+      minMonths: 48,
+      maxMonths: 59,
+      mean: ImpulsivityAlgorithmConfig.inhibition48to59Mean,
+      stdDev: ImpulsivityAlgorithmConfig.inhibition48to59StdDev,
+    ),
     // 5세 3개월 (63개월) 기준
-    AgeNormData(minMonths: 60, maxMonths: 72, mean: 0.89, stdDev: 0.137),
+    AgeNormData(
+      minMonths: 60,
+      maxMonths: 72,
+      mean: ImpulsivityAlgorithmConfig.inhibition60to72Mean,
+      stdDev: ImpulsivityAlgorithmConfig.inhibition60to72StdDev,
+    ),
   ];
 
   /// 월령별 부주의(Omission) 비율 규준값
   /// 주의: omission 비율은 낮을수록 좋으므로 Z점수 계산 시 방향 반전 필요
   static const List<AgeNormData> omissionRateNorms = [
     // 3세 기준 - 부주의 비율이 상대적으로 높음
-    AgeNormData(minMonths: 36, maxMonths: 47, mean: 0.18, stdDev: 0.12),
+    AgeNormData(
+      minMonths: 36,
+      maxMonths: 47,
+      mean: ImpulsivityAlgorithmConfig.omission36to47Mean,
+      stdDev: ImpulsivityAlgorithmConfig.omission36to47StdDev,
+    ),
     // 4세 기준 - 집중력 향상으로 부주의 감소
-    AgeNormData(minMonths: 48, maxMonths: 59, mean: 0.12, stdDev: 0.08),
+    AgeNormData(
+      minMonths: 48,
+      maxMonths: 59,
+      mean: ImpulsivityAlgorithmConfig.omission48to59Mean,
+      stdDev: ImpulsivityAlgorithmConfig.omission48to59StdDev,
+    ),
     // 5세 기준 - 더욱 안정적인 집중력
-    AgeNormData(minMonths: 60, maxMonths: 72, mean: 0.08, stdDev: 0.05),
+    AgeNormData(
+      minMonths: 60,
+      maxMonths: 72,
+      mean: ImpulsivityAlgorithmConfig.omission60to72Mean,
+      stdDev: ImpulsivityAlgorithmConfig.omission60to72StdDev,
+    ),
   ];
 
   /// 월령별 반응시간(ms) 규준값
   static const List<AgeNormData> reactionTimeNorms = [
     // 3세 기준
-    AgeNormData(minMonths: 36, maxMonths: 47, mean: 934, stdDev: 200),
+    AgeNormData(
+      minMonths: 36,
+      maxMonths: 47,
+      mean: ImpulsivityAlgorithmConfig.reactionTime36to47Mean,
+      stdDev: ImpulsivityAlgorithmConfig.reactionTime36to47StdDev,
+    ),
     // 4세 기준
-    AgeNormData(minMonths: 48, maxMonths: 59, mean: 835, stdDev: 180),
+    AgeNormData(
+      minMonths: 48,
+      maxMonths: 59,
+      mean: ImpulsivityAlgorithmConfig.reactionTime48to59Mean,
+      stdDev: ImpulsivityAlgorithmConfig.reactionTime48to59StdDev,
+    ),
     // 5세 기준
-    AgeNormData(minMonths: 60, maxMonths: 72, mean: 733, stdDev: 150),
+    AgeNormData(
+      minMonths: 60,
+      maxMonths: 72,
+      mean: ImpulsivityAlgorithmConfig.reactionTime60to72Mean,
+      stdDev: ImpulsivityAlgorithmConfig.reactionTime60to72StdDev,
+    ),
   ];
 
   /// 월령에 해당하는 억제 비율 규준값 반환
@@ -202,6 +309,3 @@ class AgeRangeNormData {
     return position.clamp(-2.0, 2.0);
   }
 }
-
-
-

@@ -1,4 +1,5 @@
 import 'package:littlesignals/core/constants/age_norms.dart';
+import 'package:littlesignals/core/constants/algorithm_config.dart';
 import 'package:littlesignals/models/z_score_result.dart';
 
 /// 행동 패턴 분류 서비스
@@ -19,10 +20,10 @@ class BehaviorPatternClassifier {
     required double avgReactionTime,
     required AgeRangeNormData rtNorm,
   }) {
-    // MER이 평균 이상인지 (z >= 0)
-    final isHighMer = merZ >= 0;
-    // 재확인율이 평균 이하인지 (z >= 0, 방향 반전 적용됨)
-    final isLowRevisit = revisitZ >= 0;
+    // MER이 평균 이상인지 (z >= threshold)
+    final isHighMer = merZ >= ZScoreConfig.patternAverageThreshold;
+    // 재확인율이 평균 이하인지 (z >= threshold, 방향 반전 적용됨)
+    final isLowRevisit = revisitZ >= ZScoreConfig.patternAverageThreshold;
     // 반응시간이 느린지 (중앙값보다 높음)
     final isSlowReaction = avgReactionTime > rtNorm.midValue;
 
@@ -53,8 +54,8 @@ class BehaviorPatternClassifier {
     required double inhibitionZ,
     required bool isFastReactor,
   }) {
-    // 억제 비율이 평균 이상인지 (z >= 0)
-    final isHighInhibition = inhibitionZ >= 0;
+    // 억제 비율이 평균 이상인지 (z >= threshold)
+    final isHighInhibition = inhibitionZ >= ZScoreConfig.patternAverageThreshold;
 
     if (isFastReactor) {
       // 반응 빠름
@@ -69,5 +70,3 @@ class BehaviorPatternClassifier {
     }
   }
 }
-
-

@@ -1,6 +1,7 @@
 import 'dart:developer' as dev;
 
 import 'package:littlesignals/core/constants/age_norms.dart';
+import 'package:littlesignals/core/constants/algorithm_config.dart';
 import 'package:littlesignals/core/domain/event_logger.dart';
 import 'package:littlesignals/core/services/analysis/behavior_pattern_classifier.dart';
 import 'package:littlesignals/core/services/analysis/z_score_label_provider.dart';
@@ -13,9 +14,6 @@ import 'package:littlesignals/models/z_score_result.dart';
 /// SRP: 충동성 테스트 결과의 Z점수 분석만 담당합니다.
 class ImpulsivityZScoreAnalyzer {
   const ImpulsivityZScoreAnalyzer._();
-
-  /// No-go 비율 (기획서: 25%)
-  static const double _noGoRatio = 0.25;
 
   /// 충동성 테스트 결과 분석
   ///
@@ -36,11 +34,12 @@ class ImpulsivityZScoreAnalyzer {
     logger?.logZScoreInfo('📊 월령: $ageMonths개월');
 
     // No-go 자극 수 계산 (기획서: 전체의 25%)
-    final noGoCount = (result.totalStimuli * _noGoRatio).round();
+    final noGoRatio = ImpulsivityAlgorithmConfig.noGoRatio;
+    final noGoCount = (result.totalStimuli * noGoRatio).round();
 
     dev.log('자극 정보:', name: 'ImpulsivityZScore');
     dev.log('  총 자극 수: ${result.totalStimuli}', name: 'ImpulsivityZScore');
-    dev.log('  No-go 자극 수 (25%): $noGoCount', name: 'ImpulsivityZScore');
+    dev.log('  No-go 자극 수 (${(noGoRatio * 100).toInt()}%): $noGoCount', name: 'ImpulsivityZScore');
     dev.log('  실수 오류: ${result.commissionErrors}', name: 'ImpulsivityZScore');
     dev.log('  누락 오류: ${result.omissionErrors}', name: 'ImpulsivityZScore');
 
@@ -184,5 +183,3 @@ class ImpulsivityZScoreAnalyzer {
     }
   }
 }
-
-

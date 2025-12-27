@@ -1,3 +1,4 @@
+import 'package:littlesignals/core/constants/algorithm_config.dart';
 import 'package:littlesignals/core/domain/report_calculator.dart';
 import 'package:littlesignals/core/domain/test_result.dart';
 import 'package:littlesignals/core/utils/z_score_calculator.dart';
@@ -75,15 +76,18 @@ class ImpulsivityReportCalculator implements ReportCalculator {
     ImpulsivityResult result,
     AppLocalizations l10n,
   ) {
-    final visualScore = (100.0 - (result.commissionErrors * 15)).clamp(
-      10.0,
-      90.0,
+    final visualScore = (100.0 -
+            (result.commissionErrors *
+                LegacyReportConfig.impulsivityErrorPenaltyPerError))
+        .clamp(
+      LegacyReportConfig.impulsivityMinScore,
+      LegacyReportConfig.impulsivityMaxScore,
     );
 
     final String title;
     final String description;
 
-    if (visualScore > 50) {
+    if (visualScore > LegacyReportConfig.impulsivityObserverThreshold) {
       title = l10n.carefulObserver;
       description = l10n.carefulObserverDesc;
     } else {

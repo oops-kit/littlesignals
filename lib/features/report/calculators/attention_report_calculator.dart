@@ -1,3 +1,4 @@
+import 'package:littlesignals/core/constants/algorithm_config.dart';
 import 'package:littlesignals/core/domain/report_calculator.dart';
 import 'package:littlesignals/core/domain/test_result.dart';
 import 'package:littlesignals/core/utils/z_score_calculator.dart';
@@ -75,15 +76,23 @@ class AttentionReportCalculator implements ReportCalculator {
     AttentionResult result,
     AppLocalizations l10n,
   ) {
-    final errorPenalty = (result.errors * 10).clamp(0, 50).toDouble();
-    final durationPenalty = (result.durationSeconds / 2).clamp(0.0, 40.0);
+    final errorPenalty = (result.errors *
+            LegacyReportConfig.attentionErrorPenaltyPerError)
+        .clamp(0, LegacyReportConfig.attentionMaxErrorPenalty)
+        .toDouble();
+    final durationPenalty =
+        (result.durationSeconds * LegacyReportConfig.attentionDurationPenaltyRate)
+            .clamp(0.0, LegacyReportConfig.attentionMaxDurationPenalty);
     double visualScore = 100.0 - (errorPenalty + durationPenalty);
-    visualScore = visualScore.clamp(10.0, 90.0);
+    visualScore = visualScore.clamp(
+      LegacyReportConfig.attentionMinScore,
+      LegacyReportConfig.attentionMaxScore,
+    );
 
     final String title;
     final String description;
 
-    if (visualScore > 40) {
+    if (visualScore > LegacyReportConfig.attentionExplorerThreshold) {
       title = l10n.steadyExplorer;
       description = l10n.steadyExplorerDesc;
     } else {

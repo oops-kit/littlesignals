@@ -1,6 +1,7 @@
 import 'dart:developer' as dev;
 
 import 'package:littlesignals/core/constants/age_norms.dart';
+import 'package:littlesignals/core/constants/algorithm_config.dart';
 import 'package:littlesignals/core/domain/event_logger.dart';
 import 'package:littlesignals/core/services/analysis/behavior_pattern_classifier.dart';
 import 'package:littlesignals/core/services/analysis/z_score_label_provider.dart';
@@ -13,10 +14,6 @@ import 'package:littlesignals/models/z_score_result.dart';
 /// SRP: 주의력 테스트 결과의 Z점수 분석만 담당합니다.
 class AttentionZScoreAnalyzer {
   const AttentionZScoreAnalyzer._();
-
-  /// 힌트 사용 당 MER 차감 값 (기획서: 0.5점 차감)
-  /// MER은 0~1 범위이므로 0.05로 조정 (0.5/10)
-  static const double _hintPenaltyPerUse = 0.05;
 
   /// 주의력 테스트 결과 분석
   ///
@@ -58,7 +55,8 @@ class AttentionZScoreAnalyzer {
     // 기획서: 힌트 사용 시 점수 가중치 차감
     if (result.hintUsedCount > 0) {
       final beforePenalty = mer;
-      mer = (mer - (result.hintUsedCount * _hintPenaltyPerUse)).clamp(0.0, 1.0);
+      final hintPenalty = AttentionAlgorithmConfig.hintPenaltyPerUse;
+      mer = (mer - (result.hintUsedCount * hintPenalty)).clamp(0.0, 1.0);
       dev.log('  힌트 사용 횟수: ${result.hintUsedCount}', name: 'AttentionZScore');
       dev.log('  힌트 페널티 전: ${beforePenalty.toStringAsFixed(4)}', name: 'AttentionZScore');
       dev.log('  힌트 페널티 후: ${mer.toStringAsFixed(4)}', name: 'AttentionZScore');
@@ -193,5 +191,3 @@ class AttentionZScoreAnalyzer {
     }
   }
 }
-
-
